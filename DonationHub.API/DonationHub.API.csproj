@@ -11,12 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\DonationHub.Application\DonationHub.Application.csproj" />
+    <ProjectReference Include="..\DonationHub.Infrastructure\DonationHub.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DonationHub.Application\DonationHub.Application.csproj" />
-    <ProjectReference Include="..\DonationHub.Infrastructure\DonationHub.Infrastructure.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
