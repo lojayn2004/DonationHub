@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DonationHub.Infrastructure.Configurations
+namespace DonationHub.Infrastructure.Data.Configurations
 {
     internal class Config
     {

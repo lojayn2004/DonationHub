@@ -1,7 +1,12 @@
 ﻿
 namespace DonationHub.Application
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork 
     {
+        IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
+
+
+        Task<int> SavaChangesAsync();
+
     }
 }
