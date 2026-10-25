@@ -1,4 +1,5 @@
 ﻿using DonationHub.Domain.Shared;
+using System.Reflection.Metadata.Ecma335;
 
 namespace DonationHub.Domain.Categories
 {
@@ -12,19 +13,35 @@ namespace DonationHub.Domain.Categories
 
         public string DescriptionEn { get; private set; }
 
-        public string? BannerFileName { get; private set; }
         public DateTime UpdateAt { get; private set; }
 
 
-        // relation 
-        //category id
+        public static Category CreateCategory(string nameAr, string nameEn,
+                                              string descriptionAr,
+                                              string descriptionEn,
+                                              DateTime utcNow
+            )
+        {
 
 
-        // created by user id 
+            return new Category()
+            {
+                Id = Guid.NewGuid(),
+                NameAr = nameAr,
+                NameEn = nameEn,
+                DescriptionAr = descriptionAr,
+                DescriptionEn = descriptionEn,
+                CreatedAt = utcNow,
+                UpdateAt = utcNow
+            };
 
-        // row version
+        }
 
-
-
+        public void Update(string nameAr, string nameEn, string descAr, string descEn, DateTime utcNow)
+        {
+            NameAr = nameAr; NameEn = nameEn;
+            DescriptionAr = descAr; DescriptionEn = descEn;
+            UpdateAt = utcNow;
+        }
     }
 }

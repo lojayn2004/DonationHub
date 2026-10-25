@@ -2,9 +2,9 @@
 {
     public abstract class BaseEntity
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; protected set; }
 
-        public DateTime CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; protected set; }
 
         //protected BaseEntity(Guid id, DateTime createdAt)
         //{

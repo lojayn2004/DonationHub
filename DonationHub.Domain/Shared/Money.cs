@@ -15,6 +15,12 @@
             Currency = currency.ToUpper();
         }
 
+
+        public static Money Zero(string currency)
+        {
+            return new Money(0, currency);
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             // TODO: study yield 
