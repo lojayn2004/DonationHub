@@ -1,7 +1,7 @@
-﻿using DonationHub.Domain.Donations;
-using DonationHub.Domain.Shared;
+﻿using DonationHub.Domain.Models.Donations;
+using DonationHub.Domain.Models.Shared;
 
-namespace DonationHub.Domain.Payments
+namespace DonationHub.Domain.Models.Payments
 {
     public class PaymentAttempt: BaseEntity
     {

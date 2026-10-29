@@ -1,4 +1,4 @@
-﻿namespace DonationHub.Domain.Payments
+﻿namespace DonationHub.Domain.Models.Payments
 {
     public class ProcessedStripeEvent
     {

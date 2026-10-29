@@ -1,4 +1,4 @@
-﻿namespace DonationHub.Domain.Shared
+﻿namespace DonationHub.Domain.Models.Shared
 {
     public abstract class ValueObject : IEquatable<ValueObject>
     {

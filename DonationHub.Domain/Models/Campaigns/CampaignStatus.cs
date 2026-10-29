@@ -1,4 +1,4 @@
-﻿namespace DonationHub.Domain.Campaigns
+﻿namespace DonationHub.Domain.Models.Campaigns
 {
     public enum CampaignStatus
     {

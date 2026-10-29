@@ -1,8 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 
-namespace DonationHub.Domain
+namespace DonationHub.Domain.Models.User
 {
 
     //  PreferredLanguage (en | ar، الافتراضي en) --> do we make it enum ?? 

@@ -1,7 +1,6 @@
-﻿using DonationHub.Domain.Shared;
-using System.Reflection.Metadata.Ecma335;
+﻿using DonationHub.Domain.Models.Shared;
 
-namespace DonationHub.Domain.Categories
+namespace DonationHub.Domain.Models.Categories
 {
     public class Category : BaseEntity
     {
@@ -22,6 +21,8 @@ namespace DonationHub.Domain.Categories
                                               DateTime utcNow
             )
         {
+
+
 
 
             return new Category()

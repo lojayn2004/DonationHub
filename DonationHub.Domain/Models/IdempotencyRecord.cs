@@ -1,8 +1,6 @@
-﻿
+﻿using DonationHub.Domain.Models.Shared;
 
-using DonationHub.Domain.Shared;
-
-namespace DonationHub.Domain
+namespace DonationHub.Domain.Models
 {
     public class IdempotencyRecord: BaseEntity
     {

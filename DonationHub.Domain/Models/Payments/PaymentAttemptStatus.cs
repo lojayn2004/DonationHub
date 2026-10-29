@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DonationHub.Domain.Payments
+namespace DonationHub.Domain.Models.Payments
 {
     public enum PaymentAttemptStatus
     {

@@ -1,7 +1,9 @@
-﻿using DonationHub.Domain.Campaigns;
-using DonationHub.Domain.Shared;
+﻿using DonationHub.Domain.Exceptions;
+using DonationHub.Domain.Models.Campaigns;
+using DonationHub.Domain.Models.Shared;
+using DonationHub.Domain.Models.User;
 
-namespace DonationHub.Domain.Donations
+namespace DonationHub.Domain.Models.Donations
 {
     public class Donation: BaseEntity
     {
@@ -20,13 +22,10 @@ namespace DonationHub.Domain.Donations
 
         public string? ReceiptFileName { get; private set; }
 
-        // relations
-
-        // campaign id
         public Guid CampaignId { get; private set; }
         public Campaign Campaign { get; private set; }
 
-        // donor user id
+   
 
         public Guid DonorUserId { get; private set; }
 
@@ -37,9 +36,10 @@ namespace DonationHub.Domain.Donations
                                      Money donationAmount, 
                                      DateTime utcNow)
         {
-            // TODO: enhance exception type
-            if (donationAmount.Amount <= 0)
-                throw new Exception("Donation Amount Must Be Positive");
+           
+            if (donationAmount.Amount < 0)
+                throw new AmountNotValidException("Donation Amount Must Be Positive");
+         
             return new Donation
             {
                 Id = Guid.NewGuid(),
