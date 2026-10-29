@@ -6,7 +6,7 @@ using DonationHub.Domain.Models.User;
 
 namespace DonationHub.Domain.Models.Campaigns
 {
-    public class Campaign: BaseEntity
+    public class Campaign: BaseEntity, ISoftDeletable
     {
         public string TitleAr { get; private set; }
 
@@ -24,7 +24,9 @@ namespace DonationHub.Domain.Models.Campaigns
 
         public Money RaisedAmount { get; private set; }
 
-        public bool IsDeleted { get; private set; }
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedAtUtc { get; set; }
 
         public CampaignStatus CampaignStatus { get; private set; }
 

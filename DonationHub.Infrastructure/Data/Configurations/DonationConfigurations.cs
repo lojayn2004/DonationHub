@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DonationHub.Infrastructure.Data.Configurations
 {
-    internal class Config
+    internal class DonationConfigurations
     {
     }
 }
