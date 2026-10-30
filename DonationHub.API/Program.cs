@@ -1,3 +1,6 @@
+using DonationHub.Domain.Models.User;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -6,7 +9,14 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options
         .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-        .AddInterceptors(new SoftDeleteInterceptor()));
+        .AddInterceptors(new SoftDeleteInterceptor())
+);
+
+builder.Services
+    .AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 // --------------------------- Add Options --------------------------
 builder.Services.AddOptions<JwtOptions>()
     .BindConfiguration("JwtOptions")
