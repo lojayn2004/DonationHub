@@ -1,6 +1,4 @@
-﻿
-
-namespace DonationHub.Application
+﻿namespace DonationHub.Application.Contracts
 {
     public interface IGenericRepository<TEntity>
     {

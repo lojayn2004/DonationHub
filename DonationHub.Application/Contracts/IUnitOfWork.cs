@@ -1,4 +1,6 @@
 ﻿
+using DonationHub.Application.Contracts;
+
 namespace DonationHub.Application
 {
     public interface IUnitOfWork 
