@@ -2,7 +2,6 @@
 using DonationHub.Domain.Models.Categories;
 using DonationHub.Domain.Models.Donations;
 using DonationHub.Domain.Models.Shared;
-using DonationHub.Domain.Models.User;
 
 namespace DonationHub.Domain.Models.Campaigns
 {
@@ -24,10 +23,6 @@ namespace DonationHub.Domain.Models.Campaigns
 
         public Money RaisedAmount { get; private set; }
 
-        public bool IsDeleted { get; set; }
-
-        public DateTime? DeletedAtUtc { get; set; }
-
         public CampaignStatus CampaignStatus { get; private set; }
 
         public string? BannerFileName { get; private set; }
@@ -39,10 +34,9 @@ namespace DonationHub.Domain.Models.Campaigns
         
         public Guid CreatedByUserId { get; private set; }
 
-        public ApplicationUser CreatedBy { get; private set; }
-
         public List<Donation> Donations { get; private set; }
-
+        public bool IsDeleted { get ; set; }
+        public DateTime? DeletedAtUtc { get; set; }
 
         public static Campaign Create(string titleAr, string titleEn,
                                               string descAr, string descEn,
@@ -72,8 +66,7 @@ namespace DonationHub.Domain.Models.Campaigns
                 CreatedByUserId = createdByUserId,
                 CampaignStatus = CampaignStatus.ACTIVE,
                 CreatedAt = utcNow,
-                UpdatedAt = utcNow,
-                IsDeleted = false
+                UpdatedAt = utcNow
             };
         }
 
@@ -122,17 +115,6 @@ namespace DonationHub.Domain.Models.Campaigns
             CampaignStatus = status;
             UpdatedAt = utcNow;
         }
-
-
-        //public void SoftDelete(DateTime utcNow)
-        //{
-        //    IsDeleted = true;
-        //    UpdatedAt = utcNow;
-        //}
-
-
-
-
 
 
     }

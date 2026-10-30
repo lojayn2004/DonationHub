@@ -1,7 +1,4 @@
-﻿
-
-using DonationHub.Application;
-using DonationHub.Application.Contracts;
+﻿using DonationHub.Application.Contracts;
 using DonationHub.Infrastructure.Data;
 
 namespace DonationHub.Infrastructure

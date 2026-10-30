@@ -18,10 +18,7 @@ namespace DonationHub.Domain.Models.Payments
         public string StripeCheckoutSessionId { get; private set; }
 
         public string? StripePaymentIntentId { get; private set; }
-        // relations
-
-
-        // donation id 
+  
         public Guid DonationId { get; private set; }
 
         public Donation Donation { get; private set; }

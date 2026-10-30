@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DonationHub.Infrastructure.Data.Seeding
 {
-    internal class AdminSeeder
+    internal class UsersSeeder
     {
     }
 }

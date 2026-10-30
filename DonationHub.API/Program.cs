@@ -1,17 +1,30 @@
-using DonationHub.Infrastructure;
-using DonationHub.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options
         .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
         .AddInterceptors(new SoftDeleteInterceptor()));
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// --------------------------- Add Options --------------------------
+builder.Services.AddOptions<JwtOptions>()
+    .BindConfiguration("JwtOptions")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+
+builder.Services.AddOptions<DonationOptions>()
+    .BindConfiguration("DonationOptions")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services.AddOptions<SeedAdminOptions>()
+    .BindConfiguration("AdminSeedOptions")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

@@ -15,8 +15,12 @@ namespace DonationHub.Domain.Models
         public DateTime ExpiresAt { get; private set; }
 
 
+        public Guid UserId { get; private set; }
 
-        // udser id
+        public static IdempotencyRecord Create()
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

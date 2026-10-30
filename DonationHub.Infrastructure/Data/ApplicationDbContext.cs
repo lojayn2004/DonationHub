@@ -18,7 +18,7 @@ namespace DonationHub.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Apply all IEntityTypeConfiguration<T> in this assembly
+           
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

@@ -1,4 +1,5 @@
-﻿using DonationHub.Domain.Models.Shared;
+﻿using DonationHub.Domain.Models.Campaigns;
+using DonationHub.Domain.Models.Shared;
 
 namespace DonationHub.Domain.Models.Categories
 {
@@ -14,12 +15,12 @@ namespace DonationHub.Domain.Models.Categories
 
         public DateTime UpdateAt { get; private set; }
 
+        public List<Campaign> Campaigns { get; private set; }
 
         public static Category CreateCategory(string nameAr, string nameEn,
                                               string descriptionAr,
                                               string descriptionEn,
-                                              DateTime utcNow
-            )
+                                              DateTime utcNow)
         {
 
 

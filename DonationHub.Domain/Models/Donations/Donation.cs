@@ -1,7 +1,6 @@
 ﻿using DonationHub.Domain.Exceptions;
 using DonationHub.Domain.Models.Campaigns;
 using DonationHub.Domain.Models.Shared;
-using DonationHub.Domain.Models.User;
 
 namespace DonationHub.Domain.Models.Donations
 {
@@ -14,8 +13,6 @@ namespace DonationHub.Domain.Models.Donations
 
         public DateTime? CompletedAt { get; private set; }
 
-       
-
         public string? FaliureReson { get; private set; }
 
         public string? ReceiptNumber { get; private set; }
@@ -25,11 +22,7 @@ namespace DonationHub.Domain.Models.Donations
         public Guid CampaignId { get; private set; }
         public Campaign Campaign { get; private set; }
 
-   
-
         public Guid DonorUserId { get; private set; }
-
-        public ApplicationUser Donor { get; private set; }
 
         public static Donation Create(Guid campaignId,
                                      Guid donorUserId,
