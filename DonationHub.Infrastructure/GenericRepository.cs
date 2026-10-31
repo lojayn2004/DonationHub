@@ -1,4 +1,4 @@
-﻿using DonationHub.Application.Contracts;
+﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

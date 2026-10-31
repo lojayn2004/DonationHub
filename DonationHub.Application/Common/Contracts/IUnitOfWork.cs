@@ -1,4 +1,4 @@
-﻿namespace DonationHub.Application.Contracts
+﻿namespace DonationHub.Application.Common.Contracts
 {
     public interface IUnitOfWork 
     {

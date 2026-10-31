@@ -11,8 +11,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Auth\" />
-    <Folder Include="Features\Categories\" />
+    <Folder Include="Features\Admin\CreateStaff\" />
+    <Folder Include="Features\Auth\Login\" />
+    <Folder Include="Features\Auth\Logout\" />
+    <Folder Include="Features\Auth\GetMe\" />
+    <Folder Include="Features\Auth\Refresh\" />
+    <Folder Include="Features\Auth\Register\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.2.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.2.0" />
+    <PackageReference Include="MediatR" Version="14.2.0" />
   </ItemGroup>
 
 </Project>

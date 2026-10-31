@@ -1,4 +1,8 @@
+using DonationHub.Application;
+using DonationHub.Application.Behaviors;
 using DonationHub.Domain.Models.User;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +38,20 @@ builder.Services.AddOptions<SeedAdminOptions>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+ 
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 8;
+
+
+    options.User.RequireUniqueEmail = true;
+});
+builder.Services.AddApplicationServices();
 
 builder.Services.AddOpenApi();
 
