@@ -9,7 +9,7 @@ namespace DonationHub.Infrastructure
         public IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity: class
         {
             string repoName = typeof(TEntity).Name;
-            if (_repos.ContainsKey(repoName))
+            if (!_repos.ContainsKey(repoName))
                 _repos[repoName] = new GenericRepository<TEntity>(_dbContext);
             return (IGenericRepository<TEntity>) _repos[repoName];
         }

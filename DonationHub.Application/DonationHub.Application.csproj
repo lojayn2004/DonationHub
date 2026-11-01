@@ -12,11 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Admin\CreateStaff\" />
-    <Folder Include="Features\Auth\Login\" />
-    <Folder Include="Features\Auth\Logout\" />
-    <Folder Include="Features\Auth\GetMe\" />
     <Folder Include="Features\Auth\Refresh\" />
-    <Folder Include="Features\Auth\Register\" />
   </ItemGroup>
 
   <ItemGroup>

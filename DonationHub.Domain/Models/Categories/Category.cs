@@ -3,7 +3,7 @@ using DonationHub.Domain.Models.Shared;
 
 namespace DonationHub.Domain.Models.Categories
 {
-    public class Category : BaseEntity
+    public class Category : BaseEntity, ISoftDeletable
     {
         public string NameAr { get; private set; }
 
@@ -16,6 +16,8 @@ namespace DonationHub.Domain.Models.Categories
         public DateTime UpdateAt { get; private set; }
 
         public List<Campaign> Campaigns { get; private set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAtUtc { get; set; }
 
         public static Category CreateCategory(string nameAr, string nameEn,
                                               string descriptionAr,

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Categories.GetCategoryById
 {
-    public record GetQueryByIdQuery(Guid Id): IRequest<Result<CategoryResponse>>
+    public record GetCategoryByIdQuery(Guid Id): IRequest<Result<CategoryResponse>>
     {
     }
 }

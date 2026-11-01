@@ -15,7 +15,7 @@
 
         public override bool Equals(object? obj)
         {
-            if (obj == null) 
+            if (obj is null) 
                 return false;
             if (!(obj is BaseEntity entity))
                 return false;
@@ -23,19 +23,17 @@
 
         }
 
-        public override int GetHashCode()
+        public override int GetHashCode() => Id.GetHashCode();
+        public static bool operator==(BaseEntity? firstEntity, BaseEntity? secondEntity)
         {
-            return base.GetHashCode();
-        }
-
-        public static bool operator==(BaseEntity firstEntity, BaseEntity secondEntity)
-        {
-            if (firstEntity == null) 
+            if(firstEntity is null && secondEntity is null)
+                return true;
+            if (firstEntity is null) 
                 return  false;
             return firstEntity.Equals(secondEntity);
 
         }
-        public static bool operator !=(BaseEntity firstEntity, BaseEntity secondEntity)
+        public static bool operator !=(BaseEntity? firstEntity, BaseEntity? secondEntity)
         {
 
             return !(firstEntity == secondEntity);

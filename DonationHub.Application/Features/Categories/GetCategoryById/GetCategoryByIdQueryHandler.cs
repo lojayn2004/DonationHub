@@ -6,9 +6,9 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Categories.GetCategoryById
 {
-    internal class GetQueryByIdQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetQueryByIdQuery, Result<CategoryResponse>>
+    internal class GetCategoryByIdQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetCategoryByIdQuery, Result<CategoryResponse>>
     {
-        public async Task<Result<CategoryResponse>> Handle(GetQueryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<CategoryResponse>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             var categoryRepo = _unitOfWork.GetRepository<Category>();
             var category = await categoryRepo.GetByIdAsync(request.Id);
