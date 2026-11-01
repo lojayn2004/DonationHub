@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
-namespace DonationHub.Infrastructure
+namespace DonationHub.Infrastructure.Data.Interceptors
 {
     public class SoftDeleteInterceptor: SaveChangesInterceptor
     {

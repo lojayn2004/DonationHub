@@ -1,7 +1,7 @@
 ﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Infrastructure.Data;
 
-namespace DonationHub.Infrastructure
+namespace DonationHub.Infrastructure.ContractImplementations
 {
     internal class UnitOfWork(ApplicationDbContext _dbContext) : IUnitOfWork
     {

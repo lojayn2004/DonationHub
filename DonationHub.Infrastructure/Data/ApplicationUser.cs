@@ -3,11 +3,8 @@ using DonationHub.Domain.Models.Donations;
 using Microsoft.AspNetCore.Identity;
 
 
-namespace DonationHub.Domain.Models.User
+namespace DonationHub.Infrastructure.Data
 {
-
-    //  PreferredLanguage (en | ar، الافتراضي en) --> do we make it enum ?? 
-
     public class ApplicationUser: IdentityUser<Guid>
     {
 
@@ -21,6 +18,21 @@ namespace DonationHub.Domain.Models.User
         public List<Donation> Donations { get; private set; }
 
         public List<Campaign> Campaigns { get; private set; }
+
+        public static ApplicationUser Create(string fullName,
+            string email, 
+            string? preferredLanguage)
+        {
+            var user = new ApplicationUser
+            {
+                FullName = fullName,
+                Email = email,
+                UserName = email,
+                IsActive = true,
+                PreferredLanguage = preferredLanguage ?? "en"
+            };
+            return user;
+        }
 
         // role: : Admin, CampaignManager, Donor.
 

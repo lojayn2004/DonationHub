@@ -2,7 +2,7 @@
 using DonationHub.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace DonationHub.Infrastructure
+namespace DonationHub.Infrastructure.ContractImplementations
 {
     internal class GenericRepository<TEntity>(ApplicationDbContext _applicationDbContext):
         IGenericRepository<TEntity> where TEntity: class

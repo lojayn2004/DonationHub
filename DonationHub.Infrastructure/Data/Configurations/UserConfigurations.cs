@@ -1,5 +1,4 @@
-﻿using DonationHub.Domain.Models.User;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DonationHub.Infrastructure.Data.Configurations

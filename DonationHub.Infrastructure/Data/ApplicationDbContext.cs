@@ -1,5 +1,4 @@
 ﻿using DonationHub.Domain.Models.Shared;
-using DonationHub.Domain.Models.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
