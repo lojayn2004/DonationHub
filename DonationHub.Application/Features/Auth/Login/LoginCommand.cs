@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DonationHub.Application.Common.Results;
+using DonationHub.Application.Features.Auth.Common;
+using MediatR;
 
 namespace DonationHub.Application.Features.Auth.Login
 {
-    internal class LoginCommand
+    public record LoginCommand(string Email, string Password) : IRequest<Result<AuthResponse>>
     {
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
+
 
 
 namespace DonationHub.Infrastructure
@@ -39,6 +39,7 @@ namespace DonationHub.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtUtils, JwtUtils>();
             services.AddScoped<IDataSeeder, RolesSeeder>();
+            services.AddScoped<IIdentityService, IdentityService>();
             return services;
         }
     

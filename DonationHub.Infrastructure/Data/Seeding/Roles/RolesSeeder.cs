@@ -9,7 +9,7 @@ namespace DonationHub.Infrastructure.Data.Seeding.Roles
         {
             if(!_roleManager.Roles.Any())
             {
-                 var roles = InitialRolesData.Roles;
+                var roles = InitialRolesData.Roles;
                 foreach (var role in roles)
                 {
                     await _roleManager.CreateAsync(new IdentityRole<Guid>(role));

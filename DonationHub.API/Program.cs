@@ -1,7 +1,7 @@
 using DonationHub.API.Extensions;
 using DonationHub.Application;
 using Scalar.AspNetCore;
-
+//your-256-bit-secret-for-testing-only-change-me
 
 var builder = WebApplication.CreateBuilder(args);
 

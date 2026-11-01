@@ -21,13 +21,14 @@ namespace DonationHub.Infrastructure.Data
 
         public static ApplicationUser Create(string fullName,
             string email, 
+            string userName,
             string? preferredLanguage)
         {
             var user = new ApplicationUser
             {
                 FullName = fullName,
                 Email = email,
-                UserName = email,
+                UserName = userName,
                 IsActive = true,
                 PreferredLanguage = preferredLanguage ?? "en"
             };
