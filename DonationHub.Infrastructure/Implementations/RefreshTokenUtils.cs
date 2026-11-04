@@ -13,5 +13,12 @@ namespace DonationHub.Infrastructure.Implementations
                 return Convert.ToBase64String(randomNumber);
             }
         }
+
+        public static string HashRefreshToken(string refreshToken)
+        {
+            var tokenBytes = System.Text.Encoding.UTF8.GetBytes(refreshToken);
+            var hashBytes = SHA256.HashData(tokenBytes);
+            return Convert.ToBase64String(hashBytes);
+        }
     }
 }

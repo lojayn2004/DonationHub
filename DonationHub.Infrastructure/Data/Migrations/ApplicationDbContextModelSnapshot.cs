@@ -654,10 +654,13 @@ namespace DonationHub.Infrastructure.Data.Migrations
                             b1.Property<DateTime>("ExpiresAt")
                                 .HasColumnType("datetime2");
 
+                            b1.Property<int?>("ReplacedByTokenId")
+                                .HasColumnType("int");
+
                             b1.Property<DateTime?>("RevokedOn")
                                 .HasColumnType("datetime2");
 
-                            b1.Property<string>("Token")
+                            b1.Property<string>("TokenHash")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 

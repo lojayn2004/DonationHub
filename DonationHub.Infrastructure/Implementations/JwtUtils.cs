@@ -37,10 +37,11 @@ namespace DonationHub.Infrastructure.ContractImplementations
 
         public RefreshToken GetRefreshToken()
         {
-            var refreshToken = RefreshTokenUtils.GenerateRefreshToken();
+            var rawRefreshToken = RefreshTokenUtils.GenerateRefreshToken();
             return new RefreshToken
             {
-                Token = refreshToken,
+                Token = rawRefreshToken,
+                TokenHash = RefreshTokenUtils.HashRefreshToken(rawRefreshToken),
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddDays(_jwtOptions.Value.RefreshTokenExpiryDays) 
             };
