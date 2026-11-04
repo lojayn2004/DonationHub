@@ -16,10 +16,11 @@ namespace DonationHub.Application.Features.Auth.Refresh
                 return Result<AuthResponse>.Failure(new Error("UserAlreadyExists", "A user with the provided email already exists.", ErrorType.Conflict));
             var registerCommand = new RegisterCommand(request.Email, request.Password, request.FullName,
                 request.UserName, request.PrefferedLanguage, "Donor");
-            var user =  await _identityService.CreateUserAsync(registerCommand);
+            var userResult = await _identityService.CreateUserAsync(registerCommand);
+            if (!userResult.IsSuccess)
+                return Result<AuthResponse>.Failure(userResult.Error!);
 
-            var authResponse = await  _identityService.GetAuthResponse(user.Email);
-            return Result<AuthResponse>.Success(authResponse);
+            return await _identityService.GetAuthResponse(userResult.Value!.Email);
         }
     }
 }

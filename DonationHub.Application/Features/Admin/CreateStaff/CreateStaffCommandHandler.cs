@@ -14,7 +14,11 @@ namespace DonationHub.Application.Features.Admin.CreateStaff
                 return Result<CreateStaffResponse>.Failure(new Error("UserAlreadyExists", "A user with the provided email already exists.", ErrorType.Conflict));
             var registerCommand = new RegisterCommand(request.Email, request.Password, request.FullName, 
                 request.UserName, request.PrefferedLanguage, request.Role);
-            var user = await _identityService.CreateUserAsync(registerCommand);
+            var userResult = await _identityService.CreateUserAsync(registerCommand);
+            if (!userResult.IsSuccess)
+                return Result<CreateStaffResponse>.Failure(userResult.Error!);
+
+            var user = userResult.Value!;
             return Result<CreateStaffResponse>.Success(new CreateStaffResponse(user.Id, user.Email, user.UserName, user.FullName, user.PreferredLanguage));
         }
     }

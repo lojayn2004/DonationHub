@@ -10,11 +10,7 @@ namespace DonationHub.Application.Features.Auth.Logout
         
         public async Task<Result> Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.RevokeRefreshToken(request.RefreshToken);
-            if (!result)
-                return Result.Failure(new Error("UnAuthorized", "UnAuthorized", ErrorType.UnAuthorized));
-            
-            return Result.Success();
+            return await _identityService.RevokeRefreshToken(request.RefreshToken);
         }
     
     }

@@ -1,4 +1,5 @@
 ﻿using DonationHub.Application.Common.Dtos;
+using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Auth.Common;
 using DonationHub.Application.Features.Common;
 
@@ -6,13 +7,13 @@ namespace DonationHub.Application.Common.Contracts
 {
     public  interface IIdentityService
     {
-         Task<UserDto> CreateUserAsync(RegisterCommand register);
+         Task<Result<UserDto>> CreateUserAsync(RegisterCommand register);
 
-        Task<AuthResponse> GetAuthResponse(string Email);
+        Task<Result<AuthResponse>> GetAuthResponse(string Email);
 
-        Task<AuthResponse> RefreshTokenAsync(string refreshToken);
+        Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken);
 
-        Task<bool> RevokeRefreshToken(string refreshToken);
+        Task<Result> RevokeRefreshToken(string refreshToken);
 
 
          Task<UserDto?> FindUserByEmailAsync(string Email);

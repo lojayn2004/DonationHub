@@ -16,17 +16,7 @@ namespace DonationHub.Application.Features.Auth.Login
             var isValidCredentials = await _identityService.ValidateCredentialsAsync(request.Email, request.Password);
             if(!isValidCredentials) 
                 return Result<AuthResponse>.Failure(new Error("InvalidCredentials", "The provided credentials are invalid.", ErrorType.UnAuthorized));
-            try
-            {
-                var authResult = await _identityService.GetAuthResponse(request.Email);
-
-                return Result<AuthResponse>.Success(authResult);
-
-            }
-            catch(Exception ex)
-            {
-                return Result<AuthResponse>.Failure(new Error("InvalidCredentials", "The provided credentials are invalid.", ErrorType.UnAuthorized));
-            }
+            return await _identityService.GetAuthResponse(request.Email);
             
             
         }

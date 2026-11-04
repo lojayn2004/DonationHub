@@ -1,5 +1,6 @@
 ﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Common.Dtos;
+using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Auth.Common;
 using DonationHub.Application.Features.Common;
 using DonationHub.Domain.Exceptions;
@@ -11,21 +12,33 @@ namespace DonationHub.Infrastructure.ContractImplementations
     internal class IdentityService(UserManager<ApplicationUser> _userManager,
         IJwtUtils _jwtUtils): IIdentityService
     {
-        public async Task<UserDto> CreateUserAsync(RegisterCommand register)
+        public async Task<Result<UserDto>> CreateUserAsync(RegisterCommand register)
         {
             var appUser = ApplicationUser.Create(register.FullName, register.Email, register.UserName,
                 register.PrefferedLanguage, DateTime.UtcNow);
             var result = await _userManager.CreateAsync(appUser, register.Password);
+            if (!result.Succeeded)
+            {
+                var message = string.Join(" ", result.Errors.Select(error => error.Description));
+                return Result<UserDto>.Failure(new Error("IdentityError", message, ErrorType.Validation));
+            }
 
-            await _userManager.AddToRoleAsync(appUser, register.Role);
-            return  new UserDto
+            var roleResult = await _userManager.AddToRoleAsync(appUser, register.Role);
+            if (!roleResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(appUser);
+                var message = string.Join(" ", roleResult.Errors.Select(error => error.Description));
+                return Result<UserDto>.Failure(new Error("IdentityError", message, ErrorType.UnExpected));
+            }
+
+            return Result<UserDto>.Success(new UserDto
             {
                 Id = appUser.Id,
                 Email = appUser.Email,
                 UserName = appUser.UserName,
                 FullName = appUser.FullName,
                 PreferredLanguage = appUser.PreferredLanguage
-            };
+            });
         }
 
         public async Task<bool> EmailExistsAsync(string Email)
@@ -58,11 +71,11 @@ namespace DonationHub.Infrastructure.ContractImplementations
             return await _userManager.CheckPasswordAsync(user, Password);
         }
 
-        public async Task<AuthResponse> GetAuthResponse(string Email)
+        public async Task<Result<AuthResponse>> GetAuthResponse(string Email)
         {
             var appUser = await _userManager.FindByEmailAsync(Email);
             if(appUser == null)
-                throw new Exception("User not found");
+                return Result<AuthResponse>.Failure(Error.Unauthorized("UserNotFound", "Invalid user credentials."));
             var authResponse = new AuthResponse();
             authResponse.Token =  await _jwtUtils.GenerateJwtTokenAsync(appUser.Id);
 
@@ -80,20 +93,20 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 authResponse.RefreshToken = refreshToken.Token;
                 authResponse.RefreshTokenExpiration = refreshToken.ExpiresAt;
             }
-            return authResponse;
+            return Result<AuthResponse>.Success(authResponse);
         }
 
-        public async Task<AuthResponse> RefreshTokenAsync(string refreshToken)
+        public async Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken)
         {
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
             if (user == null)
-                throw new Exception("Invalid refresh token");
+                return Result<AuthResponse>.Failure(Error.Unauthorized("InvalidRefreshToken", "The provided refresh token is invalid or expired."));
             if(user.IsActive == false)
-                throw new ForbiddenException("User account is inactive");
+                return Result<AuthResponse>.Failure(Error.Forbidden("AccountLocked", "The account associated with the provided refresh token is locked."));
 
             var refreshTokenEntity = user.RefreshTokens.Single(t => t.Token == refreshToken);
             if (!refreshTokenEntity.IsActive)
-                throw new Exception("token is not active");
+                return Result<AuthResponse>.Failure(Error.Unauthorized("InvalidRefreshToken", "The provided refresh token is invalid or expired."));
             var authResponse = new AuthResponse();
             // refresh token revoke
             refreshTokenEntity.RevokedOn = DateTime.UtcNow;
@@ -106,24 +119,24 @@ namespace DonationHub.Infrastructure.ContractImplementations
             // Generate new JWT token
             authResponse.Token = await _jwtUtils.GenerateJwtTokenAsync(user.Id);
  
-            return authResponse;
+            return Result<AuthResponse>.Success(authResponse);
         }
 
-        public async Task<bool> RevokeRefreshToken(string refreshToken)
+        public async Task<Result> RevokeRefreshToken(string refreshToken)
         {
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
             if (user == null)
-                throw new Exception("Invalid refresh token");
+                return Result.Failure(Error.Unauthorized("InvalidRefreshToken", "The provided refresh token is invalid or expired."));
 
             var refreshTokenEntity = user.RefreshTokens.Single(t => t.Token == refreshToken);
             if (!refreshTokenEntity.IsActive)
-                throw new Exception("token is not active");
+                return Result.Failure(Error.Unauthorized("InvalidRefreshToken", "The provided refresh token is invalid or expired."));
         
             // refresh token revoke
             refreshTokenEntity.RevokedOn = DateTime.UtcNow;
             await _userManager.UpdateAsync(user);
             
-            return true;
+            return Result.Success();
         }
 
         public async Task<bool> IsAccountLocked(string Email)
