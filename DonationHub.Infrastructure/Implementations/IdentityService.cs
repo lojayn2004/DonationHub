@@ -12,7 +12,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
     {
         public async Task<UserDto> CreateUserAsync(RegisterCommand register)
         {
-            var appUser = ApplicationUser.Create(register.FullName, register.Email, register.UserName, register.PrefferedLanguage);
+            var appUser = ApplicationUser.Create(register.FullName, register.Email, register.UserName, register.PrefferedLanguage, DateTime.UtcNow);
             var result = await _userManager.CreateAsync(appUser, register.Password);
 
             await _userManager.AddToRoleAsync(appUser, register.Role);

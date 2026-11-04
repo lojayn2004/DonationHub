@@ -16,26 +16,24 @@ namespace DonationHub.Infrastructure.Data.Seeding.Users
             {
                 var adminOptions = _adminOptions.Value;
                 var adminUser = ApplicationUser.Create(adminOptions.FullName,
-                    adminOptions.Email, adminOptions.Email ,"en");
+                    adminOptions.Email, adminOptions.Email ,"en", DateTime.UtcNow);
                 
                 await _userManager.CreateAsync(adminUser, adminOptions.Password);
                 await _userManager.AddToRoleAsync(adminUser, "Admin");
                 
-                var donorUser =  ApplicationUser.Create("Donor", "donor@example.com", "Donor0505", "en");
+                var donorUser =  ApplicationUser.Create("Donor", "donor@example.com", "Donor0505",
+                    "en", DateTime.UtcNow);
 
 
                 await _userManager.CreateAsync(donorUser, "Donor@1234");
                 await _userManager.AddToRoleAsync(donorUser, "Donor");
 
 
-                var campaignManagerUser = ApplicationUser.Create("Campaign Manager", "campaignmanager@example.com", "CampaignManager0505", "en");
+                var campaignManagerUser = ApplicationUser.Create("Campaign Manager", "campaignmanager@example.com", 
+                    "CampaignManager0505", "en", DateTime.UtcNow);
                 
                 var result = await _userManager.CreateAsync(campaignManagerUser, "CampaignManager@1234");
 
-                foreach(var error in result.Errors)
-                {
-                    Console.WriteLine($"Error creating campaign manager user: {error.Description}");
-                }
                 await _userManager.AddToRoleAsync(campaignManagerUser, "CampaignManager");  
 
 

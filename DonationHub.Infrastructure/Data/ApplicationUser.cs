@@ -15,6 +15,8 @@ namespace DonationHub.Infrastructure.Data
 
         public string PreferredLanguage { get; private set; }
 
+        public DateTime CreatedAt { get; private set; } 
+
 
         public List<Donation> Donations { get; private set; }
 
@@ -22,11 +24,12 @@ namespace DonationHub.Infrastructure.Data
 
         public List<RefreshToken>? RefreshTokens { get; private set; }
 
-        //[OwnsOne]
+
         public static ApplicationUser Create(string fullName,
             string email, 
             string userName,
-            string? preferredLanguage)
+            string? preferredLanguage, 
+            DateTime utcNow)
         {
             var user = new ApplicationUser
             {
@@ -34,6 +37,7 @@ namespace DonationHub.Infrastructure.Data
                 Email = email,
                 UserName = userName,
                 IsActive = true,
+                CreatedAt = utcNow,
                 PreferredLanguage = preferredLanguage ?? "en"
             };
             return user;
