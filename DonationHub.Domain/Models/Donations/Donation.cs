@@ -26,13 +26,17 @@ namespace DonationHub.Domain.Models.Donations
 
         public static Donation Create(Guid campaignId,
                                      Guid donorUserId,
-                                     Money donationAmount, 
+                                     Money donationAmount,
+                                     int minAmount,
+                                     int maxAmount,
                                      DateTime utcNow)
         {
            
             if (donationAmount.Amount < 0)
                 throw new AmountNotValidException("Donation Amount Must Be Positive");
-         
+            if(donationAmount.Amount < minAmount || donationAmount.Amount > maxAmount)
+                throw new AmountNotValidException($"Donation Amount Must Be Between {minAmount} and {maxAmount}");
+
             return new Donation
             {
                 Id = Guid.NewGuid(),

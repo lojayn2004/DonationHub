@@ -1,9 +1,8 @@
+using DonationHub.API;
 using DonationHub.API.Extensions;
 using DonationHub.Application;
 using Scalar.AspNetCore;
-using System.Text;
-using System.Text.Json;
-//your-256-bit-secret-for-testing-only-change-me
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,14 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-
-
 builder.Services.AddOptionsConfiguration(builder.Configuration);
 
 builder.Services.AddApplicationServices()
     .AddInfrastructureServices(builder.Configuration);
 
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
+
 
 var app = builder.Build();
 

@@ -69,6 +69,8 @@ namespace DonationHub.Infrastructure
                     };
                 });
 
+
+            services.AddAuthorization();
             services.AddScoped<IDataSeeder, CategoriesSeeder>();
             services.AddScoped<IDataSeeder, RolesSeeder>();
             services.AddScoped<IDataSeeder, UsersSeeder>();

@@ -12,7 +12,7 @@
 
         public string Role { get; set; }
 
-        public string? PreferredLanguage { get; set; }
+        public string? PreferredLanguage { get; set; } = "en";
 
 
     }

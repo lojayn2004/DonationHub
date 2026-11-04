@@ -1,6 +1,7 @@
 ﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Domain.Models.RefreshToken;
 using DonationHub.Infrastructure.Data;
+using DonationHub.Infrastructure.Implementations;
 using DonationHub.Shared.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;

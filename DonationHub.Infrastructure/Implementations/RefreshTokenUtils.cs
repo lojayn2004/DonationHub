@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace DonationHub.Infrastructure
+namespace DonationHub.Infrastructure.Implementations
 {
     internal static class RefreshTokenUtils
     {

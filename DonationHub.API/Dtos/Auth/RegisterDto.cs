@@ -1,4 +1,6 @@
-﻿namespace DonationHub.API.Dtos.Auth
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DonationHub.API.Dtos.Auth
 {
     public class RegisterDto
     {
@@ -10,7 +12,8 @@
 
         public string UserName { get; set; }
 
-        public string? PreferredLanguage { get; set; }
+        [RegularExpression("^(en|ar)$", ErrorMessage = "Preferred language must be 'en' or 'ar'.")]
+        public string? PreferredLanguage { get; set; } = "en";
 
     }
 }
