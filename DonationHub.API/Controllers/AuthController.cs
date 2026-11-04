@@ -14,12 +14,13 @@ namespace DonationHub.API.Controllers
     public class AuthController(ISender _mediator) : APIBaseController
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto dto)
+        public async Task<IActionResult> Register(RegisterDto dto, CancellationToken ct)
         {
             var command = new RegisterDonerCommand(dto.Email, dto.Password, dto.FullName, dto.UserName, dto.PreferredLanguage);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
             if(!result.IsSuccess)
-                return GetProblemResult();
+                return GetProblemResult(result.Error!);
+
             if (!string.IsNullOrEmpty(result.Value.RefreshToken))
                 SetRefreshTokenCookie(result.Value.RefreshToken, result.Value.RefreshTokenExpiration);
 
@@ -28,12 +29,12 @@ namespace DonationHub.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
+        public async Task<IActionResult> Login(LoginDto dto, CancellationToken ct)
         {
             var command = new LoginCommand(dto.Email, dto.Password);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
             if(!result.IsSuccess)
-                return GetProblemResult();
+                return GetProblemResult(result.Error!);
 
            if (!string.IsNullOrEmpty(result.Value.RefreshToken))
                 SetRefreshTokenCookie(result.Value.RefreshToken, result.Value.RefreshTokenExpiration);
@@ -43,15 +44,15 @@ namespace DonationHub.API.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken()
+        public async Task<IActionResult> RefreshToken(CancellationToken ct)
         {
             if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
                 return Unauthorized(new { message = "Refresh token is missing." });
             
             var command = new RefreshTokenCommand(refreshToken);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
             if (!result.IsSuccess)
-                return GetProblemResult();
+                return GetProblemResult(result.Error!);
             if (!string.IsNullOrEmpty(result.Value.RefreshToken))
                 SetRefreshTokenCookie(result.Value.RefreshToken, result.Value.RefreshTokenExpiration);
             return Ok(result.Value);
@@ -59,14 +60,14 @@ namespace DonationHub.API.Controllers
 
         [Authorize]
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(CancellationToken ct)
         {
             if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
                 return Unauthorized(new { message = "Refresh token is missing." });
             var command = new LogoutCommand(refreshToken);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
             if(!result.IsSuccess)
-                return GetProblemResult();
+                return GetProblemResult(result.Error!);
             Response.Cookies.Delete("refreshToken");
             return Ok(new { message = "Logged out successfully." });
         }
@@ -76,7 +77,7 @@ namespace DonationHub.API.Controllers
         [Authorize]
         [HttpGet("me")]
         
-        public async Task<IActionResult> GetMe()
+        public async Task<IActionResult> GetMe(CancellationToken ct)
         {
             var userEmail = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
 
@@ -84,9 +85,9 @@ namespace DonationHub.API.Controllers
                 return Unauthorized(new { message = "Invalid Credentials" });
 
             var query = new GetProfileQuery(userEmail);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
             if(!result.IsSuccess)
-                return GetProblemResult();
+                return GetProblemResult(result.Error!);
             return Ok(result.Value);
         }
 

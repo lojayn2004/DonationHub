@@ -6,7 +6,7 @@ namespace DonationHub.Application.Common.Contracts
 {
     public  interface IIdentityService
     {
-        public Task<UserDto> CreateUserAsync(RegisterCommand register);
+         Task<UserDto> CreateUserAsync(RegisterCommand register);
 
         Task<AuthResponse> GetAuthResponse(string Email);
 
@@ -15,10 +15,12 @@ namespace DonationHub.Application.Common.Contracts
         Task<bool> RevokeRefreshToken(string refreshToken);
 
 
-        public Task<UserDto?> FindUserByEmailAsync(string Email);
+         Task<UserDto?> FindUserByEmailAsync(string Email);
 
-        public Task<bool> ValidateCredentialsAsync(string Email, string Password);
+         Task<bool> ValidateCredentialsAsync(string Email, string Password);
 
-        public Task<bool> EmailExistsAsync(string Email);
+         Task<bool> EmailExistsAsync(string Email);
+
+        Task<bool> IsAccountLocked(string Email);
     }
 }

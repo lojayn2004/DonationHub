@@ -11,7 +11,7 @@ namespace DonationHub.Application.Features.Auth.GetMe
         {
              var user = await _identityService.FindUserByEmailAsync(request.Email);
              if (user == null)
-                 return Result<UserDto>.Failure(new Error("User not found.", "UserNotFound", ErrorType.UnAuthorized));
+                 return Result<UserDto>.Failure(new Error("UserNotFound.", "Invalid User Credentials", ErrorType.UnAuthorized));
 
              return Result<UserDto>.Success(user);
         }

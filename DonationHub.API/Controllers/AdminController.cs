@@ -14,10 +14,11 @@ namespace DonationHub.API.Controllers
         [HttpPost("staff")]
         public async Task<IActionResult> CreateStaffUser(CreateStaffUserDto dto)
         {
-            var command = new CreateStaffCommand(dto.Email, dto.Password, dto.FullName, dto.UserName, dto.PreferredLanguage, dto.Role);
+            var command = new CreateStaffCommand(dto.Email, dto.Password, dto.FullName, 
+                dto.UserName, dto.PreferredLanguage, dto.Role);
             var result = await _mediator.Send(command);
             if (!result.IsSuccess)
-                return GetProblemResult();
+                return GetProblemResult(result.Error!);
             return Ok(result.Value);
         }
 

@@ -23,8 +23,8 @@ namespace DonationHub.API.Controllers
                 request.DescriptionEn);
 
             var result = await _mediator.Send(command, ct);
-            if (result.IsFailure)
-                return GetProblemResult();
+            if (!result.IsSuccess)
+                return GetProblemResult(result.Error!);
 
 
             return Created($"/api/v1/categories/{result.Value!.Id}", result.Value);
@@ -38,8 +38,8 @@ namespace DonationHub.API.Controllers
                 request.DescriptionEn);
 
             var result = await _mediator.Send(command, ct);
-            if (result.IsFailure)
-                return GetProblemResult();
+            if (!result.IsSuccess)
+                return GetProblemResult(result.Error!);
 
             return Ok(result.Value);
 
@@ -52,8 +52,8 @@ namespace DonationHub.API.Controllers
             var command = new DeleteCategoryCommand(id);
 
             var result = await _mediator.Send(command, ct);
-            if (result.IsFailure)
-                return GetProblemResult();
+            if (!result.IsSuccess)
+                return GetProblemResult(result.Error!);
 
             return NoContent();
         }
@@ -65,8 +65,8 @@ namespace DonationHub.API.Controllers
             var query = new GetCategoryByIdQuery(id);
 
             var result = await _mediator.Send(query, ct);
-            if (result.IsFailure)
-                return GetProblemResult();
+            if (!result.IsSuccess)
+                return GetProblemResult(result.Error!);
 
             return Ok(result.Value);
         }
@@ -78,8 +78,8 @@ namespace DonationHub.API.Controllers
             var query = new GetCategoriesQuery();
 
             var result = await _mediator.Send(query, ct);
-            if (result.IsFailure)
-                return GetProblemResult();
+            if (!result.IsSuccess)
+                return GetProblemResult(result.Error!);
 
             return Ok(result.Value);
         }

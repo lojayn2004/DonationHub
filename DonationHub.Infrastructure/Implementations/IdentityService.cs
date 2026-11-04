@@ -2,6 +2,7 @@
 using DonationHub.Application.Common.Dtos;
 using DonationHub.Application.Features.Auth.Common;
 using DonationHub.Application.Features.Common;
+using DonationHub.Domain.Exceptions;
 using DonationHub.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,8 @@ namespace DonationHub.Infrastructure.ContractImplementations
     {
         public async Task<UserDto> CreateUserAsync(RegisterCommand register)
         {
-            var appUser = ApplicationUser.Create(register.FullName, register.Email, register.UserName, register.PrefferedLanguage, DateTime.UtcNow);
+            var appUser = ApplicationUser.Create(register.FullName, register.Email, register.UserName,
+                register.PrefferedLanguage, DateTime.UtcNow);
             var result = await _userManager.CreateAsync(appUser, register.Password);
 
             await _userManager.AddToRoleAsync(appUser, register.Role);
@@ -86,6 +88,8 @@ namespace DonationHub.Infrastructure.ContractImplementations
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
             if (user == null)
                 throw new Exception("Invalid refresh token");
+            if(user.IsActive == false)
+                throw new ForbiddenException("User account is inactive");
 
             var refreshTokenEntity = user.RefreshTokens.Single(t => t.Token == refreshToken);
             if (!refreshTokenEntity.IsActive)
@@ -120,6 +124,12 @@ namespace DonationHub.Infrastructure.ContractImplementations
             await _userManager.UpdateAsync(user);
             
             return true;
+        }
+
+        public async Task<bool> IsAccountLocked(string Email)
+        {
+            var user = await _userManager.FindByEmailAsync(Email);
+            return user != null && !user.IsActive;
         }
     }
 }
