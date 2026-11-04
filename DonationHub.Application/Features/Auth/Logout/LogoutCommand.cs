@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DonationHub.Application.Common.Results;
+using MediatR;
 
 namespace DonationHub.Application.Features.Auth.Logout
 {
-    internal class LogoutCommand
+    public record LogoutCommand(string RefreshToken):
+        IRequest<Result>
     {
     }
 }

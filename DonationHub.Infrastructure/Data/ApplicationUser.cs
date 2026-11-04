@@ -1,5 +1,6 @@
 ﻿using DonationHub.Domain.Models.Campaigns;
 using DonationHub.Domain.Models.Donations;
+using DonationHub.Domain.Models.RefreshToken;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -19,6 +20,9 @@ namespace DonationHub.Infrastructure.Data
 
         public List<Campaign> Campaigns { get; private set; }
 
+        public List<RefreshToken>? RefreshTokens { get; private set; }
+
+        //[OwnsOne]
         public static ApplicationUser Create(string fullName,
             string email, 
             string userName,
@@ -35,7 +39,7 @@ namespace DonationHub.Infrastructure.Data
             return user;
         }
 
-        // role: : Admin, CampaignManager, Donor.
+       
 
     }
 }

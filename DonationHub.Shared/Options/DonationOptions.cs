@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DonationHub.API.Options
-{
+namespace DonationHub.Shared.Options 
+{ 
     public class DonationOptions
     {
         [Range(0.01, double.MaxValue, ErrorMessage = "Minimum donation amount must be greater than zero.")]

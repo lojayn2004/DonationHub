@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DonationHub.API.Options
+namespace DonationHub.Shared.Options
 {
     public class SeedAdminOptions
     {

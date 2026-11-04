@@ -10,15 +10,22 @@ namespace DonationHub.Application.Features.Auth.Login
     {
         public async Task<Result<AuthResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-             var isValidCredentials = await _identityService.ValidateCredentialsAsync(request.Email, request.Password);
+            var isValidCredentials = await _identityService.ValidateCredentialsAsync(request.Email, request.Password);
             if(!isValidCredentials) 
                 return Result<AuthResponse>.Failure(new Error("InvalidCredentials", "The provided credentials are invalid.", ErrorType.UnAuthorized));
-            var user = await _identityService.FindUserByEmailAsync(request.Email);  
-            var authResult = new AuthResponse()
+            try
             {
-                Token = await _jwtUtils.GenerateJwtTokenAsync(user!.Id)
-            };
-            return Result<AuthResponse>.Success(authResult);
+                var authResult = await _identityService.GetAuthResponse(request.Email);
+
+                return Result<AuthResponse>.Success(authResult);
+
+            }
+            catch(Exception ex)
+            {
+                return Result<AuthResponse>.Failure(new Error("InvalidCredentials", "The provided credentials are invalid.", ErrorType.UnAuthorized));
+            }
+            
+            
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DonationHub.Shared
+namespace DonationHub.Shared.Options
 { 
 
     public class JwtOptions

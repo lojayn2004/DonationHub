@@ -1,4 +1,4 @@
-﻿using DonationHub.Domain.Models;
+﻿using DonationHub.Domain.Models.IdempotencyRecord;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

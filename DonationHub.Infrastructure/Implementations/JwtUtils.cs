@@ -1,6 +1,7 @@
 ﻿using DonationHub.Application.Common.Contracts;
+using DonationHub.Domain.Models.RefreshToken;
 using DonationHub.Infrastructure.Data;
-using DonationHub.Shared;
+using DonationHub.Shared.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +11,8 @@ using System.Text;
 
 namespace DonationHub.Infrastructure.ContractImplementations
 {
-    public class JwtUtils(UserManager<ApplicationUser> _userManager, IOptions<JwtOptions> _jwtOptions): IJwtUtils
+    public class JwtUtils(UserManager<ApplicationUser> _userManager, 
+        IOptions<JwtOptions> _jwtOptions): IJwtUtils
     {
         public  async Task<string> GenerateJwtTokenAsync(Guid UserId)
         {
@@ -27,7 +29,20 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 expires: DateTime.UtcNow.AddMinutes(_jwtOptions.Value.ExpiryMinutes)
                 );
             var token = new JwtSecurityTokenHandler().WriteToken(securityToken);
+            
+            
             return token;
+        }
+
+        public RefreshToken GetRefreshToken()
+        {
+            var refreshToken = RefreshTokenUtils.GenerateRefreshToken();
+            return new RefreshToken
+            {
+                Token = refreshToken,
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(_jwtOptions.Value.RefreshTokenExpiryDays) 
+            };
         }
 
         private static async Task<List<Claim>> GetClaimsAsync(ApplicationUser user, UserManager<ApplicationUser> _userManager)
@@ -46,6 +61,8 @@ namespace DonationHub.Infrastructure.ContractImplementations
             }
             return claims;
         }
+
+      
     }
 
 }

@@ -3,10 +3,14 @@ using DonationHub.Infrastructure.ContractImplementations;
 using DonationHub.Infrastructure.Data;
 using DonationHub.Infrastructure.Data.Interceptors;
 using DonationHub.Infrastructure.Data.Seeding.Roles;
+using DonationHub.Shared.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 
@@ -14,7 +18,8 @@ namespace DonationHub.Infrastructure
 {
     public static class InfrastructureServicesRegisteration
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, 
+            IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                     options
@@ -36,6 +41,31 @@ namespace DonationHub.Infrastructure
         
                .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    var jwtOptions = configuration
+                        .GetSection("JwtOptions")
+                        .Get<JwtOptions>() ?? throw new InvalidOperationException("JWT options not configured");
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtOptions.Issuer,
+
+                        ValidateAudience = true,
+                        ValidAudience = jwtOptions.Audience,
+
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
+                    };
+                });
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtUtils, JwtUtils>();
             services.AddScoped<IDataSeeder, RolesSeeder>();

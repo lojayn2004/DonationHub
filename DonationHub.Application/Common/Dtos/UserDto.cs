@@ -1,6 +1,4 @@
-﻿
-
-namespace DonationHub.Application.Common.Contracts
+﻿namespace DonationHub.Application.Common.Dtos
 {
     public class UserDto
     {

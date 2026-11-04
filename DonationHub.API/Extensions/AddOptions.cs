@@ -1,4 +1,5 @@
-﻿using DonationHub.Shared;
+﻿
+using DonationHub.Shared.Options;
 
 namespace DonationHub.API.Extensions
 {

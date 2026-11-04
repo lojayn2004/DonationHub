@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DonationHub.Application.Common.Dtos;
+using DonationHub.Application.Common.Results;
+using MediatR;
 
 namespace DonationHub.Application.Features.Auth.GetMe
 {
-    internal class GetProfileQuery
+    public record GetProfileQuery(string Email) : IRequest<Result<UserDto>>
     {
     }
 }
