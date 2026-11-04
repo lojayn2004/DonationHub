@@ -1,4 +1,5 @@
-﻿using DonationHub.Domain.Models.Shared;
+﻿using DonationHub.Domain.Models.Categories;
+using DonationHub.Domain.Models.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -33,5 +34,7 @@ namespace DonationHub.Infrastructure.Data
                     .HasQueryFilter(Expression.Lambda(notDeleted, parameter));
             }
         }
+
+        public DbSet<Category> Category { get; set; }
     }
 }

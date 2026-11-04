@@ -2,7 +2,9 @@
 using DonationHub.Infrastructure.ContractImplementations;
 using DonationHub.Infrastructure.Data;
 using DonationHub.Infrastructure.Data.Interceptors;
+using DonationHub.Infrastructure.Data.Seeding.Categories;
 using DonationHub.Infrastructure.Data.Seeding.Roles;
+using DonationHub.Infrastructure.Data.Seeding.Users;
 using DonationHub.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -66,10 +68,14 @@ namespace DonationHub.Infrastructure
                             Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
                     };
                 });
+
+            services.AddScoped<IDataSeeder, CategoriesSeeder>();
+            services.AddScoped<IDataSeeder, RolesSeeder>();
+            services.AddScoped<IDataSeeder, UsersSeeder>();
+
+            services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtUtils, JwtUtils>();
-            services.AddScoped<IDataSeeder, RolesSeeder>();
-            services.AddScoped<IIdentityService, IdentityService>();
             return services;
         }
     
@@ -83,6 +89,7 @@ namespace DonationHub.Infrastructure
             var seeders = scope.ServiceProvider.GetServices<IDataSeeder>();
             foreach(var seeder in seeders)
             {
+                Console.WriteLine($"Seeding data using {seeder.GetType().Name}...");
                 await seeder.SeedAllAsync();
             }
         }

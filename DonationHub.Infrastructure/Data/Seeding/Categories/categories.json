@@ -1,0 +1,32 @@
+[
+  {
+    "NameAr": "الصحة",
+    "NameEn": "Health",
+    "DescriptionAr": "دعم الرعاية الصحية والخدمات الطبية للمحتاجين",
+    "DescriptionEn": "Supporting healthcare and medical services for those in need"
+  },
+  {
+    "NameAr": "التعليم",
+    "NameEn": "Education",
+    "DescriptionAr": "توفير فرص التعليم والمنح الدراسية للطلاب",
+    "DescriptionEn": "Providing educational opportunities and scholarships for students"
+  },
+  {
+    "NameAr": "الإغاثة",
+    "NameEn": "Relief",
+    "DescriptionAr": "تقديم المساعدات الإغاثية العاجلة للمتضررين",
+    "DescriptionEn": "Delivering urgent relief aid to those affected by crises"
+  },
+  {
+    "NameAr": "الأيتام",
+    "NameEn": "Orphans",
+    "DescriptionAr": "رعاية الأيتام وتوفير احتياجاتهم الأساسية",
+    "DescriptionEn": "Caring for orphans and providing their basic needs"
+  },
+  {
+    "NameAr": "البيئة",
+    "NameEn": "Environment",
+    "DescriptionAr": "حماية البيئة ومشاريع الاستدامة",
+    "DescriptionEn": "Environmental protection and sustainability projects"
+  }
+]

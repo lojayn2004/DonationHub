@@ -1,6 +1,4 @@
-﻿
-
-using DonationHub.Application.Common.Contracts;
+﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Common.Results;
 using MediatR;
 
