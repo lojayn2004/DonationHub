@@ -1,10 +1,25 @@
+using DonationHub.API;
+using DonationHub.API.Extensions;
+using DonationHub.Application;
+using Scalar.AspNetCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+builder.Services.AddOptionsConfiguration(builder.Configuration);
+
+builder.Services.AddApplicationServices()
+    .AddInfrastructureServices(builder.Configuration);
+
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
+
 
 var app = builder.Build();
 
@@ -12,6 +27,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
+    await app.Services.SeedDatabaseAsync();
 }
 
 app.UseHttpsRedirection();
