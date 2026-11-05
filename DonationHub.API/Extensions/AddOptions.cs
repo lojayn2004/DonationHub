@@ -13,10 +13,10 @@ namespace DonationHub.API.Extensions
                     .ValidateOnStart();
 
 
-            //services.AddOptions<DonationOptions>()
-            //    .BindConfiguration("DonationOptions")
-            //    .ValidateDataAnnotations()
-            //    .ValidateOnStart();
+            services.AddOptions<DonationOptions>()
+                .BindConfiguration("DonationOptions")
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
             services.AddOptions<SeedAdminOptions>()
                 .BindConfiguration("AdminSeedOptions")
