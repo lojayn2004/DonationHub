@@ -81,16 +81,13 @@ namespace DonationHub.Infrastructure.ContractImplementations
             var authResponse = new AuthResponse();
             authResponse.Token =  await _jwtUtils.GenerateJwtTokenAsync(appUser.Id);
             var activeRefreshToken = appUser.RefreshTokens.FirstOrDefault(t => t.IsActive);
-            if (activeRefreshToken is not null)
-            {   
-                activeRefreshToken.RevokedOn = DateTime.UtcNow;
-            }
+          
 
             var refreshToken = _jwtUtils.GetRefreshToken();
             appUser.RefreshTokens.Add(refreshToken);
             await _userManager.UpdateAsync(appUser);
             if(activeRefreshToken is not null) 
-                activeRefreshToken.ReplacedByTokenId = refreshToken.Id;
+                activeRefreshToken.RevokeToken(DateTime.UtcNow, refreshToken.Id);
 
             await _userManager.UpdateAsync(appUser);
             authResponse.RefreshToken = refreshToken.Token!;
@@ -113,11 +110,12 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 return Result<AuthResponse>.Failure(Error.Unauthorized("InvalidRefreshToken", "The provided refresh token is invalid or expired."));
             var authResponse = new AuthResponse();
             // refresh token revoke
-            refreshTokenEntity.RevokedOn = DateTime.UtcNow;
+            
             var newRefreshToken = _jwtUtils.GetRefreshToken();
             user.RefreshTokens.Add(newRefreshToken);
             await _userManager.UpdateAsync(user);
-            refreshTokenEntity.ReplacedByTokenId = newRefreshToken.Id;
+            refreshTokenEntity.RevokeToken(DateTime.UtcNow, newRefreshToken.Id);
+            
 
             await _userManager.UpdateAsync(user);
             authResponse.RefreshToken = newRefreshToken.Token!;
@@ -140,7 +138,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 return Result.Failure(Error.Unauthorized("InvalidRefreshToken", "The provided refresh token is invalid or expired."));
         
             // refresh token revoke
-            refreshTokenEntity.RevokedOn = DateTime.UtcNow;
+            refreshTokenEntity.RevokeToken(DateTime.UtcNow, null);
             await _userManager.UpdateAsync(user);
             
             return Result.Success();

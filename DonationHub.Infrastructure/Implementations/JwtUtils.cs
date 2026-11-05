@@ -30,21 +30,18 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 expires: DateTime.UtcNow.AddMinutes(_jwtOptions.Value.ExpiryMinutes)
                 );
             var token = new JwtSecurityTokenHandler().WriteToken(securityToken);
-            
-            
             return token;
         }
 
         public RefreshToken GetRefreshToken()
         {
             var rawRefreshToken = RefreshTokenUtils.GenerateRefreshToken();
-            return new RefreshToken
-            {
-                Token = rawRefreshToken,
-                TokenHash = RefreshTokenUtils.HashRefreshToken(rawRefreshToken),
-                CreatedAt = DateTime.UtcNow,
-                ExpiresAt = DateTime.UtcNow.AddDays(_jwtOptions.Value.RefreshTokenExpiryDays) 
-            };
+            return  RefreshToken.Create(
+                rawRefreshToken,
+                RefreshTokenUtils.HashRefreshToken(rawRefreshToken),
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddDays(_jwtOptions.Value.RefreshTokenExpiryDays) 
+            );
         }
 
         private static async Task<List<Claim>> GetClaimsAsync(ApplicationUser user, UserManager<ApplicationUser> _userManager)
