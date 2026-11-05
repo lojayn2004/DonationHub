@@ -89,7 +89,8 @@ namespace DonationHub.Infrastructure.ContractImplementations
             var refreshToken = _jwtUtils.GetRefreshToken();
             appUser.RefreshTokens.Add(refreshToken);
             await _userManager.UpdateAsync(appUser);
-            activeRefreshToken.ReplacedByTokenId = refreshToken.Id;
+            if(activeRefreshToken is not null) 
+                activeRefreshToken.ReplacedByTokenId = refreshToken.Id;
 
             await _userManager.UpdateAsync(appUser);
             authResponse.RefreshToken = refreshToken.Token!;

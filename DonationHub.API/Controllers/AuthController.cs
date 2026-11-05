@@ -1,11 +1,12 @@
-﻿using DonationHub.Application.Features.Auth.Login;
-using DonationHub.Application.Features.Auth.Refresh;
-using Microsoft.AspNetCore.Authorization;
-using DonationHub.API.Dtos.Auth;
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
+﻿using DonationHub.API.Dtos.Auth;
 using DonationHub.Application.Features.Auth.GetMe;
+using DonationHub.Application.Features.Auth.Login;
 using DonationHub.Application.Features.Auth.Logout;
+using DonationHub.Application.Features.Auth.Refresh;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DonationHub.API.Controllers
 {
@@ -79,9 +80,11 @@ namespace DonationHub.API.Controllers
         
         public async Task<IActionResult> GetMe(CancellationToken ct)
         {
-            var userEmail = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            //var userEmail = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            string userEmail = User.FindFirstValue(ClaimTypes.Email);
+            Console.WriteLine("User Email: " + userEmail);
 
-            if(string.IsNullOrEmpty(userEmail))
+            if (string.IsNullOrEmpty(userEmail))
                 return Unauthorized(new { message = "Invalid Credentials" });
 
             var query = new GetProfileQuery(userEmail);

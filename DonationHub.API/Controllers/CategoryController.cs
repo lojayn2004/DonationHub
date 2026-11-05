@@ -5,6 +5,7 @@ using DonationHub.Application.Features.Categories.GetCategories;
 using DonationHub.Application.Features.Categories.GetCategoryById;
 using DonationHub.Application.Features.Categories.UpdateCategory;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DonationHub.API.Controllers
@@ -15,6 +16,7 @@ namespace DonationHub.API.Controllers
     {
 
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Create(CreateCategoryRequest request, CancellationToken ct)
         {
             var command = new CreateCategoryCommand(request.NameAr,
@@ -30,6 +32,7 @@ namespace DonationHub.API.Controllers
             return Created($"/api/v1/categories/{result.Value!.Id}", result.Value);
         }
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(UpdateCategoryRequest request, Guid id, CancellationToken ct)
         {
             var command = new UpdateCategoryCommand(id, request.NameAr,
@@ -47,6 +50,7 @@ namespace DonationHub.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
         {
             var command = new DeleteCategoryCommand(id);
