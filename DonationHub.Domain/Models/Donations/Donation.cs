@@ -48,6 +48,13 @@ namespace DonationHub.Domain.Models.Donations
             };
         }
 
+        public void UpdateStatus(DonationStatus status)
+        {
+            if (DonationStatus != DonationStatus.PENDING)
+                throw new Exception("Final State Cannot Change");
+            DonationStatus = status;
+        }
+
 
     }
 }

@@ -17,6 +17,7 @@ namespace DonationHub.Application.Features.Categories.UpdateCategory
                 return Result<CategoryResponse>.Failure(new Error("CategoryNotFound", $"Category with id {request.Id} is not Found", ErrorType.NotFound));
 
             category.Update(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, DateTime.UtcNow);
+            categoryRepo.Update(category);
             await _unitOfWork.SavaChangesAsync();
             return Result<CategoryResponse>.Success(new CategoryResponse(category.Id, 
                 category.NameAr, 

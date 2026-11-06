@@ -99,7 +99,7 @@ namespace DonationHub.Domain.Models.Campaigns
             if (donation.CampaignId != Id)
                 throw new Exception("Donation does not belong to this campaign.");
 
-            if (CampaignStatus != CampaignStatus.ACTIVE)
+            if (CampaignStatus != CampaignStatus.ACTIVE || utcNow >= EndDate)
                 throw new Exception("cannot add donation to un active campaign");
 
             RaisedAmount += donation.Amount;

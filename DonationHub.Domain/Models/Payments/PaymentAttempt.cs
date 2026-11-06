@@ -45,6 +45,13 @@ namespace DonationHub.Domain.Models.Payments
             };
         }
 
+        public void UpdatePayment(PaymentAttemptStatus status)
+        {
+            if (PaymentAttemptStatus != PaymentAttemptStatus.CREATED)
+                throw new Exception("Final State Cannot be changed");
+            PaymentAttemptStatus = status;
+        }
+
 
 
     }
