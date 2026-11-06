@@ -27,6 +27,8 @@ namespace DonationHub.Infrastructure
                     options
                          .UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
                          .AddInterceptors(new SoftDeleteInterceptor())
+                         //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+
             );
 
             services
