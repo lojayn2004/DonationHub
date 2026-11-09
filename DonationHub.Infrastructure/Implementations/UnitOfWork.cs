@@ -14,9 +14,9 @@ namespace DonationHub.Infrastructure.ContractImplementations
             return (IGenericRepository<TEntity>) _repos[repoName];
         }
 
-        public async Task<int> SavaChangesAsync()
+        public async Task<int> SavaChangesAsync(CancellationToken ct)
         {
-            return await _dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync(ct);
         }
     }
 }

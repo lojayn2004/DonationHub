@@ -10,7 +10,7 @@ namespace DonationHub.Application.Features.Auth.Logout
         
         public async Task<Result> Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
-            return await _identityService.RevokeRefreshToken(request.RefreshToken);
+            return await _identityService.RevokeRefreshTokenAsync(request.RefreshToken);
         }
     
     }

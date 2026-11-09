@@ -16,4 +16,13 @@
     <PackageReference Include="MediatR" Version="14.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Campaigns\CreateCampaign\" />
+    <Folder Include="Features\Campaigns\DeleteCampaign\" />
+    <Folder Include="Features\Campaigns\GetActiveCampaigns\" />
+    <Folder Include="Features\Campaigns\GetSuccessStories\" />
+    <Folder Include="Features\Campaigns\GetCampaignById\" />
+    <Folder Include="Features\Campaigns\UpdateCampaign\" />
+  </ItemGroup>
+
 </Project>

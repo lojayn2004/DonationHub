@@ -5,7 +5,7 @@
         IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
 
 
-        Task<int> SavaChangesAsync();
+        Task<int> SavaChangesAsync(CancellationToken ct);
 
     }
 }

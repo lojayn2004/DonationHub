@@ -18,14 +18,14 @@ namespace DonationHub.Infrastructure.ContractImplementations
             _applicationDbContext.Set<TEntity>().Remove(entity);
         }
 
-        public async Task<IReadOnlyList<TEntity>> GetAllAsync()
+        public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct)
         {
-            return await _applicationDbContext.Set<TEntity>().ToListAsync();
+            return await _applicationDbContext.Set<TEntity>().ToListAsync(ct);
         }
 
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+        public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken ct)
         {
-            return await _applicationDbContext.Set<TEntity>().FindAsync(id);
+            return await _applicationDbContext.Set<TEntity>().FindAsync(id,ct);
         }
 
         public void Update(TEntity entity)

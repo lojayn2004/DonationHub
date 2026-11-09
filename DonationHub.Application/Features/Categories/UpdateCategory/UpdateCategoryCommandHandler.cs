@@ -12,13 +12,13 @@ namespace DonationHub.Application.Features.Categories.UpdateCategory
             CancellationToken cancellationToken)
         {
             var categoryRepo = _unitOfWork.GetRepository<Category>();
-            var category = await categoryRepo.GetByIdAsync(request.Id);
+            var category = await categoryRepo.GetByIdAsync(request.Id, cancellationToken);
             if(category == null)
                 return Result<CategoryResponse>.Failure(new Error("CategoryNotFound", $"Category with id {request.Id} is not Found", ErrorType.NotFound));
 
             category.Update(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, DateTime.UtcNow);
             categoryRepo.Update(category);
-            await _unitOfWork.SavaChangesAsync();
+            await _unitOfWork.SavaChangesAsync(cancellationToken);
             return Result<CategoryResponse>.Success(new CategoryResponse(category.Id, 
                 category.NameAr, 
                 category.NameEn, 

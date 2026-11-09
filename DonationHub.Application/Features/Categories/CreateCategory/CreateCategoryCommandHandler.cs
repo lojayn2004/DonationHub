@@ -20,7 +20,7 @@ namespace DonationHub.Application.Features.Categories.CreateCatgory
             var category = Category.CreateCategory(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, DateTime.UtcNow);
 
             categoryRepo.Add(category);
-            await _unitOfWork.SavaChangesAsync();
+            await _unitOfWork.SavaChangesAsync(cancellationToken);
 
             return Result<CategoryResponse>.Success(new CategoryResponse(category.Id, 
                 category.NameAr, 

@@ -80,7 +80,7 @@ namespace DonationHub.API.Controllers
         
         public async Task<IActionResult> GetMe(CancellationToken ct)
         {
-            //var userEmail = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+           
             string userEmail = User.FindFirstValue(ClaimTypes.Email);
             Console.WriteLine("User Email: " + userEmail);
 

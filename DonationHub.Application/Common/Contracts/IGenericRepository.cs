@@ -2,9 +2,9 @@
 {
     public interface IGenericRepository<TEntity>
     {
-        Task<IReadOnlyList<TEntity>> GetAllAsync();
+        Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct);
 
-        Task<TEntity?> GetByIdAsync(Guid id);
+        Task<TEntity?> GetByIdAsync(Guid id, CancellationToken ct);
 
         void Add(TEntity entity);
 

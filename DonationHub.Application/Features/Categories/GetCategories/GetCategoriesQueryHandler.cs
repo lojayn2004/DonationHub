@@ -13,7 +13,7 @@ namespace DonationHub.Application.Features.Categories.GetCategories
         {
             var categoryRepo = _unitOfWork.GetRepository<Category>();
 
-            var categories = await categoryRepo.GetAllAsync();
+            var categories = await categoryRepo.GetAllAsync(cancellationToken);
             var mappedCategories = categories.Select(c => new CategoryResponse(c.Id, c.NameAr, c.NameEn, c.DescriptionAr, c.DescriptionEn)).ToList();
             return Result<IReadOnlyList<CategoryResponse>>.Success(mappedCategories);
         }

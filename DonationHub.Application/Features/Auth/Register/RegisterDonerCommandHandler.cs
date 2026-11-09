@@ -20,7 +20,7 @@ namespace DonationHub.Application.Features.Auth.Refresh
             if (!userResult.IsSuccess)
                 return Result<AuthResponse>.Failure(userResult.Error!);
 
-            return await _identityService.GetAuthResponse(userResult.Value!.Email);
+            return await _identityService.GetAuthResponseAsync(userResult.Value!.Email);
         }
     }
 }

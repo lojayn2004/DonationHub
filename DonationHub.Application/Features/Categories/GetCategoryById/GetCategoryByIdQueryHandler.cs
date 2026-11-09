@@ -11,7 +11,7 @@ namespace DonationHub.Application.Features.Categories.GetCategoryById
         public async Task<Result<CategoryResponse>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             var categoryRepo = _unitOfWork.GetRepository<Category>();
-            var category = await categoryRepo.GetByIdAsync(request.Id);
+            var category = await categoryRepo.GetByIdAsync(request.Id, cancellationToken);
             if (category == null)
                 return Result<CategoryResponse>.Failure(new Error("CategoryNotFound", $"Category with id {request.Id} is not Found", ErrorType.NotFound));
 
