@@ -1,5 +1,5 @@
 ﻿using DonationHub.API.Dtos.Auth;
-using DonationHub.Application.Features.Admin.CreateStaff;
+using DonationHub.Application.Features.Auth.CreateStaff;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

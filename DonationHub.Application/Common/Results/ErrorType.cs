@@ -9,6 +9,11 @@ namespace DonationHub.Application.Common.Results
         Conflict,
         UnAuthorized,
         Forbidden, 
-        UnExpected
+        UnExpected,
+        
+        PayloadTooLarge,
+        UnprocessableEntity,
+
+        TooManyRequests
     }
 }

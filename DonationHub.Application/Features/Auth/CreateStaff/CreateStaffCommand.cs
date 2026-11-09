@@ -1,7 +1,7 @@
 ﻿using DonationHub.Application.Common.Results;
 using MediatR;
 
-namespace DonationHub.Application.Features.Admin.CreateStaff
+namespace DonationHub.Application.Features.Auth.CreateStaff
 {
     public record CreateStaffCommand(string Email,
         string Password,

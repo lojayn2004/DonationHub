@@ -14,7 +14,7 @@ namespace DonationHub.Application.Features.Categories.UpdateCategory
             var categoryRepo = _unitOfWork.GetRepository<Category>();
             var category = await categoryRepo.GetByIdAsync(request.Id, cancellationToken);
             if(category == null)
-                return Result<CategoryResponse>.Failure(new Error("CategoryNotFound", $"Category with id {request.Id} is not Found", ErrorType.NotFound));
+                return Result<CategoryResponse>.Failure(CategoryErrors.NotFound);
 
             category.Update(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, _timeProvider.GetUtcNow());
             categoryRepo.Update(category);

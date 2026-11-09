@@ -18,7 +18,10 @@ namespace DonationHub.API.Controllers
                 return Conflict(error.Message);
             if(error.Type == ErrorType.Forbidden)
                 return Forbid(error.Message);
-
+            if(error.Type == ErrorType.PayloadTooLarge)
+                return new StatusCodeResult(StatusCodes.Status413PayloadTooLarge);
+            if(error.Type == ErrorType.UnprocessableEntity)
+                return UnprocessableEntity();
             return Problem(error.Message);
         }
     }

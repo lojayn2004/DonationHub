@@ -1,17 +1,18 @@
 ﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Common.Results;
-using DonationHub.Application.Features.Common;
+using DonationHub.Application.Features.Auth.Common;
 using MediatR;
 
 
-namespace DonationHub.Application.Features.Admin.CreateStaff
+namespace DonationHub.Application.Features.Auth.CreateStaff
 {
     internal class CreateStaffCommandHandler(IIdentityService _identityService): IRequestHandler<CreateStaffCommand, Result<CreateStaffResponse>>
     {
         public async Task<Result<CreateStaffResponse>> Handle(CreateStaffCommand request, CancellationToken cancellationToken)
         {
             if(await _identityService.EmailExistsAsync(request.Email))
-                return Result<CreateStaffResponse>.Failure(new Error("UserAlreadyExists", "A user with the provided email already exists.", ErrorType.Conflict));
+                return Result<CreateStaffResponse>.Failure(AuthErrors.EmailAlreadyExists);
+
             var registerCommand = new RegisterCommand(request.Email, request.Password, request.FullName, 
                 request.UserName, request.PrefferedLanguage, request.Role);
 

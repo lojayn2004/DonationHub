@@ -1,4 +1,4 @@
-﻿namespace DonationHub.Application.Features.Admin.CreateStaff
+﻿namespace DonationHub.Application.Features.Auth.CreateStaff
 {
     public record CreateStaffResponse(Guid Id,
         string FirstName, 

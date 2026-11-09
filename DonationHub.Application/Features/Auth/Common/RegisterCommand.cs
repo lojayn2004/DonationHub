@@ -1,4 +1,4 @@
-﻿namespace DonationHub.Application.Features.Common
+﻿namespace DonationHub.Application.Features.Auth.Common
 {
     public record RegisterCommand(string Email,
         string Password,

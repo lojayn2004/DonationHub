@@ -1,7 +1,6 @@
 ﻿using DonationHub.Application.Features.Auth.Common;
 using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Common.Results;
-using DonationHub.Application.Features.Common;
 using MediatR;
 
 
@@ -13,7 +12,7 @@ namespace DonationHub.Application.Features.Auth.Refresh
         public async Task<Result<AuthResponse>> Handle(RegisterDonerCommand request, CancellationToken cancellationToken)
         {
             if(await _identityService.EmailExistsAsync(request.Email))
-                return Result<AuthResponse>.Failure(new Error("UserAlreadyExists", "A user with the provided email already exists.", ErrorType.Conflict));
+                return Result<AuthResponse>.Failure(AuthErrors.EmailAlreadyExists);
 
             var registerCommand = new RegisterCommand(request.Email, request.Password, request.FullName,
                 request.UserName, request.PrefferedLanguage, "Donor");

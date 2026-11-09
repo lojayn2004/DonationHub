@@ -12,10 +12,10 @@ namespace DonationHub.Application.Features.Auth.Login
         public async Task<Result<AuthResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             if(await _identityService.IsAccountLockedAsync(request.Email))
-                return Result<AuthResponse>.Failure(new Error("AccountLocked", "The account associated with the provided email is locked.", ErrorType.Forbidden));
+                return Result<AuthResponse>.Failure(AuthErrors.AccountDeactivated);
             var isValidCredentials = await _identityService.ValidateCredentialsAsync(request.Email, request.Password);
             if(!isValidCredentials) 
-                return Result<AuthResponse>.Failure(new Error("InvalidCredentials", "The provided credentials are invalid.", ErrorType.UnAuthorized));
+                return Result<AuthResponse>.Failure(AuthErrors.InValidCredentials);
             return await _identityService.GetAuthResponseAsync(request.Email);
             
             
