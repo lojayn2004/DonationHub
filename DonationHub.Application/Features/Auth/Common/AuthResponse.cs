@@ -9,6 +9,6 @@ namespace DonationHub.Application.Features.Auth.Common
         [JsonIgnore]
         public string? RefreshToken { get; set; } = "";
 
-        public DateTime RefreshTokenExpiration { get; set; }
+        public DateTimeOffset RefreshTokenExpiration { get; set; }
     }
 }

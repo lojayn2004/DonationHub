@@ -14,8 +14,10 @@ namespace DonationHub.Application.Features.Auth.Refresh
         {
             if(await _identityService.EmailExistsAsync(request.Email))
                 return Result<AuthResponse>.Failure(new Error("UserAlreadyExists", "A user with the provided email already exists.", ErrorType.Conflict));
+
             var registerCommand = new RegisterCommand(request.Email, request.Password, request.FullName,
                 request.UserName, request.PrefferedLanguage, "Donor");
+
             var userResult = await _identityService.CreateUserAsync(registerCommand);
             if (!userResult.IsSuccess)
                 return Result<AuthResponse>.Failure(userResult.Error!);

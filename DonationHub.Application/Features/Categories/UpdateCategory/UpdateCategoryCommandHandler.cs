@@ -6,7 +6,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Categories.UpdateCategory
 {
-    internal class UpdateCategoryCommandHandler(IUnitOfWork _unitOfWork) : IRequestHandler<UpdateCategoryCommand, Result<CategoryResponse>>
+    internal class UpdateCategoryCommandHandler(IUnitOfWork _unitOfWork, TimeProvider _timeProvider) : IRequestHandler<UpdateCategoryCommand, Result<CategoryResponse>>
     {
         public async Task<Result<CategoryResponse>> Handle(UpdateCategoryCommand request, 
             CancellationToken cancellationToken)
@@ -16,7 +16,7 @@ namespace DonationHub.Application.Features.Categories.UpdateCategory
             if(category == null)
                 return Result<CategoryResponse>.Failure(new Error("CategoryNotFound", $"Category with id {request.Id} is not Found", ErrorType.NotFound));
 
-            category.Update(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, DateTime.UtcNow);
+            category.Update(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, _timeProvider.GetUtcNow());
             categoryRepo.Update(category);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
             return Result<CategoryResponse>.Success(new CategoryResponse(category.Id, 

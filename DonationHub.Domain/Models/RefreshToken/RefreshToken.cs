@@ -13,19 +13,19 @@ namespace DonationHub.Domain.Models.RefreshToken
         [NotMapped]
         public string? Token { get; private set; }
 
-        public DateTime ExpiresAt { get; private set; }
+        public DateTimeOffset ExpiresAt { get; private set; }
 
-        public DateTime CreatedAt { get; private set; }
+        public DateTimeOffset CreatedAt { get; private set; }
 
-        public DateTime? RevokedOn { get; private set; }
+        public DateTimeOffset? RevokedOn { get; private set; }
 
         public int? ReplacedByTokenId { get; private set; }
 
-        public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
+        public bool IsExpired => DateTimeOffset.UtcNow >= ExpiresAt;
 
         public bool IsActive => RevokedOn == null && !IsExpired;
 
-        public static RefreshToken Create(string token, string tokenHash, DateTime createdAt, DateTime expiresAt)
+        public static RefreshToken Create(string token, string tokenHash, DateTimeOffset createdAt, DateTimeOffset expiresAt)
         {
             return new RefreshToken()
             {
@@ -37,7 +37,7 @@ namespace DonationHub.Domain.Models.RefreshToken
             };
         }
 
-        public void RevokeToken(DateTime revokedOn, int? replacedByTokenId)
+        public void RevokeToken(DateTimeOffset revokedOn, int? replacedByTokenId)
         {
             RevokedOn = revokedOn;
             if (replacedByTokenId is not null)

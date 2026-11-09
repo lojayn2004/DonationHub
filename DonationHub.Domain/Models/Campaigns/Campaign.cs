@@ -15,9 +15,9 @@ namespace DonationHub.Domain.Models.Campaigns
 
         public string DescriptionEn { get; private set; }
 
-        public DateTime UpdatedAt { get; private set; }
+        public DateTimeOffset UpdatedAt { get; private set; }
 
-        public DateTime EndDate { get; private set; }
+        public DateTimeOffset EndDate { get; private set; }
 
         public Money GoalAmount { get; private set; }
 
@@ -36,15 +36,15 @@ namespace DonationHub.Domain.Models.Campaigns
 
         public List<Donation> Donations { get; private set; }
         public bool IsDeleted { get ; set; }
-        public DateTime? DeletedAtUtc { get; set; }
+        public DateTimeOffset? DeletedAtUtc { get; set; }
 
         public static Campaign Create(string titleAr, string titleEn,
                                               string descAr, string descEn,
                                               Money goalAmount,
-                                              DateTime endDate,
+                                              DateTimeOffset endDate,
                                               Guid categoryId,
                                               Guid createdByUserId,
-                                              DateTime utcNow) {
+                                              DateTimeOffset utcNow) {
             
             if (goalAmount.Amount < 0)
                 throw new AmountNotValidException("Goal Amount Must be Positive");
@@ -70,7 +70,7 @@ namespace DonationHub.Domain.Models.Campaigns
             };
         }
 
-        public void UpdateGoalAmount(Money newGoal,DateTime utcNow)
+        public void UpdateGoalAmount(Money newGoal, DateTimeOffset utcNow)
         {
             if(newGoal.Amount < 0)
                 throw new AmountNotValidException("Goal Amount Must be Positive");
@@ -82,7 +82,7 @@ namespace DonationHub.Domain.Models.Campaigns
             
         }
 
-        public void UpdateEndDate(DateTime endDate, DateTime utcNow)
+        public void UpdateEndDate(DateTimeOffset endDate, DateTimeOffset utcNow)
         {
             if (endDate < utcNow)
                 throw new DateNotValidException("End Date must be in future");
@@ -92,7 +92,7 @@ namespace DonationHub.Domain.Models.Campaigns
 
 
        
-        public void AddDonation(Donation donation, DateTime utcNow)
+        public void AddDonation(Donation donation, DateTimeOffset utcNow)
         {
             if (donation.DonationStatus != DonationStatus.COMPLETED)
                 throw new Exception("Only succeeded donations count toward raised amount.");
@@ -108,7 +108,7 @@ namespace DonationHub.Domain.Models.Campaigns
                 UpdateCampaignStatus(CampaignStatus.COMPLETED, utcNow);
         }
 
-        public void UpdateCampaignStatus(CampaignStatus status, DateTime utcNow)
+        public void UpdateCampaignStatus(CampaignStatus status, DateTimeOffset utcNow)
         {
             if (CampaignStatus != CampaignStatus.ACTIVE)
                 throw new Exception("Cannot update campiagn status it is final");

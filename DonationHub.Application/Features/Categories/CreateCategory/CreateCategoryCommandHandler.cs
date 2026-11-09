@@ -6,7 +6,8 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Categories.CreateCatgory
 {
-    public class CreateCategoryCommandHandler(IUnitOfWork _unitOfWork) :
+    public class CreateCategoryCommandHandler(IUnitOfWork _unitOfWork, 
+        TimeProvider _timeProvider) :
         IRequestHandler<CreateCategoryCommand, Result<CategoryResponse>>
     {
       
@@ -17,7 +18,8 @@ namespace DonationHub.Application.Features.Categories.CreateCatgory
         {
             var categoryRepo = _unitOfWork.GetRepository<Category>();
 
-            var category = Category.CreateCategory(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, DateTime.UtcNow);
+            var category = Category.CreateCategory(request.NameAr, request.NameEn, 
+                request.DescriptionAr, request.DescriptionEn, _timeProvider.GetUtcNow());
 
             categoryRepo.Add(category);
             await _unitOfWork.SavaChangesAsync(cancellationToken);

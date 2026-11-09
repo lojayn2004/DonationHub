@@ -96,8 +96,8 @@ namespace DonationHub.API.Controllers
 
 
 
-        private void SetRefreshTokenCookie(string refreshToken, 
-            DateTime expiresAt)
+        private void SetRefreshTokenCookie(string refreshToken,
+            DateTimeOffset expiresAt)
         {
             var cookieOptions = new CookieOptions
             {

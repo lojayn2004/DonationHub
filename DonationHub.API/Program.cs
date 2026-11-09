@@ -20,6 +20,7 @@ builder.Services.AddOpenApi(options =>
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
+builder.Services.AddSingleton(TimeProvider.System);
 
 var app = builder.Build();
 
