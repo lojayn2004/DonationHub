@@ -1,6 +1,5 @@
-﻿
-
-using DonationHub.Application.Features.Campaigns.Common;
+﻿using DonationHub.Application.Features.Campaigns.Common;
+using DonationHub.Domain.Results;
 using MediatR;
 
 namespace DonationHub.Application.Features.Campaigns.CreateCampaign
@@ -10,7 +9,7 @@ namespace DonationHub.Application.Features.Campaigns.CreateCampaign
                                               decimal goalAmount,
                                               DateTimeOffset endDate,
                                               Guid categoryId,
-                                              Guid createdByUserId): IRequest<Guid>
+                                              Guid createdByUserId): IRequest<Result<CampaignDto>>
     {
     }
 }

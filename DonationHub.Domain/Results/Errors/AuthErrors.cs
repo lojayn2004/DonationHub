@@ -1,8 +1,6 @@
 ﻿
 
-using DonationHub.Application.Common.Results;
-
-namespace DonationHub.Application.Features.Auth.Common
+namespace DonationHub.Domain.Results.Errors
 {
     public static class AuthErrors
     {

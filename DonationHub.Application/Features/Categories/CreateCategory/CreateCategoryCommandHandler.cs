@@ -3,6 +3,7 @@ using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Categories.Common;
 using DonationHub.Domain.Models.Categories;
 using MediatR;
+using DonationHub.Domain.Results;
 
 namespace DonationHub.Application.Features.Categories.CreateCatgory
 {

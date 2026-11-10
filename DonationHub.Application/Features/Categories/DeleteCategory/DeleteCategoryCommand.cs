@@ -1,6 +1,4 @@
-﻿
-
-using DonationHub.Application.Common.Results;
+﻿using DonationHub.Domain.Results;
 using MediatR;
 
 namespace DonationHub.Application.Features.Categories.DeleteCategory

@@ -2,14 +2,27 @@
 
 namespace DonationHub.Application.Features.Campaigns.Common
 {
-    internal class CampaignDto
+    public class CampaignDto
     {
-        //string titleAr, string titleEn,
-        //                                      string descAr, string descEn,
-        //                                      Money goalAmount,
-        //                                      DateTimeOffset endDate,
-        //                                      Guid categoryId,
-        //                                      Guid createdByUserId,
-        //                                      DateTimeOffset utcNow
+        public Guid Id { get; set; }
+        public string TitleAr { get; set; }
+
+        public string TitleEn { get; set; }
+        public string DescriptionAr { get; set; }
+
+        public string DescriptionEn { get; set; }
+
+        public decimal GoalAmount { get; set; }
+
+        public DateTimeOffset EndDate { get; set; }
+
+
+        public Guid CategoryId { get; set; }
+
+        // TODO: TO HANDLE JOIN IN FUTURE
+        //public string CategoryName { get; set; }
+
+        //public string CreatedByUserName { get; set; }
+
     }
 }

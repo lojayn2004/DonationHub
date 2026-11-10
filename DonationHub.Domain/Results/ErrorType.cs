@@ -1,6 +1,6 @@
 ﻿
 
-namespace DonationHub.Application.Common.Results
+namespace DonationHub.Domain.Results
 {
     public enum ErrorType
     {

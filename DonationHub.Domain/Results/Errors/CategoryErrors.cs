@@ -1,7 +1,5 @@
 ﻿
-using DonationHub.Application.Common.Results;
-
-namespace DonationHub.Application.Features.Categories.Common
+namespace DonationHub.Domain.Results.Errors
 {
     public static  class CategoryErrors
     {

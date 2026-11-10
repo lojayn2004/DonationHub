@@ -1,4 +1,4 @@
-﻿using DonationHub.Application.Common.Results;
+﻿using DonationHub.Domain.Results;
 using DonationHub.Application.Features.Categories.Common;
 using MediatR;
 

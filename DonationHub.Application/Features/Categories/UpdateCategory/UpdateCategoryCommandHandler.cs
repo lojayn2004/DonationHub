@@ -1,8 +1,9 @@
 ﻿using DonationHub.Application.Common.Contracts;
-using DonationHub.Application.Common.Results;
+using DonationHub.Domain.Results;
 using DonationHub.Application.Features.Categories.Common;
 using DonationHub.Domain.Models.Categories;
 using MediatR;
+using DonationHub.Domain.Results.Errors;
 
 namespace DonationHub.Application.Features.Categories.UpdateCategory
 {
@@ -16,7 +17,8 @@ namespace DonationHub.Application.Features.Categories.UpdateCategory
             if(category == null)
                 return Result<CategoryResponse>.Failure(CategoryErrors.NotFound);
 
-            category.Update(request.NameAr, request.NameEn, request.DescriptionAr, request.DescriptionEn, _timeProvider.GetUtcNow());
+            category.Update(request.NameAr, request.NameEn, request.DescriptionAr,
+                request.DescriptionEn, _timeProvider.GetUtcNow());
             categoryRepo.Update(category);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
             return Result<CategoryResponse>.Success(new CategoryResponse(category.Id, 

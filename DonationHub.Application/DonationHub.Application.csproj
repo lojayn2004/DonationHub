@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Campaigns\DeleteCampaign\" />
     <Folder Include="Features\Campaigns\GetActiveCampaigns\" />
     <Folder Include="Features\Campaigns\GetSuccessStories\" />
     <Folder Include="Features\Campaigns\GetCampaignById\" />

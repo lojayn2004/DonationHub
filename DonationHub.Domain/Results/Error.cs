@@ -1,6 +1,6 @@
 ﻿
 
-namespace DonationHub.Application.Common.Results
+namespace DonationHub.Domain.Results
 {
     public record Error(string Code, string Message, ErrorType Type)
     {

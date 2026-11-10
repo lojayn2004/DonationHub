@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+
+using FluentValidation;
 
 namespace DonationHub.Application.Features.Campaigns.CreateCampaign
 {
-    internal class CreateCampaignCommandValidator
+    public class CreateCampaignCommandValidator: AbstractValidator<CreateCampaignCommand>
     {
+        public CreateCampaignCommandValidator()
+        {
+            RuleFor(c => c.goalAmount).GreaterThan(0).WithMessage("Goal Amount Must be Greater than zero");
+
+        }
     }
 }
