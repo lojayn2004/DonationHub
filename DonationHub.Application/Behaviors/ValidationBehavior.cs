@@ -8,10 +8,10 @@ namespace DonationHub.Application.Behaviors
     }
     // applies validation before reaching the handler
     public class ValidationBehavior<TRequest,TResponse>(IEnumerable<IValidator<TRequest>> validators) :
-        IPipelineBehavior<TRequest, Result<TResponse>> where TRequest: notnull
+        IPipelineBehavior<TRequest,TResponse> where TRequest: notnull
     {
-        public async Task<Result<TResponse>> Handle(TRequest request, 
-            RequestHandlerDelegate<Result<TResponse>> next,
+        public async Task<TResponse> Handle(TRequest request, 
+            RequestHandlerDelegate<TResponse> next,
             CancellationToken cancellationToken)
         {
             // if their is no validations
@@ -23,7 +23,7 @@ namespace DonationHub.Application.Behaviors
 
             var failures = results.SelectMany(r => r.Errors).Where(e => e is not null).ToList();
             if (failures.Count != 0)
-                return Result<TResponse>.Failure(ValidationErrors.Falied);
+                throw new ValidationException(failures);
                 
             return await next();
         }
