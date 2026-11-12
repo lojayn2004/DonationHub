@@ -5,6 +5,7 @@ using DonationHub.Infrastructure.Data.Interceptors;
 using DonationHub.Infrastructure.Data.Seeding.Categories;
 using DonationHub.Infrastructure.Data.Seeding.Roles;
 using DonationHub.Infrastructure.Data.Seeding.Users;
+using DonationHub.Infrastructure.Implementations;
 using DonationHub.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -76,7 +77,8 @@ namespace DonationHub.Infrastructure
             services.AddScoped<IDataSeeder, CategoriesSeeder>();
             services.AddScoped<IDataSeeder, RolesSeeder>();
             services.AddScoped<IDataSeeder, UsersSeeder>();
-
+            
+            services.AddScoped(typeof(IQuery<,>), typeof(Query<,>));
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtUtils, JwtUtils>();

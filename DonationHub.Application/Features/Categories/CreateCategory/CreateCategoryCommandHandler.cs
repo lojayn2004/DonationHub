@@ -1,5 +1,4 @@
 ﻿using DonationHub.Application.Common.Contracts;
-using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Categories.Common;
 using DonationHub.Domain.Models.Categories;
 using MediatR;

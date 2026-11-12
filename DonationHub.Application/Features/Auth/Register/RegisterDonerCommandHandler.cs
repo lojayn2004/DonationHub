@@ -1,7 +1,8 @@
 ﻿using DonationHub.Application.Features.Auth.Common;
 using DonationHub.Application.Common.Contracts;
-using DonationHub.Application.Common.Results;
 using MediatR;
+using DonationHub.Domain.Results;
+using DonationHub.Domain.Results.Errors;
 
 
 namespace DonationHub.Application.Features.Auth.Refresh

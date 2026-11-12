@@ -1,5 +1,5 @@
 ﻿using DonationHub.Application.Common.Dtos;
-using DonationHub.Application.Common.Results;
+using DonationHub.Domain.Results;
 using MediatR;
 
 namespace DonationHub.Application.Features.Auth.GetMe

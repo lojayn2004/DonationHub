@@ -1,5 +1,7 @@
-﻿using DonationHub.Application.Common.Results;
+﻿
+using DonationHub.Domain.Results;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace DonationHub.API.Controllers
 {

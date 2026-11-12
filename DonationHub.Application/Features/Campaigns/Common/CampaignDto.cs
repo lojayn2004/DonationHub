@@ -14,13 +14,18 @@ namespace DonationHub.Application.Features.Campaigns.Common
 
         public decimal GoalAmount { get; set; }
 
+
+        public decimal RaisedAmount { get; set; }
+
+
         public DateTimeOffset EndDate { get; set; }
 
+       
 
         public Guid CategoryId { get; set; }
 
         // TODO: TO HANDLE JOIN IN FUTURE
-        //public string CategoryName { get; set; }
+        public string CategoryName { get; set; }
 
         //public string CreatedByUserName { get; set; }
 

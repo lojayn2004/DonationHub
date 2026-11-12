@@ -1,6 +1,6 @@
 ﻿using DonationHub.Application.Common.Dtos;
-using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Auth.Common;
+using DonationHub.Domain.Results;
 
 namespace DonationHub.Application.Common.Contracts
 {

@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DonationHub.Domain.Models.RefreshToken
 {
-    [Owned]
+    //[Owned]
     public  class RefreshToken
     {
         public int Id { get; private set; }

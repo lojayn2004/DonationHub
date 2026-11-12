@@ -1,11 +1,9 @@
-﻿using DonationHub.Application.Common.Results;
+﻿using DonationHub.Domain.Results;
 using FluentValidation;
 using MediatR;
 namespace DonationHub.Application.Behaviors
 {
-    public static class ValidationErrors {
-        public static Error Falied = new("Validation.Failed", "Input Validation Faliure", ErrorType.Validation);
-    }
+  
     // applies validation before reaching the handler
     public class ValidationBehavior<TRequest,TResponse>(IEnumerable<IValidator<TRequest>> validators) :
         IPipelineBehavior<TRequest,TResponse> where TRequest: notnull

@@ -16,6 +16,7 @@ namespace DonationHub.Application.Features.Campaigns.DeleteCampaign
             var campaign = await campaignsRepo.GetByIdAsync(request.Id, cancellationToken);
             if(campaign == null) 
                return Result.Failure(CampaignErrors.NotFound);
+            
             campaignsRepo.Delete(campaign);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
             return Result.Success();

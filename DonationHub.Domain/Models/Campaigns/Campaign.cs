@@ -2,6 +2,8 @@
 using DonationHub.Domain.Models.Categories;
 using DonationHub.Domain.Models.Donations;
 using DonationHub.Domain.Models.Shared;
+using DonationHub.Domain.Results;
+using DonationHub.Domain.Results.Errors;
 
 namespace DonationHub.Domain.Models.Campaigns
 {
@@ -38,21 +40,21 @@ namespace DonationHub.Domain.Models.Campaigns
         public bool IsDeleted { get ; set; }
         public DateTimeOffset? DeletedAtUtc { get; set; }
 
-        public static Campaign Create(string titleAr, string titleEn,
+        public static Result<Campaign> Create(string titleAr, string titleEn,
                                               string descAr, string descEn,
                                               Money goalAmount,
                                               DateTimeOffset endDate,
                                               Guid categoryId,
                                               Guid createdByUserId,
                                               DateTimeOffset utcNow) {
-            
-            if (goalAmount.Amount < 0)
-                throw new AmountNotValidException("Goal Amount Must be Positive");
-            if(endDate <= utcNow)
-                throw new DateNotValidException("End Date Must be in future");
+            // TODO: enhance validation messge 
+            if (goalAmount.Amount <= 0)
+                return Result<Campaign>.Failure(ValidationErrors.Falied);
+            if (endDate <= utcNow)
+                return Result<Campaign>.Failure(CampaignErrors.EndDateInPast);
 
 
-            return new Campaign
+            var campaign =  new Campaign
             {
                 Id = Guid.NewGuid(),
                 TitleAr = titleAr,
@@ -68,27 +70,29 @@ namespace DonationHub.Domain.Models.Campaigns
                 CreatedAt = utcNow,
                 UpdatedAt = utcNow
             };
+
+            return Result<Campaign>.Success(campaign);
         }
 
-        public void UpdateGoalAmount(Money newGoal, DateTimeOffset utcNow)
-        {
-            if(newGoal.Amount < 0)
-                throw new AmountNotValidException("Goal Amount Must be Positive");
-            if(newGoal.Amount < RaisedAmount.Amount)
-                throw new AmountNotValidException("Updated Goal Amount Must be Greater than or equal the raised amount");
-            // TODO: add when they are not the same currecny also
-            GoalAmount = newGoal;
-            UpdatedAt = utcNow;
+        //public void UpdateGoalAmount(Money newGoal, DateTimeOffset utcNow)
+        //{
+        //    if(newGoal.Amount < 0)
+        //        throw new AmountNotValidException("Goal Amount Must be Positive");
+        //    if(newGoal.Amount < RaisedAmount.Amount)
+        //        throw new AmountNotValidException("Updated Goal Amount Must be Greater than or equal the raised amount");
+        //    // TODO: add when they are not the same currecny also
+        //    GoalAmount = newGoal;
+        //    UpdatedAt = utcNow;
             
-        }
+        //}
 
-        public void UpdateEndDate(DateTimeOffset endDate, DateTimeOffset utcNow)
-        {
-            if (endDate < utcNow)
-                throw new DateNotValidException("End Date must be in future");
-            EndDate = endDate;
-            UpdatedAt = utcNow;
-        }
+        //public void UpdateEndDate(DateTimeOffset endDate, DateTimeOffset utcNow)
+        //{
+        //    if (endDate < utcNow)
+        //        throw new DateNotValidException("End Date must be in future");
+        //    EndDate = endDate;
+        //    UpdatedAt = utcNow;
+        //}
 
 
        
@@ -108,12 +112,42 @@ namespace DonationHub.Domain.Models.Campaigns
                 UpdateCampaignStatus(CampaignStatus.COMPLETED, utcNow);
         }
 
-        public void UpdateCampaignStatus(CampaignStatus status, DateTimeOffset utcNow)
+        public Result UpdateCampaignStatus(CampaignStatus status, DateTimeOffset utcNow)
         {
             if (CampaignStatus != CampaignStatus.ACTIVE)
-                throw new Exception("Cannot update campiagn status it is final");
+                return Result.Failure(CampaignErrors.NotActive);
             CampaignStatus = status;
             UpdatedAt = utcNow;
+            return Result.Success();
+        }
+
+        public Result Update(string titleAr, string titleEn,
+                                              string descAr, string descEn,
+                                              decimal goalAmount,
+                                              DateTimeOffset endDate,
+                                              Guid categoryId,
+                                              DateTimeOffset utcNow)
+        {
+           
+            TitleAr = titleAr;
+            TitleEn = titleEn;
+            DescriptionAr = descAr;
+            DescriptionEn = descEn;
+            if (endDate <= utcNow)
+                return Result.Failure(CampaignErrors.EndDateInPast);
+
+            if (goalAmount <= 0)
+                return Result.Failure(ValidationErrors.Falied);
+
+            if (goalAmount <= RaisedAmount.Amount)
+                return Result.Failure(CampaignErrors.GoalBelowRaised);
+
+            GoalAmount.UpdateAmount(goalAmount);
+
+            EndDate = endDate;
+            CategoryId = categoryId;
+            UpdatedAt = utcNow;
+            return Result.Success();
         }
 
 

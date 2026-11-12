@@ -1,6 +1,7 @@
 ﻿using DonationHub.Application.Common.Contracts;
-using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Auth.Common;
+using DonationHub.Domain.Results;
+using DonationHub.Domain.Results.Errors;
 using MediatR;
 
 
