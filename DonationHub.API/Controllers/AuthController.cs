@@ -1,12 +1,13 @@
 ﻿using DonationHub.API.Dtos.Auth;
-using DonationHub.Application.Features.Auth.GetMe;
-using DonationHub.Application.Features.Auth.Login;
-using DonationHub.Application.Features.Auth.Logout;
-using DonationHub.Application.Features.Auth.Refresh;
+using DonationHub.Application.Features.Auth.Queries.GetMe;
+using DonationHub.Application.Features.Auth.Commands.Login;
+using DonationHub.Application.Features.Auth.Commands.Logout;
+using DonationHub.Application.Features.Auth.Commands.Refresh;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using DonationHub.Application.Features.Auth.Commands.Register;
 
 namespace DonationHub.API.Controllers
 {

@@ -2,12 +2,12 @@
 {
     public class CreateCampaignDto
     {
-        public string TitleAr { get; set; }
+        public string TitleAr { get; set; } = default!;
 
-        public string TitleEn { get; set; }
-        public string DescriptionAr { get; set; }
+        public string TitleEn { get; set; } = default!;
+        public string DescriptionAr { get; set; } = default!;
 
-        public string DescriptionEn { get; set; }
+        public string DescriptionEn { get; set; } = default!;
 
         public decimal GoalAmount { get; set; }
 

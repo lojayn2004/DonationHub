@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Campaigns\GetCampaignById\" />
-    <Folder Include="Features\Campaigns\UpdateCampaign\" />
+    <Folder Include="Features\Campaigns\Queries\GetCampaignById\" />
+    <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
   </ItemGroup>
 
 </Project>
