@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Campaigns.Commands.UpdateCampaignStatus
 {
-    public record UpdateCampaignStatusCommand(Guid campaignId, string status): IRequest<Result>
+    public record UpdateCampaignStatusCommand(Guid campaignId, string status, byte[] rowVersion) : IRequest<Result>
     {
     }
 }

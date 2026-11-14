@@ -7,7 +7,10 @@ using MediatR;
 namespace DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign
 {
 
-    public class UpdateCampaignHandler(IUnitOfWork _unitOfWork, TimeProvider _timeProvider): IRequestHandler<UpdateCampaignCommand, Result>
+    public class UpdateCampaignHandler(IUnitOfWork _unitOfWork, 
+                                      TimeProvider _timeProvider, 
+                                      IConcurrencyHandler<Campaign> _concurrencyHandler): 
+        IRequestHandler<UpdateCampaignCommand, Result>
     {
         public async Task<Result> Handle(UpdateCampaignCommand request, 
             CancellationToken cancellationToken)
@@ -26,7 +29,18 @@ namespace DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign
             if (!updateResult.IsSuccess)
                 return Result.Failure(updateResult.Error);
             campaignRepo.Update(campaign);
-            await _unitOfWork.SavaChangesAsync(cancellationToken);
+            _concurrencyHandler.HandleConcurrentUpdate(campaign, request.rowVersion);
+
+
+
+            var result = await _unitOfWork.SavaChangesAsync(cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                if (result.Error.Type == ErrorType.Conflict)
+                    return Result.Failure(CampaignErrors.ConcurrencyConflict);
+                return Result.Failure(result.Error);
+            }
 
             return Result.Success();
         }

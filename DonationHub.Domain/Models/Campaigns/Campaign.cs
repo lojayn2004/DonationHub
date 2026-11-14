@@ -7,7 +7,7 @@ using DonationHub.Domain.Results.Errors;
 
 namespace DonationHub.Domain.Models.Campaigns
 {
-    public class Campaign: BaseEntity, ISoftDeletable
+    public class Campaign: BaseEntity, ISoftDeletable, IConcurrency
     {
         public string TitleAr { get; private set; }
 

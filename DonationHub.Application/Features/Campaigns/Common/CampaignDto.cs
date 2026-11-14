@@ -24,8 +24,11 @@ namespace DonationHub.Application.Features.Campaigns.Common
 
         public Guid CategoryId { get; set; }
 
-        // TODO: TO HANDLE JOIN IN FUTURE
+
         public string CategoryName { get; set; } = default!;
+
+
+        public byte[] RowVersion { get; set; } = default!;
 
         //public string CreatedByUserName { get; set; }
 

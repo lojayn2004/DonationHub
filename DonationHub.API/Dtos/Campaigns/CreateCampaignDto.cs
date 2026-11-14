@@ -9,6 +9,8 @@
 
         public string DescriptionEn { get; set; } = default!;
 
+        public string GoalCurrency { get; set; } = default!;
+
         public decimal GoalAmount { get; set; }
 
         public  DateTimeOffset EndDate { get; set; }

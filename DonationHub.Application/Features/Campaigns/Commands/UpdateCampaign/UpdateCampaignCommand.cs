@@ -8,7 +8,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign
                                               string descAr, string descEn,
                                               decimal goalAmount,
                                               DateTimeOffset endDate,
-                                              Guid categoryId): IRequest<Result>
+                                              Guid categoryId, byte[] rowVersion): IRequest<Result>
     {
 
     }

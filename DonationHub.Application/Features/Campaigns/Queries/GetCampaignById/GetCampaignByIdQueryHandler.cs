@@ -13,7 +13,8 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetCampaignById
         public async Task<Result<CampaignDto?>> Handle(GetCampaignById request, CancellationToken cancellationToken)
         {
             // maloosh lazama request.Id 3ayza ashelo
-            var campaignDto = await  _query.GetByIdAsync(request.id, new CampaignWithCategorySpecification(request.id));
+            var campaignDto = await  _query.GetByIdAsync(request.id, 
+                new CampaignWithCategorySpecification(request.id));
             return Result<CampaignDto?>.Success(campaignDto);
         }
     }
