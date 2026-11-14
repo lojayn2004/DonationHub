@@ -7,6 +7,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
     public record CreateCampaignCommand(string titleAr, string titleEn,
                                               string descAr, string descEn,
                                               decimal goalAmount,
+                                              string goalCurrency,
                                               DateTimeOffset endDate,
                                               Guid categoryId,
                                               Guid createdByUserId): IRequest<Result<CampaignDto>>

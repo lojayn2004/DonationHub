@@ -25,6 +25,7 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
         {
             return campaign => new MainInfoCampginDto()
             {
+                Id = campaign.Id,
                 TitleAr = campaign.TitleAr,
                 TitleEn = campaign.TitleEn,
                 DescriptionAr = campaign.DescriptionAr,

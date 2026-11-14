@@ -79,6 +79,7 @@ namespace DonationHub.Infrastructure
             services.AddScoped<IDataSeeder, UsersSeeder>();
             
             services.AddScoped(typeof(IQuery<,>), typeof(Query<,>));
+            services.AddScoped(typeof(IConcurrencyHandler<>), typeof(ConcurrentHandler<>));
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtUtils, JwtUtils>();

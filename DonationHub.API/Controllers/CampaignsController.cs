@@ -21,10 +21,11 @@ namespace DonationHub.API.Controllers
         [HttpPost] 
         public async Task<IActionResult> Create(CreateCampaignDto request, CancellationToken ct)
         {
-            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            //var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = new Guid("1F12D3D7-4978-433B-44AE-08DF3F161831");
             var createCampaignCommand =
                 new CreateCampaignCommand(request.TitleAr, request.TitleEn, request.DescriptionAr, request.DescriptionEn,
-                request.GoalAmount, request.EndDate, request.CategoryId, userId);
+                request.GoalAmount, request.GoalCurrency, request.EndDate, request.CategoryId, userId);
 
             var result = await  _mediator.Send(createCampaignCommand, ct);
 

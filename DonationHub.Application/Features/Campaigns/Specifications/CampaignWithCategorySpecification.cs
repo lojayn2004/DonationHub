@@ -21,6 +21,7 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
         {
             return campaign => new CampaignDto()
             {
+                Id = campaign.Id,
 
                 TitleAr = campaign.TitleAr,
                 TitleEn = campaign.TitleEn,
@@ -30,8 +31,9 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
                 RaisedAmount = campaign.RaisedAmount.Amount,
                 EndDate = campaign.EndDate,
                 CategoryId = campaign.CategoryId,
-                CategoryName = campaign.Category.NameEn
-                
+                CategoryName = campaign.Category.NameEn,
+                RowVersion = campaign.rowVersion
+
 
             };
         }

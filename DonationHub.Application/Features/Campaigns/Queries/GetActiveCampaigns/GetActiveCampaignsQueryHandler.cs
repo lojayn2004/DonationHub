@@ -10,8 +10,8 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetActiveCampaigns
     public class GetActiveCampaignsQueryHandler(IQuery<Campaign, MainInfoCampginDto> _query)
         : IRequestHandler<GetActiveCampaignsQuery, Result<IReadOnlyList<MainInfoCampginDto>>>
     {
-        public async Task<Result<IReadOnlyList<MainInfoCampginDto>>>
-            Handle(GetActiveCampaignsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<MainInfoCampginDto>>> Handle(GetActiveCampaignsQuery request, 
+                                                                            CancellationToken cancellationToken)
         {
             // TODOD: FIX TO TAKE CACNECLLATION TOKEN
             return Result<IReadOnlyList<MainInfoCampginDto>>.Success(

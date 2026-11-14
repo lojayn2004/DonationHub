@@ -1,7 +1,7 @@
 using DonationHub.API;
 using DonationHub.API.Extensions;
+using DonationHub.API.Middleware;
 using DonationHub.Application;
-using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
 
 
@@ -24,12 +24,15 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp", policy =>
     {
-        policy.WithOrigins("https://localhost:3000") // Replace with your frontend URL
+        policy.WithOrigins("https://localhost:3000") 
               .AllowAnyMethod()
               .AllowAnyHeader();
               
     });
 });
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddSingleton(TimeProvider.System);
 
 var app = builder.Build();
@@ -41,6 +44,8 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
     await app.Services.SeedDatabaseAsync();
 }
+
+app.UseExceptionHandler();
 
 app.UseCors("AllowFrontendApp");
 

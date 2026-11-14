@@ -23,7 +23,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
                 return Result<CampaignDto>.Failure(CategoryErrors.NotFound);
             var campaignsRepo = _unitOfWork.GetRepository<Campaign>();
 
-            Money goalAmount = new Money(request.goalAmount, "USD");
+            Money goalAmount = new Money(request.goalAmount, request.goalCurrency);
             Result<Campaign> campaignResult = Campaign.Create(request.titleAr, request.titleEn, request.descAr, request.descEn,
                 goalAmount, request.endDate, request.categoryId, request.createdByUserId, _timeProvider.GetLocalNow()
                 );
