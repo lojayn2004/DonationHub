@@ -11,9 +11,12 @@ namespace DonationHub.Infrastructure.Specifications
             where TIn: class
            where TOut : class
         {
-           
+
             if (specification.Criteria is not null)
+            {
+
                 inputQuery = inputQuery.Where(specification.Criteria);
+            }
 
             foreach (var include in specification.Includes)
             {

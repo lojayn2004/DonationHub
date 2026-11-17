@@ -15,7 +15,7 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories
         {
             // TODOD: FIX TO TAKE CACNECLLATION TOKEN
             return Result<IReadOnlyList<MainInfoCampginDto>>.Success(
-                await _query.GetAllAsync(new ActiveCampaignsSpecification(true)));
+                await _query.GetAllAsync(new ActiveCampaignsSpecification(false)));
         }
     }
 }

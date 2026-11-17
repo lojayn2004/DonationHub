@@ -1,5 +1,4 @@
-﻿
-using DonationHub.Domain.Models.Shared;
+﻿using DonationHub.Domain.Models.Shared;
 
 namespace DonationHub.Application.Common.Contracts
 {

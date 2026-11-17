@@ -17,7 +17,8 @@ namespace DonationHub.API.Controllers
 
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Create(CreateCategoryRequest request, CancellationToken ct)
+        public async Task<IActionResult> Create(CreateCategoryRequest request,
+            CancellationToken ct)
         {
             var command = new CreateCategoryCommand(request.NameAr,
                 request.NameEn,
@@ -33,7 +34,9 @@ namespace DonationHub.API.Controllers
         }
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update(UpdateCategoryRequest request, Guid id, CancellationToken ct)
+        public async Task<IActionResult> Update(UpdateCategoryRequest request,
+                                                Guid id,
+                                                CancellationToken ct)
         {
             var command = new UpdateCategoryCommand(id, request.NameAr,
                 request.NameEn,

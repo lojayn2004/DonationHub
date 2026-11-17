@@ -10,14 +10,16 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
 {
     internal class CampaignWithCategorySpecification: Specification<Campaign, CampaignDto>
     {
-        public CampaignWithCategorySpecification(Guid id): base(c => c.Id == id)
+      
+        public CampaignWithCategorySpecification(Guid id, TimeProvider provider): base(c => c.Id == id)
         {
-            Projection = GetProjection();
+        
+            Projection = GetProjection(provider);
             AddInclude(c => c.Category);
 
         }
 
-        private static Expression<Func<Campaign, CampaignDto>> GetProjection()
+        private static Expression<Func<Campaign, CampaignDto>> GetProjection(TimeProvider provider)
         {
             return campaign => new CampaignDto()
             {
@@ -32,8 +34,10 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
                 EndDate = campaign.EndDate,
                 CategoryId = campaign.CategoryId,
                 CategoryName = campaign.Category.NameEn,
-                RowVersion = campaign.rowVersion
-
+                RowVersion = campaign.rowVersion,
+                Status = campaign.CampaignStatus.ToString(),
+                CreatedByUserId = campaign.CreatedByUserId,
+                DaysLeft = Math.Max(0, (campaign.EndDate - provider.GetUtcNow()).Days)
 
             };
         }

@@ -3,6 +3,7 @@ using DonationHub.API.Dtos.Categories;
 using DonationHub.Application.Features.Campaigns.Commands.CreateCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.DeleteCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign;
+using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaignStatus;
 using DonationHub.Application.Features.Campaigns.Queries.GetActiveCampaigns;
 using DonationHub.Application.Features.Campaigns.Queries.GetCampaignById;
 using DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories;
@@ -10,12 +11,14 @@ using DonationHub.Application.Features.Categories.Commands.UpdateCategory;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
+using System.Data;
 using System.Security.Claims;
 
 namespace DonationHub.API.Controllers
 {
     [ApiController]
-    [Route("api/campaign")]
+    [Route("api/v1/campaign")]
     public class CampaignsController(ISender _mediator): APIBaseController
     {
         [HttpPost] 
@@ -50,6 +53,7 @@ namespace DonationHub.API.Controllers
                 request.descEn, request.goalAmount, request.endDate, request.categoryId, request.rowVersion);
 
             var result = await _mediator.Send(command, ct);
+            
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
@@ -78,6 +82,7 @@ namespace DonationHub.API.Controllers
             var query = new GetCampaignById(id);
 
             var result = await _mediator.Send(query, ct);
+            
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
@@ -109,10 +114,22 @@ namespace DonationHub.API.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> Update()
+        [HttpPatch("id:guid")]
+        public async Task<IActionResult> Update(Guid id, UpdateStatusDto updateStatusDto, CancellationToken ct)
         {
-            throw new NotImplementedException();
+
+            var command = new UpdateCampaignStatusCommand(id, updateStatusDto.status, updateStatusDto.rowVersion);
+            var result = await _mediator.Send(command, ct);
+            if (!result.IsSuccess)
+                return GetProblemResult(result.Error!);
+
+            return Ok();
+        }
+
+        public class UpdateStatusDto
+        {
+            public string status { get; set; }
+            public byte[] rowVersion { get; set; }
         }
 
 

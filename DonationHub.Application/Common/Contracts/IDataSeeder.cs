@@ -4,6 +4,6 @@ namespace DonationHub.Application.Common.Contracts
 {
     public interface IDataSeeder
     {
-        Task SeedAllAsync();
+        Task SeedAllAsync(CancellationToken ct);
     }
 }

@@ -42,7 +42,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
-    await app.Services.SeedDatabaseAsync();
+   
+    var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+    await app.Services.SeedDatabaseAsync(lifetime.ApplicationStopping);
 }
 
 app.UseExceptionHandler();

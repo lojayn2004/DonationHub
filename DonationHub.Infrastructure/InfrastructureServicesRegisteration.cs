@@ -88,7 +88,7 @@ namespace DonationHub.Infrastructure
     
     
     
-        public static async Task SeedDatabaseAsync(this IServiceProvider serviceProvider)
+        public static async Task SeedDatabaseAsync(this IServiceProvider serviceProvider, CancellationToken ct)
         {
             using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -97,7 +97,7 @@ namespace DonationHub.Infrastructure
             foreach(var seeder in seeders)
             {
                 Console.WriteLine($"Seeding data using {seeder.GetType().Name}...");
-                await seeder.SeedAllAsync();
+                await seeder.SeedAllAsync(ct);
             }
         }
 

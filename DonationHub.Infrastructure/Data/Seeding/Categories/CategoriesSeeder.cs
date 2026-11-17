@@ -15,22 +15,22 @@ namespace DonationHub.Infrastructure.Data.Seeding.Categories
     internal class CategoriesSeeder(ApplicationDbContext _dbContext): IDataSeeder
     {
 
-        public async Task SeedAllAsync()
+        public async Task SeedAllAsync(CancellationToken ct)
         {
          
-            if(!(await _dbContext.Category.AnyAsync()))
+            if(!(await _dbContext.Category.AnyAsync(ct)))
             {
                 var path = Path.Combine(AppContext.BaseDirectory, "Data", "Seeding", "Categories", "categories.json");
-                var categoriesJson = await File.ReadAllTextAsync(path);
+                var categoriesJson = await File.ReadAllTextAsync(path, ct);
                 var categories = JsonSerializer.Deserialize<IReadOnlyList<CategoryDto>>(categoriesJson);
 
                 
                 foreach(var category in categories)
                 {
                     await _dbContext.Category.AddAsync(Category.CreateCategory(category.NameAr,
-                        category.NameEn, category.DescriptionAr, category.DescriptionEn, DateTime.UtcNow));
+                        category.NameEn, category.DescriptionAr, category.DescriptionEn, DateTime.UtcNow), ct);
                 }
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync(ct);
             }
              
         }

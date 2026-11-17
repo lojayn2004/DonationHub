@@ -10,9 +10,9 @@ namespace DonationHub.Infrastructure.Data.Seeding.Users
     internal class UsersSeeder(UserManager<ApplicationUser> _userManager,
         IOptions<SeedAdminOptions> _adminOptions): IDataSeeder
     {
-        public async Task SeedAllAsync()
+        public async Task SeedAllAsync(CancellationToken ct)
         {
-            if(!(await _userManager.Users.AnyAsync()))
+            if(!(await _userManager.Users.AnyAsync(ct)))
             {
                 var adminOptions = _adminOptions.Value;
                 var adminUser = ApplicationUser.Create(adminOptions.FullName,

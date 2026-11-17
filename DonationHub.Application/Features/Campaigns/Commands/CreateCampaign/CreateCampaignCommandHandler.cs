@@ -9,7 +9,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
 {
-    internal class CreateCampaignCommandHandler(IUnitOfWork _unitOfWork, 
+    public class CreateCampaignCommandHandler(IUnitOfWork _unitOfWork, 
         TimeProvider _timeProvider): IRequestHandler<CreateCampaignCommand, Result<CampaignDto>>
     {
         public async Task<Result<CampaignDto>> Handle(CreateCampaignCommand request, 

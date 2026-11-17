@@ -14,6 +14,8 @@
 
         public static Result Success() => new(true, null);
         public static Result Failure(Error error) => new(false, error);
+
+      
     }
 
     public class Result<T> : Result

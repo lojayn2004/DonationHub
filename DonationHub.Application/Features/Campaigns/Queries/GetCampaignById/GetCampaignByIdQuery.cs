@@ -4,7 +4,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Campaigns.Queries.GetCampaignById
 {
-    public record GetCampaignById(Guid id): IRequest<Result<CampaignDto?>>
+    public record GetCampaignById(Guid id): IRequest<Result<CampaignDto>>
     {
         
     }

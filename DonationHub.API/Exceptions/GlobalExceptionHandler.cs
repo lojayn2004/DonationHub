@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using DonationHub.Application.Common.Dtos;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace DonationHub.API.Middleware
 {
@@ -13,17 +13,21 @@ namespace DonationHub.API.Middleware
             _logger = logger;
         }
 
-        public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
+        public async ValueTask<bool> TryHandleAsync(HttpContext context,
+                                                    Exception exception, 
+                                                    CancellationToken cancellationToken)
         {
             _logger.LogError(exception,
                      "Exception Ocuured: {Message}",
                      exception.Message);
 
-            var problemDetails = new ProblemDetails
+            var problemDetails = new ProblemDetailsDto
             {
                 Status = StatusCodes.Status500InternalServerError,
                 Title = "An unexpected error occurred",
-                Type = ""
+                TraceId = context.TraceIdentifier,
+                Code = "Server Error",
+                Type = $"https://httpstatuses.io/500"
 
             };
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;

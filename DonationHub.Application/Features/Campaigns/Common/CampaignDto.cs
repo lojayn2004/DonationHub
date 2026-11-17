@@ -2,7 +2,7 @@
 
 namespace DonationHub.Application.Features.Campaigns.Common
 {
-    public class CampaignDto
+    public class CampaignDto()
     {
         public Guid Id { get; set; }
         public string TitleAr { get; set; } = default!;
@@ -30,7 +30,15 @@ namespace DonationHub.Application.Features.Campaigns.Common
 
         public byte[] RowVersion { get; set; } = default!;
 
-        //public string CreatedByUserName { get; set; }
+        public string Status { get; set; } = default!;
+
+        public Guid CreatedByUserId { get; set; }
+
+        public decimal ProgressPercent => decimal.Min(100, (RaisedAmount / GoalAmount) * 100);
+
+        public int DaysLeft { get; set; }
 
     }
 }
+
+
