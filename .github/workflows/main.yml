@@ -6,6 +6,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     services:
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
@@ -20,6 +21,8 @@ jobs:
           --health-timeout 5s
           --health-retries 10
 
+    env:
+      TEST_DB_CONNECTION: Server=localhost,1433;Database=DonationHubTestDb;User Id=sa;Password=Your_Strong_Passw0rd;TrustServerCertificate=True
     steps:
       - name: Get the code
         uses: actions/checkout@v4
