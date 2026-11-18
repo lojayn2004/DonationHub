@@ -41,13 +41,14 @@ namespace DontaionHub.IntegrationTests
 
             builder.ConfigureServices(services =>
             {
-      
 
-               
+                var connectionString = Environment.GetEnvironmentVariable("TEST_DB_CONNECTION");
+
+
 
                 services.AddDbContext<ApplicationDbContext>(o => o
-                .UseSqlServer("Server=.;Database=DonationHubTestDb;Trusted_Connection=True;TrustServerCertificate=True")
-                .AddInterceptors(new SoftDeleteInterceptor()));
+                   .UseSqlServer(connectionString)
+                   .AddInterceptors(new SoftDeleteInterceptor()));
             });
         }
         
