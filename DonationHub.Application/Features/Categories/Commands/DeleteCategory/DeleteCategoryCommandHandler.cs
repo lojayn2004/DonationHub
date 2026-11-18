@@ -14,6 +14,8 @@ namespace DonationHub.Application.Features.Categories.Commands.DeleteCategory
             var category = await categoryRepo.GetByIdAsync(request.Id, cancellationToken);
             if (category == null)
                 return Result.Failure(CategoryErrors.NotFound);
+            if (category.Campaigns.Any())
+                return Result.Failure(CategoryErrors.Conflict);
             categoryRepo.Delete(category);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
             return Result.Success();

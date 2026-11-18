@@ -19,6 +19,8 @@ namespace DonationHub.Domain.Models.Categories
         public bool IsDeleted { get; set; }
         public DateTimeOffset? DeletedAtUtc { get; set; }
 
+
+
         public static Category CreateCategory(string nameAr, string nameEn,
                                               string descriptionAr,
                                               string descriptionEn,

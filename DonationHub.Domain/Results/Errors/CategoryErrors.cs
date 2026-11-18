@@ -8,8 +8,10 @@ namespace DonationHub.Domain.Results.Errors
 
         public static readonly Error Conflict =
             new Error("Category.HasCampaigns", " Cannot delete a category with linked campaigns", ErrorType.Conflict);
-    
+
+
         
-    
+
+
     }
 }

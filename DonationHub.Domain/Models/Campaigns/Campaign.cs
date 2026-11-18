@@ -74,28 +74,19 @@ namespace DonationHub.Domain.Models.Campaigns
             return Result<Campaign>.Success(campaign);
         }
 
-        //public void UpdateGoalAmount(Money newGoal, DateTimeOffset utcNow)
-        //{
-        //    if(newGoal.Amount < 0)
-        //        throw new AmountNotValidException("Goal Amount Must be Positive");
-        //    if(newGoal.Amount < RaisedAmount.Amount)
-        //        throw new AmountNotValidException("Updated Goal Amount Must be Greater than or equal the raised amount");
-        //    // TODO: add when they are not the same currecny also
-        //    GoalAmount = newGoal;
-        //    UpdatedAt = utcNow;
-            
-        //}
+        public void UpdateGoalAmount(Money newGoal, DateTimeOffset utcNow)
+        {
+            if (newGoal.Amount < 0)
+                throw new AmountNotValidException("Goal Amount Must be Positive");
+            if (newGoal.Amount < RaisedAmount.Amount)
+                throw new AmountNotValidException("Updated Goal Amount Must be Greater than or equal the raised amount");
+            // TODO: add when they are not the same currecny also
+            GoalAmount = newGoal;
+            UpdatedAt = utcNow;
 
-        //public void UpdateEndDate(DateTimeOffset endDate, DateTimeOffset utcNow)
-        //{
-        //    if (endDate < utcNow)
-        //        throw new DateNotValidException("End Date must be in future");
-        //    EndDate = endDate;
-        //    UpdatedAt = utcNow;
-        //}
+        }
 
 
-       
         public void AddDonation(Donation donation, DateTimeOffset utcNow)
         {
             if (donation.DonationStatus != DonationStatus.COMPLETED)
@@ -136,17 +127,37 @@ namespace DonationHub.Domain.Models.Campaigns
             if (endDate <= utcNow)
                 return Result.Failure(CampaignErrors.EndDateInPast);
 
-            if (goalAmount <= 0)
-                return Result.Failure(ValidationErrors.Falied);
-
-            if (goalAmount <= RaisedAmount.Amount)
-                return Result.Failure(CampaignErrors.GoalBelowRaised);
-
-            GoalAmount.UpdateAmount(goalAmount);
+            var updateGoalAmountResult = UpdateGoalAmount(goalAmount, utcNow);
+            if (!updateGoalAmountResult.IsSuccess)
+                return updateGoalAmountResult;
 
             EndDate = endDate;
             CategoryId = categoryId;
             UpdatedAt = utcNow;
+            return Result.Success();
+        }
+
+        private Result UpdateGoalAmount(decimal goalAmount, DateTimeOffset utcNow)
+        {
+            if (goalAmount <= 0)
+                return Result.Failure(ValidationErrors.Falied);
+
+            if (goalAmount < RaisedAmount.Amount)
+                return Result.Failure(CampaignErrors.GoalBelowRaised);
+
+            // if their is no update in the goal amount
+            if (goalAmount == GoalAmount.Amount)
+                return Result.Success();
+
+            GoalAmount.UpdateAmount(goalAmount);
+
+            if (GoalAmount.Amount == RaisedAmount.Amount)
+            {
+                var result = UpdateCampaignStatus(CampaignStatus.COMPLETED, utcNow);
+                if (!result.IsSuccess)
+                    return result;
+
+            }
             return Result.Success();
         }
 

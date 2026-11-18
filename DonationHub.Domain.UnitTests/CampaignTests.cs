@@ -1,4 +1,5 @@
 ﻿using DonationHub.Domain.Models.Campaigns;
+using DonationHub.Domain.Models.Donations;
 using DonationHub.Domain.Models.Shared;
 using DonationHub.Domain.Results;
 using FluentAssertions;
@@ -132,6 +133,7 @@ namespace DonationHub.Domain.UnitTests
         {
             // Arrange
             var campaign = CreateValidCampaign();
+            // if feeeeeel i need to remove asserions here
             campaign.CampaignStatus.Should().Be(CampaignStatus.ACTIVE); 
 
             campaign.UpdateCampaignStatus(CampaignStatus.EXPIRED, TimeProvider.GetUtcNow());
@@ -149,6 +151,30 @@ namespace DonationHub.Domain.UnitTests
             result.IsSuccess.Should().BeFalse();
             result.Error.Should().NotBeNull();
             campaign.UpdatedAt.Should().Be(updatedAtBeforeSecondCall); 
+        }
+
+
+        [Fact]
+        public void AddDonation_WhenReachesRaisedGoal_ReturnsSuccess_UpdateStatusToCompleted()
+        {
+            // Arrange
+            var campaign = CreateValidCampaign();
+
+           
+            var donation = Donation.Create(campaign.Id, campaign.CategoryId, new Money(10000, "USD"),
+                int.MinValue, int.MaxValue, TimeProvider.GetUtcNow());
+
+            donation.UpdateStatus(DonationStatus.COMPLETED);
+
+            // Act
+            campaign.AddDonation(donation, TimeProvider.GetUtcNow());
+
+            // Assert 
+
+            campaign.CampaignStatus.Should().Be(CampaignStatus.COMPLETED);
+
+
+
         }
     }
 }

@@ -29,7 +29,7 @@ namespace DonationHub.Domain.Models.Donations
                                      Money donationAmount,
                                      int minAmount,
                                      int maxAmount,
-                                     DateTime utcNow)
+                                     DateTimeOffset utcNow)
         {
            
             if (donationAmount.Amount < 0)
