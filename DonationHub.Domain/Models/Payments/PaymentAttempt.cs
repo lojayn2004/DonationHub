@@ -11,7 +11,7 @@ namespace DonationHub.Domain.Models.Payments
         public PaymentAttemptStatus PaymentAttemptStatus { get; private set; }
 
 
-        public DateTime UpdatedAt { get; private set; }
+        public DateTimeOffset UpdatedAt { get; private set; }
 
         public string? FaliureCode { get; private set; }
 

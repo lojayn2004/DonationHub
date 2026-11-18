@@ -1,9 +1,9 @@
 ﻿using DonationHub.API.Dtos.Categories;
-using DonationHub.Application.Features.Categories.CreateCatgory;
-using DonationHub.Application.Features.Categories.DeleteCategory;
-using DonationHub.Application.Features.Categories.GetCategories;
-using DonationHub.Application.Features.Categories.GetCategoryById;
-using DonationHub.Application.Features.Categories.UpdateCategory;
+using DonationHub.Application.Features.Categories.Commands.CreateCategory;
+using DonationHub.Application.Features.Categories.Commands.DeleteCategory;
+using DonationHub.Application.Features.Categories.Queries.GetCategories;
+using DonationHub.Application.Features.Categories.Queries.GetCategoryById;
+using DonationHub.Application.Features.Categories.Commands.UpdateCategory;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,8 @@ namespace DonationHub.API.Controllers
 
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> Create(CreateCategoryRequest request, CancellationToken ct)
+        public async Task<IActionResult> Create(CreateCategoryRequest request,
+            CancellationToken ct)
         {
             var command = new CreateCategoryCommand(request.NameAr,
                 request.NameEn,
@@ -33,7 +34,9 @@ namespace DonationHub.API.Controllers
         }
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update(UpdateCategoryRequest request, Guid id, CancellationToken ct)
+        public async Task<IActionResult> Update(UpdateCategoryRequest request,
+                                                Guid id,
+                                                CancellationToken ct)
         {
             var command = new UpdateCategoryCommand(id, request.NameAr,
                 request.NameEn,

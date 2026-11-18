@@ -1,5 +1,8 @@
 ﻿using DonationHub.Application.Common.Contracts;
+using DonationHub.Domain.Results;
+using DonationHub.Domain.Results.Errors;
 using DonationHub.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DonationHub.Infrastructure.ContractImplementations
 {
@@ -14,9 +17,18 @@ namespace DonationHub.Infrastructure.ContractImplementations
             return (IGenericRepository<TEntity>) _repos[repoName];
         }
 
-        public async Task<int> SavaChangesAsync()
+        public async Task<Result<int>> SavaChangesAsync(CancellationToken ct)
         {
-            return await _dbContext.SaveChangesAsync();
+            try
+            {
+                int result = await _dbContext.SaveChangesAsync(ct);
+                return  Result<int>.Success(result);
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                return Result<int>.Failure(CommonErrors.ConcurrencyConflict);
+
+            }
         }
     }
 }

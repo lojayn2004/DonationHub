@@ -1,11 +1,13 @@
-﻿namespace DonationHub.Application.Common.Contracts
+﻿using DonationHub.Domain.Results;
+
+namespace DonationHub.Application.Common.Contracts
 {
     public interface IUnitOfWork 
     {
         IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
 
 
-        Task<int> SavaChangesAsync();
+        Task<Result<int>> SavaChangesAsync(CancellationToken ct);
 
     }
 }

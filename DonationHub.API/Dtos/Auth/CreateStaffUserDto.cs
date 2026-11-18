@@ -2,15 +2,15 @@
 {
     public class CreateStaffUserDto
     {
-        public string Email { get; set; }
+        public string Email { get; set; } = default!;
 
-        public string Password { get; set; }
+        public string Password { get; set; } = default!;
 
-        public string FullName { get; set; }
+        public string FullName { get; set; } = default!;
 
-        public string UserName { get; set; }
+        public string UserName { get; set; } = default!;
 
-        public string Role { get; set; }
+        public string Role { get; set; } = default!;
 
         public string? PreferredLanguage { get; set; } = "en";
 

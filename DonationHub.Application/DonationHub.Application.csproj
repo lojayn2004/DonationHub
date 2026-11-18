@@ -11,9 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="17.0.0" />
     <PackageReference Include="FluentValidation" Version="12.2.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.2.0" />
     <PackageReference Include="MediatR" Version="14.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Campaigns\Queries\GetCampaignById\" />
+    <Folder Include="Features\Campaigns\Commands\UpdateCampaign\" />
   </ItemGroup>
 
 </Project>

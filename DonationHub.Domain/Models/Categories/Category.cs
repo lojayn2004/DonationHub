@@ -13,16 +13,18 @@ namespace DonationHub.Domain.Models.Categories
 
         public string DescriptionEn { get; private set; }
 
-        public DateTime UpdateAt { get; private set; }
+        public DateTimeOffset UpdateAt { get; private set; }
 
         public List<Campaign> Campaigns { get; private set; }
         public bool IsDeleted { get; set; }
-        public DateTime? DeletedAtUtc { get; set; }
+        public DateTimeOffset? DeletedAtUtc { get; set; }
+
+
 
         public static Category CreateCategory(string nameAr, string nameEn,
                                               string descriptionAr,
                                               string descriptionEn,
-                                              DateTime utcNow)
+                                              DateTimeOffset utcNow)
         {
 
 
@@ -41,7 +43,7 @@ namespace DonationHub.Domain.Models.Categories
 
         }
 
-        public void Update(string nameAr, string nameEn, string descAr, string descEn, DateTime utcNow)
+        public void Update(string nameAr, string nameEn, string descAr, string descEn, DateTimeOffset utcNow)
         {
             NameAr = nameAr; NameEn = nameEn;
             DescriptionAr = descAr; DescriptionEn = descEn;

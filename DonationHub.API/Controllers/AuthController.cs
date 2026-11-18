@@ -1,12 +1,13 @@
 ﻿using DonationHub.API.Dtos.Auth;
-using DonationHub.Application.Features.Auth.GetMe;
-using DonationHub.Application.Features.Auth.Login;
-using DonationHub.Application.Features.Auth.Logout;
-using DonationHub.Application.Features.Auth.Refresh;
+using DonationHub.Application.Features.Auth.Queries.GetMe;
+using DonationHub.Application.Features.Auth.Commands.Login;
+using DonationHub.Application.Features.Auth.Commands.Logout;
+using DonationHub.Application.Features.Auth.Commands.Refresh;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using DonationHub.Application.Features.Auth.Commands.Register;
 
 namespace DonationHub.API.Controllers
 {
@@ -80,7 +81,7 @@ namespace DonationHub.API.Controllers
         
         public async Task<IActionResult> GetMe(CancellationToken ct)
         {
-            //var userEmail = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+           
             string userEmail = User.FindFirstValue(ClaimTypes.Email);
             Console.WriteLine("User Email: " + userEmail);
 
@@ -96,8 +97,8 @@ namespace DonationHub.API.Controllers
 
 
 
-        private void SetRefreshTokenCookie(string refreshToken, 
-            DateTime expiresAt)
+        private void SetRefreshTokenCookie(string refreshToken,
+            DateTimeOffset expiresAt)
         {
             var cookieOptions = new CookieOptions
             {

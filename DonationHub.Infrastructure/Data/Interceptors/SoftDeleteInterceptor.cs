@@ -1,6 +1,7 @@
 ﻿using DonationHub.Domain.Models.Shared;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DonationHub.Infrastructure.Data.Interceptors
 {
@@ -52,6 +53,21 @@ namespace DonationHub.Infrastructure.Data.Interceptors
                 entry.State = EntityState.Modified;
                 entry.Entity.IsDeleted = true;
                 entry.Entity.DeletedAtUtc = DateTime.UtcNow;
+                MarkOwnedEntriesAsModified(entry);
+            }
+        }
+
+        private static void MarkOwnedEntriesAsModified(EntityEntry entry)
+        {
+            foreach (var reference in entry.References)
+            {
+                var targetEntity = reference.TargetEntry as EntityEntry;
+                if (targetEntity is not null && targetEntity.Metadata.IsOwned())
+                {
+                    targetEntity.State = EntityState.Modified;
+                    // nested owned types
+                    MarkOwnedEntriesAsModified(targetEntity); 
+                }
             }
         }
 

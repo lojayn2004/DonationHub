@@ -1,5 +1,7 @@
-﻿using DonationHub.Application.Common.Results;
+﻿
+using DonationHub.Domain.Results;
 using Microsoft.AspNetCore.Mvc;
+using DonationHub.Application.Common.Dtos;
 
 namespace DonationHub.API.Controllers
 {
@@ -8,18 +10,32 @@ namespace DonationHub.API.Controllers
 
         protected IActionResult GetProblemResult(Error error)
         {
-            if (error.Type == ErrorType.Validation)
-                return BadRequest(error.Message);
-            if(error.Type == ErrorType.NotFound)
-                return NotFound(error.Message);
-            if(error.Type == ErrorType.UnAuthorized)
-                return Unauthorized(error.Message);
-            if(error.Type == ErrorType.Conflict)
-                return Conflict(error.Message);
-            if(error.Type == ErrorType.Forbidden)
-                return Forbid(error.Message);
+            var errorDetails = error as ErrorDetails;
 
-            return Problem(error.Message);
+
+
+            var problemDetails = new ProblemDetailsDto()
+            {
+                Title  = error.Message,
+                Code = error.Code,
+                TraceId = HttpContext.TraceIdentifier,
+                Status = (int) error.Type,
+                Type = $"https://httpstatuses.io/{(int) error.Type}"
+
+            };
+            if(errorDetails is not null)
+            {
+                problemDetails.Details = errorDetails.Details;
+            }
+            return new ObjectResult(problemDetails)
+            {
+                StatusCode = (int)error.Type,
+                ContentTypes = { "application/problem+json" }
+            };
+
+
         }
     }
+
+   
 }

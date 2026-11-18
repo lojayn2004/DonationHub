@@ -12,7 +12,7 @@ namespace DonationHub.Domain.Models.IdempotencyRecord
         public string ResponseBody { get; private set; }
 
 
-        public DateTime ExpiresAt { get; private set; }
+        public DateTimeOffset ExpiresAt { get; private set; }
 
 
         public Guid UserId { get; private set; }

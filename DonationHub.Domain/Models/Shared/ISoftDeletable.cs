@@ -4,6 +4,6 @@ namespace DonationHub.Domain.Models.Shared
     {
         bool IsDeleted { get; set; }
 
-        DateTime? DeletedAtUtc { get; set; }
+        DateTimeOffset? DeletedAtUtc { get; set; }
     }
 }

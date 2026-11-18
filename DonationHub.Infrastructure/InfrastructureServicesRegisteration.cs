@@ -5,6 +5,7 @@ using DonationHub.Infrastructure.Data.Interceptors;
 using DonationHub.Infrastructure.Data.Seeding.Categories;
 using DonationHub.Infrastructure.Data.Seeding.Roles;
 using DonationHub.Infrastructure.Data.Seeding.Users;
+using DonationHub.Infrastructure.Implementations;
 using DonationHub.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -12,24 +13,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting;
 using System.Text;
-
-
 
 namespace DonationHub.Infrastructure
 {
     public static class InfrastructureServicesRegisteration
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, 
-            IConfiguration configuration)
+            IConfiguration configuration, IHostEnvironment environment)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+
+            if (!environment.IsEnvironment("Testing"))
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
                     options
                          .UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
                          .AddInterceptors(new SoftDeleteInterceptor())
                          //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 
-            );
+                 );
+            }
 
             services
                .AddIdentityCore<ApplicationUser>(options =>
@@ -76,7 +80,9 @@ namespace DonationHub.Infrastructure
             services.AddScoped<IDataSeeder, CategoriesSeeder>();
             services.AddScoped<IDataSeeder, RolesSeeder>();
             services.AddScoped<IDataSeeder, UsersSeeder>();
-
+            
+            services.AddScoped(typeof(IQuery<,>), typeof(Query<,>));
+            services.AddScoped(typeof(IConcurrencyHandler<>), typeof(ConcurrentHandler<>));
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtUtils, JwtUtils>();
@@ -85,16 +91,22 @@ namespace DonationHub.Infrastructure
     
     
     
-        public static async Task SeedDatabaseAsync(this IServiceProvider serviceProvider)
+        public static async Task SeedDatabaseAsync(this IServiceProvider serviceProvider, CancellationToken ct)
         {
             using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            
+
+            //var env = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+            //if (env.IsEnvironment("Testing"))
+            //{
+            //    await dbContext.Database.EnsureCreatedAsync(ct);
+            //}
+
             var seeders = scope.ServiceProvider.GetServices<IDataSeeder>();
             foreach(var seeder in seeders)
             {
                 Console.WriteLine($"Seeding data using {seeder.GetType().Name}...");
-                await seeder.SeedAllAsync();
+                await seeder.SeedAllAsync(ct);
             }
         }
 

@@ -11,7 +11,7 @@ namespace DonationHub.Domain.Models.Donations
 
         public DonationStatus DonationStatus { get; private set; }
 
-        public DateTime? CompletedAt { get; private set; }
+        public DateTimeOffset? CompletedAt { get; private set; }
 
         public string? FaliureReson { get; private set; }
 
@@ -29,7 +29,7 @@ namespace DonationHub.Domain.Models.Donations
                                      Money donationAmount,
                                      int minAmount,
                                      int maxAmount,
-                                     DateTime utcNow)
+                                     DateTimeOffset utcNow)
         {
            
             if (donationAmount.Amount < 0)

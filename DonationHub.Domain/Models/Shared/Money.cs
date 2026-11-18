@@ -25,6 +25,12 @@
             return new Money(0, currency);
         }
 
+        public void UpdateAmount(decimal amount)
+        {
+            
+            Amount = amount;
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Amount;

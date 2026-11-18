@@ -1,8 +1,7 @@
 ﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Common.Dtos;
-using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Auth.Common;
-using DonationHub.Application.Features.Common;
+using DonationHub.Domain.Results;
 using DonationHub.Infrastructure.Data;
 using DonationHub.Infrastructure.Implementations;
 using Microsoft.AspNetCore.Identity;
@@ -73,7 +72,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
             return await _userManager.CheckPasswordAsync(user, Password);
         }
 
-        public async Task<Result<AuthResponse>> GetAuthResponse(string Email)
+        public async Task<Result<AuthResponse>> GetAuthResponseAsync(string Email)
         {
             var appUser = await _userManager.FindByEmailAsync(Email);
             if(appUser == null)
@@ -126,7 +125,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
             return Result<AuthResponse>.Success(authResponse);
         }
 
-        public async Task<Result> RevokeRefreshToken(string refreshToken)
+        public async Task<Result> RevokeRefreshTokenAsync(string refreshToken)
         {
             var refreshTokenHash = RefreshTokenUtils.HashRefreshToken(refreshToken);
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.TokenHash == refreshTokenHash));
@@ -144,7 +143,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
             return Result.Success();
         }
 
-        public async Task<bool> IsAccountLocked(string Email)
+        public async Task<bool> IsAccountLockedAsync(string Email)
         {
             var user = await _userManager.FindByEmailAsync(Email);
             return user != null && !user.IsActive;

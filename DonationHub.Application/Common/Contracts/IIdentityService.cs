@@ -1,7 +1,6 @@
 ﻿using DonationHub.Application.Common.Dtos;
-using DonationHub.Application.Common.Results;
 using DonationHub.Application.Features.Auth.Common;
-using DonationHub.Application.Features.Common;
+using DonationHub.Domain.Results;
 
 namespace DonationHub.Application.Common.Contracts
 {
@@ -9,11 +8,11 @@ namespace DonationHub.Application.Common.Contracts
     {
          Task<Result<UserDto>> CreateUserAsync(RegisterCommand register);
 
-        Task<Result<AuthResponse>> GetAuthResponse(string Email);
+        Task<Result<AuthResponse>> GetAuthResponseAsync(string Email);
 
         Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken);
 
-        Task<Result> RevokeRefreshToken(string refreshToken);
+        Task<Result> RevokeRefreshTokenAsync(string refreshToken);
 
 
          Task<UserDto?> FindUserByEmailAsync(string Email);
@@ -22,6 +21,6 @@ namespace DonationHub.Application.Common.Contracts
 
          Task<bool> EmailExistsAsync(string Email);
 
-        Task<bool> IsAccountLocked(string Email);
+        Task<bool> IsAccountLockedAsync(string Email);
     }
 }
