@@ -10,7 +10,7 @@ public class CategoriesTests
     public CategoriesTests(KestrelWebApplicationFactory factory)
     {
         _factory = factory;
-        _ = factory.CreateClient();   // starts the hosts so BaseUrl is set
+        _ = factory.CreateClient();   
     }
 
     [Fact]
