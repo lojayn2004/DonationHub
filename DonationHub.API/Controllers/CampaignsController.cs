@@ -108,7 +108,7 @@ namespace DonationHub.API.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPatch("id:guid")]
+        [HttpPatch("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateStatusDto updateStatusDto, CancellationToken ct)
         {
 
