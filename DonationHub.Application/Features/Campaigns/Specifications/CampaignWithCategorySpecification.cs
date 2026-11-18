@@ -1,6 +1,4 @@
-﻿
-
-using DonationHub.Application.Common.Contracts;
+﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Features.Campaigns.Common;
 using DonationHub.Domain.Models.Campaigns;
 using System.Linq.Expressions;
@@ -24,7 +22,6 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
             return campaign => new CampaignDto()
             {
                 Id = campaign.Id,
-
                 TitleAr = campaign.TitleAr,
                 TitleEn = campaign.TitleEn,
                 DescriptionAr = campaign.DescriptionAr,
@@ -37,7 +34,7 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
                 RowVersion = campaign.rowVersion,
                 Status = campaign.CampaignStatus.ToString(),
                 CreatedByUserId = campaign.CreatedByUserId,
-                DaysLeft = Math.Max(0, (campaign.EndDate - provider.GetUtcNow()).Days)
+                DaysLeft = campaign.SetDaysLeft(provider.GetUtcNow())
 
             };
         }

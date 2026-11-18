@@ -40,6 +40,18 @@ namespace DonationHub.Domain.Models.Campaigns
         public bool IsDeleted { get ; set; }
         public DateTimeOffset? DeletedAtUtc { get; set; }
 
+        public decimal ProgressPercent =>
+            decimal.Min(100, (RaisedAmount.Amount/ GoalAmount.Amount) * 100);
+
+        public int DaysLeft { get; private set; }
+
+
+        public int SetDaysLeft(DateTimeOffset utcNow)
+        {
+            DaysLeft = Math.Max(0, (EndDate - utcNow).Days);
+            return DaysLeft;
+        }
+
         public static Result<Campaign> Create(string titleAr, string titleEn,
                                               string descAr, string descEn,
                                               Money goalAmount,

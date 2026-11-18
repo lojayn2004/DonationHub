@@ -1,6 +1,4 @@
-﻿
-
-namespace DonationHub.Application.Common.Contracts
+﻿namespace DonationHub.Application.Common.Contracts
 {
     public interface IQuery<TIn, Tout> where TIn : class 
         where Tout: class

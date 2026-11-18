@@ -7,7 +7,9 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Campaigns.Queries.GetActiveCampaigns
 {
-    public class GetActiveCampaignsQueryHandler(IQuery<Campaign, MainInfoCampginDto> _query)
+    public class GetActiveCampaignsQueryHandler(
+        IQuery<Campaign, MainInfoCampginDto> _query,
+        TimeProvider _timeProvider)
         : IRequestHandler<GetActiveCampaignsQuery, Result<IReadOnlyList<MainInfoCampginDto>>>
     {
         public async Task<Result<IReadOnlyList<MainInfoCampginDto>>> Handle(GetActiveCampaignsQuery request, 
@@ -15,7 +17,7 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetActiveCampaigns
         {
             // TODOD: FIX TO TAKE CACNECLLATION TOKEN
             return Result<IReadOnlyList<MainInfoCampginDto>>.Success(
-                await _query.GetAllAsync(new ActiveCampaignsSpecification(true)));
+                await _query.GetAllAsync(new ActiveCampaignsSpecification(true, _timeProvider)));
         }
     }
 }

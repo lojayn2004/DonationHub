@@ -8,14 +8,15 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories
 {
-    internal class GetSuccessStoriesQueryHandler(IQuery<Campaign, MainInfoCampginDto> _query) : IRequestHandler<GetSuccessStoriesQuery, Result<IReadOnlyList<MainInfoCampginDto>>>
+    internal class GetSuccessStoriesQueryHandler(IQuery<Campaign, MainInfoCampginDto> _query, 
+        TimeProvider _timeProvider) : IRequestHandler<GetSuccessStoriesQuery, Result<IReadOnlyList<MainInfoCampginDto>>>
     {
         public async Task<Result<IReadOnlyList<MainInfoCampginDto>>> Handle(GetSuccessStoriesQuery request, 
             CancellationToken cancellationToken)
         {
             // TODOD: FIX TO TAKE CACNECLLATION TOKEN
             return Result<IReadOnlyList<MainInfoCampginDto>>.Success(
-                await _query.GetAllAsync(new ActiveCampaignsSpecification(false)));
+                await _query.GetAllAsync(new ActiveCampaignsSpecification(false, _timeProvider)));
         }
     }
 }

@@ -34,7 +34,7 @@ namespace DonationHub.Application.Features.Campaigns.Common
 
         public Guid CreatedByUserId { get; set; }
 
-        public decimal ProgressPercent => decimal.Min(100, (RaisedAmount / GoalAmount) * 100);
+        public decimal ProgressPercent { get; set; }
 
         public int DaysLeft { get; set; }
 

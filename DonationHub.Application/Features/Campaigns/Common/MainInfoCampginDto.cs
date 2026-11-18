@@ -16,5 +16,9 @@ namespace DonationHub.Application.Features.Campaigns.Common
         public decimal GoalAmount { get; set; } = default!;
 
         public DateTimeOffset EndDate { get; set; }
+
+        public decimal ProgressPercent { get; set; }
+
+        public int DaysLeft { get; set; }
     }
 }

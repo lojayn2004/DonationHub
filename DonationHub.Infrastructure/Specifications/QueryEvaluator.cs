@@ -1,15 +1,16 @@
-﻿
-
-using DonationHub.Application.Common.Contracts;
+﻿using DonationHub.Application.Common.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace DonationHub.Infrastructure.Specifications
 {
     internal static class QueryEvaluator
     {
-        public static IQueryable<TOut> CreateQuery<TIn, TOut>(IQueryable<TIn> inputQuery, Specification<TIn, TOut> specification) 
+        public static IQueryable<TOut> CreateQuery<TIn, TOut>(IQueryable<TIn> inputQuery,
+
+            Specification<TIn, TOut> specification
+            ) 
             where TIn: class
-           where TOut : class
+            where TOut : class
         {
 
             if (specification.Criteria is not null)

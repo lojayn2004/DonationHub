@@ -14,7 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddOptionsConfiguration(builder.Configuration);
 
 builder.Services.AddApplicationServices()
-    .AddInfrastructureServices(builder.Configuration);
+    .AddInfrastructureServices(builder.Configuration, 
+    builder.Environment);
 
 builder.Services.AddOpenApi(options =>
 {

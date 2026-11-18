@@ -85,6 +85,10 @@ namespace DonationHub.Infrastructure.Data.Configurations
                    .WithOne(d => d.Campaign)
                    .HasForeignKey(d => d.CampaignId)
                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Ignore(c => c.DaysLeft);
+
+            builder.Ignore(c => c.ProgressPercent);
         }
     }
 }

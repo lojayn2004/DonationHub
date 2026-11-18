@@ -13,24 +13,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting;
 using System.Text;
-
-
 
 namespace DonationHub.Infrastructure
 {
     public static class InfrastructureServicesRegisteration
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, 
-            IConfiguration configuration)
+            IConfiguration configuration, IHostEnvironment environment)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+
+            if (!environment.IsEnvironment("Testing"))
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
                     options
                          .UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
                          .AddInterceptors(new SoftDeleteInterceptor())
                          //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
 
-            );
+                 );
+            }
 
             services
                .AddIdentityCore<ApplicationUser>(options =>
@@ -92,7 +95,13 @@ namespace DonationHub.Infrastructure
         {
             using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            
+
+            //var env = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+            //if (env.IsEnvironment("Testing"))
+            //{
+            //    await dbContext.Database.EnsureCreatedAsync(ct);
+            //}
+
             var seeders = scope.ServiceProvider.GetServices<IDataSeeder>();
             foreach(var seeder in seeders)
             {

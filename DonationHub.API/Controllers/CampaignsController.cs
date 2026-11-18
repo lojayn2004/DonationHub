@@ -1,19 +1,13 @@
-﻿using DonationHub.API.Dtos.Campaigns;
-using DonationHub.API.Dtos.Categories;
-using DonationHub.Application.Features.Campaigns.Commands.CreateCampaign;
+﻿using DonationHub.Application.Features.Campaigns.Commands.CreateCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.DeleteCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaignStatus;
 using DonationHub.Application.Features.Campaigns.Queries.GetActiveCampaigns;
 using DonationHub.Application.Features.Campaigns.Queries.GetCampaignById;
 using DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories;
-using DonationHub.Application.Features.Categories.Commands.UpdateCategory;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+using DonationHub.API.Dtos.Campaigns;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using System.Data;
-using System.Security.Claims;
+using MediatR;
 
 namespace DonationHub.API.Controllers
 {
@@ -126,12 +120,7 @@ namespace DonationHub.API.Controllers
             return Ok();
         }
 
-        public class UpdateStatusDto
-        {
-            public string status { get; set; }
-            public byte[] rowVersion { get; set; }
-        }
-
+        
 
     }
 }

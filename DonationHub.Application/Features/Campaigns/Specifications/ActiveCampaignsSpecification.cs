@@ -8,10 +8,10 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
 {
     public class ActiveCampaignsSpecification : Specification<Campaign, MainInfoCampginDto>
     {
-        public ActiveCampaignsSpecification(bool activeStatus)
+        public ActiveCampaignsSpecification(bool activeStatus, TimeProvider timeProvider)
             : base(ActiveWhereClause(activeStatus))
         {
-            Projection = GetProjection();
+            Projection = GetProjection(timeProvider);
 
 
         }
@@ -21,7 +21,8 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
                 (c => c.CampaignStatus == CampaignStatus.COMPLETED);
         }
 
-        private static Expression<Func<Campaign, MainInfoCampginDto>> GetProjection()
+        private static Expression<Func<Campaign, MainInfoCampginDto>> 
+            GetProjection(TimeProvider timeProvider)
         {
             return campaign => new MainInfoCampginDto()
             {
@@ -32,7 +33,9 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
                 DescriptionEn = campaign.DescriptionEn,
                 GoalAmount = campaign.GoalAmount.Amount,
                 RaisedAmount = campaign.RaisedAmount.Amount,
-                EndDate = campaign.EndDate
+                EndDate = campaign.EndDate,
+                ProgressPercent = campaign.ProgressPercent,
+                DaysLeft = campaign.SetDaysLeft(timeProvider.GetUtcNow())
 
             };
         }
