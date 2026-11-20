@@ -1,5 +1,4 @@
-﻿
-using DonationHub.Domain.Results;
+﻿using DonationHub.Domain.Results;
 using Microsoft.AspNetCore.Mvc;
 using DonationHub.Application.Common.Dtos;
 
