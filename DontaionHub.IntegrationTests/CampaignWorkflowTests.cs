@@ -20,8 +20,9 @@ public class CampaignWorkflowTests
         var categoryId = CreateCategory(token);
         var campaignId = CreateCampaign(token, categoryId);
 
+        // Todo: enhance yto get both in one time
         var returnedCampaignId = (string)Given()
-            .Header("Authorization", $"Bearer {token}")
+            
             .When()
             .Get($"{_factory.BaseUrl}/api/v1/campaign/{campaignId}")
             .Then()
@@ -29,7 +30,6 @@ public class CampaignWorkflowTests
             .Extract().Body("$.id");
 
         var returnedCategoryId = (string)Given()
-            .Header("Authorization", $"Bearer {token}")
             .When()
             .Get($"{_factory.BaseUrl}/api/v1/campaign/{campaignId}")
             .Then()
@@ -48,7 +48,6 @@ public class CampaignWorkflowTests
         var campaignId = CreateCampaign(token, categoryId);
 
         var rowVersion = (string)Given()
-            .Header("Authorization", $"Bearer {token}")
             .When()
             .Get($"{_factory.BaseUrl}/api/v1/campaign/{campaignId}")
             .Then()
@@ -86,6 +85,51 @@ public class CampaignWorkflowTests
             .Put($"{_factory.BaseUrl}/api/v1/campaign/{campaignId}")
             .Then()
             .StatusCode(409);
+    }
+
+    [Fact]
+    public void UnauthorizedUser_CannotCreateCampaign()
+    {
+        var campaign = new
+        {
+            titleAr = "حملة غير مصرح بها",
+            titleEn = $"Unauthorized campaign {Guid.NewGuid():N}",
+            descriptionAr = "وصف الحملة",
+            descriptionEn = "Unauthorized campaign description",
+            goalCurrency = "USD",
+            goalAmount = 1000,
+            endDate = DateTimeOffset.UtcNow.AddDays(30),
+            categoryId = Guid.NewGuid()
+        };
+
+        Given()
+            .ContentType("application/json")
+            .Body(campaign)
+            .When()
+            .Post($"{_factory.BaseUrl}/api/v1/campaign")
+            .Then()
+            .StatusCode(401);
+    }
+
+    [Fact]
+    public void Admin_CreatesCampaign_ThenDeletesIt()
+    {
+        var token = LoginAsAdmin();
+        var categoryId = CreateCategory(token);
+        var campaignId = CreateCampaign(token, categoryId);
+
+        Given()
+            .Header("Authorization", $"Bearer {token}")
+            .When()
+            .Delete($"{_factory.BaseUrl}/api/v1/campaign/{campaignId}")
+            .Then()
+            .StatusCode(204);
+
+        Given()
+            .When()
+            .Get($"{_factory.BaseUrl}/api/v1/campaign/{campaignId}")
+            .Then()
+            .StatusCode(404);
     }
 
     private string LoginAsAdmin()

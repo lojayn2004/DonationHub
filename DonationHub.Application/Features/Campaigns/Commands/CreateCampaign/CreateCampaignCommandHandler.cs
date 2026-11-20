@@ -1,5 +1,6 @@
 ﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Features.Campaigns.Common;
+using DonationHub.Application.Features.Campaigns.Specifications;
 using DonationHub.Domain.Models.Campaigns;
 using DonationHub.Domain.Models.Categories;
 using DonationHub.Domain.Models.Shared;
@@ -10,7 +11,7 @@ using MediatR;
 namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
 {
     public class CreateCampaignCommandHandler(IUnitOfWork _unitOfWork, 
-        TimeProvider _timeProvider): IRequestHandler<CreateCampaignCommand, Result<CampaignDto>>
+        TimeProvider _timeProvider, IQuery<Campaign, CampaignDto> _query): IRequestHandler<CreateCampaignCommand, Result<CampaignDto>>
     {
         public async Task<Result<CampaignDto>> Handle(CreateCampaignCommand request, 
             CancellationToken cancellationToken)
@@ -34,19 +35,9 @@ namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
             campaignsRepo.Add(campaignResult.Value);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
 
-            // TODO: CHANGE TO MAPSETR or AUTO MAPPER
-            var campaignDto = new CampaignDto()
-            {
-                Id = campaignResult.Value.Id,
-                TitleAr = campaignResult.Value.TitleAr,
-                TitleEn = campaignResult.Value.TitleEn,
-                DescriptionAr = campaignResult.Value.DescriptionAr,
-                DescriptionEn = campaignResult.Value.DescriptionEn,
-                GoalAmount = campaignResult.Value.GoalAmount.Amount,
-                EndDate = campaignResult.Value.EndDate
-
-
-            };
+            
+            var campaignDto = await _query.GetByIdAsync(campaignResult.Value.Id,
+                new CampaignWithCategorySpecification(_timeProvider));
             return Result<CampaignDto>.Success(campaignDto);
 
 
