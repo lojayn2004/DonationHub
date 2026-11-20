@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace DonationHub.API
+namespace DonationHub.API.Factories
 {
     public class ValidationProblemFactory
     {
