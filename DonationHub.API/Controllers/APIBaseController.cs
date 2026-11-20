@@ -6,6 +6,19 @@ namespace DonationHub.API.Controllers
 {
     public class APIBaseController: ControllerBase
     {
+        protected bool IsArabicRequest
+        {
+            get
+            {
+                var language = Request.Headers.AcceptLanguage.ToString()
+                    .Split(',')[0]
+                    .Split(';')[0]
+                    .Trim();
+
+                return language.Equals("ar", StringComparison.OrdinalIgnoreCase) ||
+                    language.StartsWith("ar-", StringComparison.OrdinalIgnoreCase);
+            }
+        }
 
         protected IActionResult GetProblemResult(Error error)
         {

@@ -5,6 +5,7 @@ using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaignStatus;
 using DonationHub.Application.Features.Campaigns.Queries.GetActiveCampaigns;
 using DonationHub.Application.Features.Campaigns.Queries.GetCampaignById;
 using DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories;
+using DonationHub.Application.Features.Campaigns.Common;
 using DonationHub.API.Dtos.Campaigns;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
@@ -29,7 +30,7 @@ namespace DonationHub.API.Controllers
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error);
 
-            return Created($"/api/campaign/{result.Value!.Id}", result.Value);
+            return Created($"/api/campaign/{result.Value!.Id}", ToPublicResponse(result.Value));
 
 
 
@@ -80,7 +81,7 @@ namespace DonationHub.API.Controllers
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value);
+            return Ok(ToPublicResponse(result.Value!));
         }
 
 
@@ -93,7 +94,7 @@ namespace DonationHub.API.Controllers
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value);
+            return Ok(result.Value!.Select(ToPublicSummaryResponse));
         }
 
         [HttpGet("success-stories")]
@@ -105,7 +106,7 @@ namespace DonationHub.API.Controllers
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value);
+            return Ok(result.Value!.Select(ToPublicSummaryResponse));
         }
 
         [HttpPatch("{id:guid}")]
@@ -121,6 +122,35 @@ namespace DonationHub.API.Controllers
         }
 
         
+
+        private object ToPublicResponse(CampaignDto campaign) => new
+        {
+            campaign.Id,
+            Title = IsArabicRequest ? campaign.TitleAr : campaign.TitleEn,
+            Description = IsArabicRequest ? campaign.DescriptionAr : campaign.DescriptionEn,
+            campaign.GoalAmount,
+            campaign.RaisedAmount,
+            campaign.EndDate,
+            campaign.CategoryId,
+            campaign.CategoryName,
+            campaign.RowVersion,
+            campaign.Status,
+            campaign.CreatedByUserId,
+            campaign.ProgressPercent,
+            campaign.DaysLeft
+        };
+
+        private object ToPublicSummaryResponse(MainInfoCampginDto campaign) => new
+        {
+            campaign.Id,
+            Title = IsArabicRequest ? campaign.TitleAr : campaign.TitleEn,
+            Description = IsArabicRequest ? campaign.DescriptionAr : campaign.DescriptionEn,
+            campaign.RaisedAmount,
+            campaign.GoalAmount,
+            campaign.EndDate,
+            campaign.ProgressPercent,
+            campaign.DaysLeft
+        };
 
     }
 }
