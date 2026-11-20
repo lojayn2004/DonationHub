@@ -133,7 +133,7 @@ namespace DonationHub.Domain.UnitTests
         {
             // Arrange
             var campaign = CreateValidCampaign();
-            // if feeeeeel i need to remove asserions here
+          
             campaign.CampaignStatus.Should().Be(CampaignStatus.ACTIVE); 
 
             campaign.UpdateCampaignStatus(CampaignStatus.EXPIRED, TimeProvider.GetUtcNow());
@@ -152,6 +152,42 @@ namespace DonationHub.Domain.UnitTests
             result.Error.Should().NotBeNull();
             campaign.UpdatedAt.Should().Be(updatedAtBeforeSecondCall); 
         }
+
+
+        [Fact]
+        public void UpdateCamapign_WhenGoalAmountBelowRaised_ReturnsFaliure()
+        {
+
+            // Arrange
+            var campaign = CreateValidCampaign();
+
+
+            // add big donation
+            var donation = Donation.Create(campaign.Id, campaign.CategoryId, new Money(50000, "USD"),
+               int.MinValue, int.MaxValue, TimeProvider.GetUtcNow());
+           
+            donation.UpdateStatus(DonationStatus.COMPLETED);
+            campaign.AddDonation(donation, TimeProvider.GetUtcNow());
+            // Act
+            var result = campaign.Update(
+                   titleAr: "عنوان تجريبي",
+                   titleEn: "Dummy Title",
+                   descAr: "وصف تجريبي",
+                   descEn: "Dummy description",
+                   goalAmount: 10_000m,
+                   endDate: TimeProvider.GetUtcNow().AddDays(30),
+                   categoryId: Guid.NewGuid(),
+                   utcNow: TimeProvider.GetUtcNow());
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.Error.Should().NotBeNull();
+            result.Error.Type.Should().Be(ErrorType.UnprocessableEntity);
+            result.Error.Code.Should().Be("Campaign.GoalBelowRaised");
+         
+
+        }
+
 
 
         [Fact]
@@ -176,5 +212,28 @@ namespace DonationHub.Domain.UnitTests
 
 
         }
+
+        [Fact]
+        public void ProgressPercent_WhenRaisedAmountExceedsGoal_IsCappedAt100()
+        {
+            // Arrange
+            var campaign = CreateValidCampaign();
+            var donation = Donation.Create(
+                campaign.Id,
+                campaign.CategoryId,
+                new Money(15_000, "USD"),
+                int.MinValue,
+                int.MaxValue,
+                TimeProvider.GetUtcNow());
+            donation.UpdateStatus(DonationStatus.COMPLETED);
+            campaign.AddDonation(donation, TimeProvider.GetUtcNow());
+
+            // Act
+            var progressPercent = campaign.ProgressPercent;
+
+            // Assert
+            progressPercent.Should().Be(100);
+        }
+
     }
 }

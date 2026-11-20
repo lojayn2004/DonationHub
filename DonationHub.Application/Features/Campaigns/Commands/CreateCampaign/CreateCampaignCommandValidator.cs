@@ -16,6 +16,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
             RuleFor(c => c.titleEn).NotEmpty().MinimumLength(5).MaximumLength(200);
             RuleFor(c => c.descAr).NotEmpty().MinimumLength(5).MaximumLength(4000);
             RuleFor(c => c.descEn).NotEmpty().MinimumLength(5).MaximumLength(4000);
+            RuleFor(c => c.categoryId).NotEmpty().WithMessage("Category Id cannot be empty");
 
 
         }

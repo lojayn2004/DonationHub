@@ -1,18 +1,18 @@
 ﻿using DonationHub.Application.Common.Contracts;
-using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaignStatus;
+using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign;
 using DonationHub.Domain.Models.Campaigns;
 using DonationHub.Domain.Models.Categories;
 using DonationHub.Domain.Models.Shared;
 using DonationHub.Domain.Results;
 using DonationHub.Domain.Results.Errors;
-using Microsoft.Extensions.Time.Testing;
 using FluentAssertions;
-using System.Text;
+using Microsoft.Extensions.Time.Testing;
 using Moq;
+using System.Text;
 
-namespace DonationHub.Application.UnitTests
+namespace DonationHub.Application.UnitTests.CommandTests
 {
-    public class UpdateCampaignStatusCommandHandlerTests
+    public class UpdateCommandHandlerTests
     {
         private readonly Mock<IUnitOfWork> _uow = new();
         private readonly Mock<IGenericRepository<Category>> _categories = new();
@@ -20,11 +20,12 @@ namespace DonationHub.Application.UnitTests
         private readonly FakeTimeProvider _time =
             new(new DateTimeOffset(2026, 11, 17, 0, 0, 0, TimeSpan.Zero));
 
-        private readonly UpdateCampaignStatusCommandHandler _handler;
+        private readonly UpdateCampaignHandler _handler;
 
         private readonly Mock<IConcurrencyHandler<Campaign>> _concurrencyHandler = new();
 
-        public UpdateCampaignStatusCommandHandlerTests()
+
+        public UpdateCommandHandlerTests()
         {
             _uow.Setup(u => u.GetRepository<Category>()).Returns(_categories.Object);
             _uow.Setup(u => u.GetRepository<Campaign>()).Returns(_campaigns.Object);
@@ -32,10 +33,28 @@ namespace DonationHub.Application.UnitTests
                 .ReturnsAsync(Result<int>.Success(1));
 
 
-            _handler = new UpdateCampaignStatusCommandHandler(_uow.Object, _time, _concurrencyHandler.Object);
+            _handler = new UpdateCampaignHandler(_uow.Object, _time, _concurrencyHandler.Object);
         }
-        private UpdateCampaignStatusCommand BuildCommand(byte[] rowVersion) => new UpdateCampaignStatusCommand(Guid.NewGuid(), "EXPIRED", rowVersion);
+        private UpdateCampaignCommand BuildCommand(byte[] rowVersion) =>
+            new UpdateCampaignCommand(Guid.NewGuid(), "حملة تجريب", "english title", "حملة تجريب", "english desc", 1000000,
+                _time.GetUtcNow().AddDays(30), Guid.NewGuid(), rowVersion);
 
+        [Fact] 
+        public async Task Handler_RowVersionNotValid_MapToCuncurrencyConflict()
+        {
+            byte[] rowVersion = Encoding.UTF8.GetBytes("0x000000000000C355");
+            var cmd = BuildCommand(rowVersion);
+
+            _campaigns.Setup(u => u.GetByIdAsync(cmd.campaignId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(CreateValidCampaign());
+                
+            _uow.Setup(u => u.SavaChangesAsync(It.IsAny<CancellationToken>()))
+               .ReturnsAsync(Result<int>.Failure(CommonErrors.ConcurrencyConflict));
+
+            var result = await _handler.Handle(cmd, CancellationToken.None);
+
+            result.Error.Should().Be(CampaignErrors.ConcurrencyConflict);
+        }
 
         [Fact]
         public async Task Handle_UnknownCampaign_ReturnsNotFound_NeverSaves()
@@ -52,21 +71,7 @@ namespace DonationHub.Application.UnitTests
         }
 
 
-        [Fact]
-        public async Task Handle_SaveReturnsConflict_MapsToConcurrencyConflict()
-        {
-            byte[] rowVersion = Encoding.UTF8.GetBytes("0x000000000000C355");
-            var cmd = BuildCommand(rowVersion);
-            _campaigns.Setup(r => r.GetByIdAsync(cmd.campaignId, It.IsAny<CancellationToken>()))
-                      .ReturnsAsync(CreateValidCampaign());
 
-            _uow.Setup(u => u.SavaChangesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Result<int>.Failure(CommonErrors.ConcurrencyConflict));
-
-            var result = await _handler.Handle(cmd, CancellationToken.None);
-
-            result.Error.Should().Be(CampaignErrors.ConcurrencyConflict);
-        }
 
         private Campaign CreateValidCampaign()
         {
@@ -85,9 +90,8 @@ namespace DonationHub.Application.UnitTests
 
             return result.Value;
         }
+
+
+
     }
 }
-
-
-
-

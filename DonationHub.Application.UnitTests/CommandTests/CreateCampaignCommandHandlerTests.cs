@@ -9,7 +9,7 @@ using FluentAssertions;
 using Moq;
 
 
-namespace DonationHub.Application.UnitTests
+namespace DonationHub.Application.UnitTests.CommandTests
 {
     public  class CreateCampaignCommandHandlerTests
     {
@@ -112,5 +112,12 @@ namespace DonationHub.Application.UnitTests
             _campaigns.Verify(r => r.Add(It.IsAny<Campaign>()), Times.Never);
             _uow.Verify(u => u.SavaChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
+    
+    
+    
+    
+    
+    
+    
     }
 }

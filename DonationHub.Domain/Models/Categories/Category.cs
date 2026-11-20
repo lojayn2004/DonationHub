@@ -15,7 +15,7 @@ namespace DonationHub.Domain.Models.Categories
 
         public DateTimeOffset UpdateAt { get; private set; }
 
-        public List<Campaign> Campaigns { get; private set; }
+        public List<Campaign> Campaigns { get; private set; } = new();
         public bool IsDeleted { get; set; }
         public DateTimeOffset? DeletedAtUtc { get; set; }
 
@@ -41,6 +41,10 @@ namespace DonationHub.Domain.Models.Categories
                 UpdateAt = utcNow
             };
 
+        }
+        public void AddCampaign(Campaign campaign)
+        {
+            Campaigns.Add(campaign);
         }
 
         public void Update(string nameAr, string nameEn, string descAr, string descEn, DateTimeOffset utcNow)
