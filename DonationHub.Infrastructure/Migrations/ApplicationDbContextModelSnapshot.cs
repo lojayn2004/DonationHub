@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DonationHub.Infrastructure.Data.Migrations
+namespace DonationHub.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -120,18 +120,24 @@ namespace DonationHub.Infrastructure.Data.Migrations
 
                     b.Property<string>("NameAr")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("NameEn")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTimeOffset>("UpdateAt")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NameAr")
+                        .IsUnique();
+
+                    b.HasIndex("NameEn")
+                        .IsUnique();
 
                     b.ToTable("Category");
                 });
@@ -642,11 +648,9 @@ namespace DonationHub.Infrastructure.Data.Migrations
                             b1.Property<Guid>("ApplicationUserId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<int>("Id")
+                            b1.Property<Guid>("Id")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<DateTimeOffset>("CreatedAt")
                                 .HasColumnType("datetimeoffset");
@@ -654,8 +658,8 @@ namespace DonationHub.Infrastructure.Data.Migrations
                             b1.Property<DateTimeOffset>("ExpiresAt")
                                 .HasColumnType("datetimeoffset");
 
-                            b1.Property<int?>("ReplacedByTokenId")
-                                .HasColumnType("int");
+                            b1.Property<Guid?>("ReplacedByTokenId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<DateTimeOffset?>("RevokedOn")
                                 .HasColumnType("datetimeoffset");
@@ -663,6 +667,9 @@ namespace DonationHub.Infrastructure.Data.Migrations
                             b1.Property<string>("TokenHash")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
+
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.HasKey("ApplicationUserId", "Id");
 

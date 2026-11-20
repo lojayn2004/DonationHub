@@ -28,7 +28,10 @@ namespace DonationHub.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasDefaultValue(true);
 
-            builder.OwnsMany(u => u.RefreshTokens);
+            builder.OwnsMany(u => u.RefreshTokens, rt =>
+            {
+                rt.Ignore(r => r.Token);
+            });
            
 
                 // Idempotency record Relation 
