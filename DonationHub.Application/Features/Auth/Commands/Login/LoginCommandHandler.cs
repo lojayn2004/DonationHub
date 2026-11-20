@@ -7,7 +7,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Auth.Commands.Login
 {
-    public class LoginCommandHandler(IIdentityService _identityService, IJwtUtils _jwtUtils):
+    public class LoginCommandHandler(IIdentityService _identityService):
         IRequestHandler<LoginCommand, Result<AuthResponse>>
     {
         public async Task<Result<AuthResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)

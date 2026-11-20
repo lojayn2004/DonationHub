@@ -19,7 +19,9 @@ namespace DonationHub.Infrastructure.Implementations
 
         public async Task<TOut?> GetByIdAsync(Guid Id, Specification<TIn, TOut> spec)
         {
-            var query = _dbContext.Set<TIn>().AsNoTracking();
+            var query = _dbContext.Set<TIn>()
+                          .AsNoTracking()
+                          .Where(x => EF.Property<Guid>(x, "Id") == Id);
 
             return await QueryEvaluator.CreateQuery<TIn, TOut>(query, spec).FirstOrDefaultAsync();
         }

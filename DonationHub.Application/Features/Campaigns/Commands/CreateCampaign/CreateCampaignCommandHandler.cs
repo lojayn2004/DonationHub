@@ -33,6 +33,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
 
             campaignsRepo.Add(campaignResult.Value);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
+
             // TODO: CHANGE TO MAPSETR or AUTO MAPPER
             var campaignDto = new CampaignDto()
             {

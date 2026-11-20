@@ -53,5 +53,11 @@ namespace DonationHub.Domain.Models.Categories
             DescriptionAr = descAr; DescriptionEn = descEn;
             UpdateAt = utcNow;
         }
+
+
+        public bool CanBeDeleted()
+        {
+            return !Campaigns.Any();
+        }
     }
 }

@@ -166,7 +166,7 @@ namespace DonationHub.Domain.UnitTests
             var donation = Donation.Create(campaign.Id, campaign.CategoryId, new Money(50000, "USD"),
                int.MinValue, int.MaxValue, TimeProvider.GetUtcNow());
            
-            donation.UpdateStatus(DonationStatus.COMPLETED);
+            donation.UpdateStatus(DonationStatus.SUCCEEDED);
             campaign.AddDonation(donation, TimeProvider.GetUtcNow());
             // Act
             var result = campaign.Update(
@@ -200,7 +200,7 @@ namespace DonationHub.Domain.UnitTests
             var donation = Donation.Create(campaign.Id, campaign.CategoryId, new Money(10000, "USD"),
                 int.MinValue, int.MaxValue, TimeProvider.GetUtcNow());
 
-            donation.UpdateStatus(DonationStatus.COMPLETED);
+            donation.UpdateStatus(DonationStatus.SUCCEEDED);
 
             // Act
             campaign.AddDonation(donation, TimeProvider.GetUtcNow());
@@ -225,7 +225,7 @@ namespace DonationHub.Domain.UnitTests
                 int.MinValue,
                 int.MaxValue,
                 TimeProvider.GetUtcNow());
-            donation.UpdateStatus(DonationStatus.COMPLETED);
+            donation.UpdateStatus(DonationStatus.SUCCEEDED);
             campaign.AddDonation(donation, TimeProvider.GetUtcNow());
 
             // Act

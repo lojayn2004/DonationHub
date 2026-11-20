@@ -10,14 +10,13 @@ namespace DonationHub.Application.UnitTests.CommandTests
     {
         private readonly Mock<IIdentityService> _identityService = new();
 
-        private readonly Mock<IJwtUtils> _jwtUtils = new();
 
         private readonly LoginCommandHandler _handler;
 
 
         public LoginCommandTests()
         {
-            _handler = new LoginCommandHandler(_identityService.Object, _jwtUtils.Object);
+            _handler = new LoginCommandHandler(_identityService.Object);
 
         }
 

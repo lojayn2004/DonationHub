@@ -14,10 +14,19 @@ namespace DonationHub.Infrastructure.Data.Configurations
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.NameAr)
-                   .HasMaxLength(200);
+                   .HasMaxLength(100);
 
+          
             builder.Property(c => c.NameEn)
-                   .HasMaxLength(200);
+                   .HasMaxLength(100);
+
+            builder.HasIndex(c => c.NameAr)
+                   .IsUnique();
+
+            builder.HasIndex(c => c.NameEn)
+                   .IsUnique();
+
+
 
             builder.Property(c => c.DescriptionAr)
                  .HasMaxLength(4000);

@@ -29,9 +29,10 @@ namespace DonationHub.Infrastructure.Data.Configurations
                 .HasDefaultValue(true);
 
             builder.OwnsMany(u => u.RefreshTokens);
+           
 
-            // Idempotency record Relation 
+                // Idempotency record Relation 
 
-        }
+            }
     }
 }

@@ -37,15 +37,23 @@ namespace DonationHub.Application.UnitTests.CommandTests
             var category = GetCategory();
             category.AddCampaign(GetValidCampaign());
 
-
-            _categories.Setup(c => c.GetByIdAsync(cmd.Id, It.IsAny<CancellationToken>()))
+            Specification<Category, Category>? usedSpecification = null;
+            _categories.Setup(c => c.GetByIdAsync(
+                    cmd.Id,
+                    It.IsAny<Specification<Category, Category>>(),
+                    It.IsAny<CancellationToken>()))
+                .Callback<Guid, Specification<Category, Category>, CancellationToken>(
+                    (_, specification, _) => usedSpecification = specification)
                 .ReturnsAsync(category);
 
-            var result = await _handler.Handle(cmd, It.IsAny<CancellationToken>());
+            var result = await _handler.Handle(cmd, CancellationToken.None);
 
             result.IsSuccess.Should().BeFalse();
             result.Error.Should().NotBeNull();
             result.Error.Type.Should().Be(Domain.Results.ErrorType.Conflict);
+            usedSpecification.Should().NotBeNull();
+            usedSpecification!.Includes.Should().ContainSingle();
+            usedSpecification.Includes[0].ToString().Should().Contain(nameof(Category.Campaigns));
 
 
         }

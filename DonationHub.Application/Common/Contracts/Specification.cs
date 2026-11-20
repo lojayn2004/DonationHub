@@ -12,7 +12,8 @@ namespace DonationHub.Application.Common.Contracts
 
         protected Specification(Expression<Func<TIn, bool>>? criteria)
         {
-            Criteria = criteria;
+           if(criteria is not null) 
+                Criteria = criteria;
         }
 
         protected void AddInclude(Expression<Func<TIn, object>> include)
