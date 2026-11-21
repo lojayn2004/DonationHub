@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace DonationHub.Application.Features.Campaigns.Specifications
 {
-    internal class CampaignWithCategorySpecification: Specification<Campaign, CampaignDto>
+    public class CampaignWithCategorySpecification: Specification<Campaign, CampaignDto>
     {
       
         public CampaignWithCategorySpecification(TimeProvider provider): base(null)

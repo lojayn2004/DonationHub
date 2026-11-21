@@ -8,7 +8,7 @@ using Microsoft.Extensions.Time.Testing;
 using FluentAssertions;
 using Moq;
 using DonationHub.Application.Features.Campaigns.Common;
-
+using DonationHub.Application.Features.Campaigns.Specifications;
 
 namespace DonationHub.Application.UnitTests.CommandTests
 {
@@ -69,18 +69,38 @@ namespace DonationHub.Application.UnitTests.CommandTests
 
 
 
-        [Fact] 
+        [Fact]
         public async Task Handle_ValidCommand_AddsCampaign_AndSavesOnce()
         {
-            
+            // Arrange
             var cmd = BuildCommand();
+
             _categories.Setup(r => r
-                                  .GetByIdAsync(cmd.categoryId, It.IsAny<CancellationToken>()))
-                                  .ReturnsAsync(Category.CreateCategory("تعليم", "Education", "تعليم", "description", _time.GetUtcNow()));
+                            .GetByIdAsync(cmd.categoryId, It.IsAny<CancellationToken>()))
+                       .ReturnsAsync(Category.CreateCategory("تعليم", "Education", "تعليم", "description", _time.GetUtcNow()));
 
             Campaign? added = null;
             _campaigns.Setup(r => r.Add(It.IsAny<Campaign>()))
                       .Callback<Campaign>(c => added = c);
+
+            
+            _query.Setup(q => q.GetByIdAsync(
+                            It.IsAny<Guid>(),
+                            It.IsAny<CampaignWithCategorySpecification>(),
+                            It.IsAny<CancellationToken>()))
+                  .ReturnsAsync((Guid id, CampaignWithCategorySpecification _, CancellationToken __) =>
+                  {
+                      return new CampaignDto
+                      {
+                          Id = id,
+                          TitleEn = cmd.titleAr,
+                          TitleAr = cmd.titleEn,
+                          GoalAmount = cmd.goalAmount,
+                          CategoryId = cmd.categoryId
+                         
+                        
+                      };
+                  });
 
             // Act
             var result = await _handler.Handle(cmd, CancellationToken.None);
@@ -92,8 +112,17 @@ namespace DonationHub.Application.UnitTests.CommandTests
 
             added.Should().NotBeNull();
             added!.TitleEn.Should().Be("Campaign");
+
+            result.Value.Should().NotBeNull();
             result.Value.Id.Should().Be(added.Id);
             result.Value.GoalAmount.Should().Be(1000m);
+
+           
+            _query.Verify(q => q.GetByIdAsync(
+                                added.Id,
+                                It.IsAny<CampaignWithCategorySpecification>(),
+                                It.IsAny<CancellationToken>()),
+                          Times.Once);
         }
 
         [Fact]
