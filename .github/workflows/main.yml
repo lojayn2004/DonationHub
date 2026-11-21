@@ -1,8 +1,10 @@
 name: Run_TESTS_CI
+
 on:
   push:
-    branches: ['**']      
-  pull_request:           
+    branches: ['**']
+  pull_request:
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,6 +25,7 @@ jobs:
 
     env:
       TEST_DB_CONNECTION: Server=localhost,1433;Database=DonationHubTestDb;User Id=sa;Password=Your_Strong_Passw0rd;TrustServerCertificate=True
+
     steps:
       - name: Get the code
         uses: actions/checkout@v4
@@ -33,23 +36,48 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restore packages
-        run: dotnet restore
+        run: dotnet restore DonationHub.slnx
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
-
+      # ─────────────────────────────────────────────────────────────
+      # 1) Domain unit tests
+      # ─────────────────────────────────────────────────────────────
       - name: Run Domain.UnitTests
         run: >
           dotnet test
-          DontaionHub.Domain.UnitTests/DontaionHub.Domain.UnitTests.csproj
-         
+          DonationHub.Domain.UnitTests/DonationHub.Domain.UnitTests.csproj
+          --configuration Release
+          --verbosity normal
+          --logger "trx;LogFileName=domain-unittests.trx"
+          --results-directory ./TestResults/Domain
+
+      # ─────────────────────────────────────────────────────────────
+      # 2) Application unit tests
+      # ─────────────────────────────────────────────────────────────
       - name: Run Application.UnitTests
         run: >
           dotnet test
-          DontaionHub.Application.UnitTests/DontaionHub.Application.UnitTests.csproj
-        
+          DonationHub.Application.UnitTests/DonationHub.Application.UnitTests.csproj
+          --configuration Release
+          --verbosity normal
+          --logger "trx;LogFileName=application-unittests.trx"
+          --results-directory ./TestResults/Application
+
+      # ─────────────────────────────────────────────────────────────
+      # 3) Integration tests (needs SQL Server)
+      # ─────────────────────────────────────────────────────────────
       - name: Run IntegrationTests
         run: >
           dotnet test
           DontaionHub.IntegrationTests/DontaionHub.IntegrationTests.csproj
-          
+          --configuration Release
+          --verbosity normal
+          --logger "trx;LogFileName=integrationtests.trx"
+          --results-directory ./TestResults/Integration
+
+    
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ./TestResults
