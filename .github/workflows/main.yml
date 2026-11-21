@@ -38,5 +38,18 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run unit and integration tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+      - name: Run Domain.UnitTests
+        run: >
+          dotnet test
+          DontaionHub.Domain.UnitTests/DontaionHub.Domain.UnitTests.csproj
+         
+      - name: Run Application.UnitTests
+        run: >
+          dotnet test
+          DontaionHub.Application.UnitTests/DontaionHub.Application.UnitTests.csproj
+        
+      - name: Run IntegrationTests
+        run: >
+          dotnet test
+          DontaionHub.IntegrationTests/DontaionHub.IntegrationTests.csproj
+          
