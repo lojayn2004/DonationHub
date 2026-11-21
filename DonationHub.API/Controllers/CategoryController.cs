@@ -75,7 +75,13 @@ namespace DonationHub.API.Controllers
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value);
+            var category = result.Value!;
+            return Ok(new
+            {
+                category.Id,
+                Name = IsArabicRequest ? category.NameAr : category.NameEn,
+                Description = IsArabicRequest ? category.DescriptionAr : category.DescriptionEn
+            });
         }
 
 
@@ -88,7 +94,12 @@ namespace DonationHub.API.Controllers
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value);
+            return Ok(result.Value!.Select(category => new
+            {
+                category.Id,
+                Name = IsArabicRequest ? category.NameAr : category.NameEn,
+                Description = IsArabicRequest ? category.DescriptionAr : category.DescriptionEn
+            }));
         }
     }
 }

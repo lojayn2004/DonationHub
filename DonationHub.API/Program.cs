@@ -1,7 +1,9 @@
 using DonationHub.API;
 using DonationHub.API.Extensions;
+using DonationHub.API.Factories;
 using DonationHub.API.Middleware;
 using DonationHub.Application;
+using Microsoft.AspNetCore.Mvc;
 using Scalar.AspNetCore;
 
 
@@ -21,6 +23,13 @@ builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = ValidationProblemFactory.Create;
+});
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp", policy =>

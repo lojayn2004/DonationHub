@@ -101,7 +101,7 @@ namespace DonationHub.Domain.Models.Campaigns
 
         public void AddDonation(Donation donation, DateTimeOffset utcNow)
         {
-            if (donation.DonationStatus != DonationStatus.COMPLETED)
+            if (donation.DonationStatus != DonationStatus.SUCCEEDED)
                 throw new Exception("Only succeeded donations count toward raised amount.");
             if (donation.CampaignId != Id)
                 throw new Exception("Donation does not belong to this campaign.");

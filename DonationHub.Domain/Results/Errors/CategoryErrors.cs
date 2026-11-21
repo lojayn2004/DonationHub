@@ -9,7 +9,8 @@ namespace DonationHub.Domain.Results.Errors
         public static readonly Error Conflict =
             new Error("Category.HasCampaigns", " Cannot delete a category with linked campaigns", ErrorType.Conflict);
 
-
+        public static readonly Error AlreadyExists =
+            new("Category.AlreadyExists", "A category with the same Arabic or English name already exists.", ErrorType.Conflict);
         
 
 

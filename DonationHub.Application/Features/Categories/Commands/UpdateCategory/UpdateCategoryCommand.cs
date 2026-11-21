@@ -10,8 +10,7 @@ namespace DonationHub.Application.Features.Categories.Commands.UpdateCategory
             string NameAr,
             string NameEn,
             string? DescriptionAr,
-            string? DescriptionEn) :
-    IRequest<Result<CategoryResponse>>
+            string? DescriptionEn) : IRequest<Result<CategoryResponse>>
     {
     }
 }

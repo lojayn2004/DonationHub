@@ -9,7 +9,7 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
     internal class CampaignWithCategorySpecification: Specification<Campaign, CampaignDto>
     {
       
-        public CampaignWithCategorySpecification(Guid id, TimeProvider provider): base(c => c.Id == id)
+        public CampaignWithCategorySpecification(TimeProvider provider): base(null)
         {
         
             Projection = GetProjection(provider);

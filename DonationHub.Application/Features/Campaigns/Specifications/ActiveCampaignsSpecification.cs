@@ -21,8 +21,7 @@ namespace DonationHub.Application.Features.Campaigns.Specifications
                 (c => c.CampaignStatus == CampaignStatus.COMPLETED);
         }
 
-        private static Expression<Func<Campaign, MainInfoCampginDto>> 
-            GetProjection(TimeProvider timeProvider)
+        private static Expression<Func<Campaign, MainInfoCampginDto>> GetProjection(TimeProvider timeProvider)
         {
             return campaign => new MainInfoCampginDto()
             {

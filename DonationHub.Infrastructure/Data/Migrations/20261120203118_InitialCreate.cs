@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DonationHub.Infrastructure.Data.Migrations
+namespace DonationHub.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -33,6 +33,7 @@ namespace DonationHub.Infrastructure.Data.Migrations
                     FullName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     PreferredLanguage = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -58,12 +59,14 @@ namespace DonationHub.Infrastructure.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NameAr = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    NameEn = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    NameAr = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     DescriptionAr = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
                     DescriptionEn = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdateAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAtUtc = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,9 +81,9 @@ namespace DonationHub.Infrastructure.Data.Migrations
                     RequestHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ResponseStatusCode = table.Column<int>(type: "int", nullable: false),
                     ResponseBody = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiresAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,7 +96,7 @@ namespace DonationHub.Infrastructure.Data.Migrations
                 {
                     EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
-                    ProcessedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ProcessedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,6 +210,30 @@ namespace DonationHub.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TokenHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpiresAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    RevokedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ReplacedByTokenId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => new { x.ApplicationUserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Campaigns",
                 columns: table => new
                 {
@@ -215,8 +242,8 @@ namespace DonationHub.Infrastructure.Data.Migrations
                     TitleEn = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     DescriptionAr = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
                     DescriptionEn = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    EndDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     GoalAmount_Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     GoalAmount_Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     RaisedAmount_Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -227,8 +254,8 @@ namespace DonationHub.Infrastructure.Data.Migrations
                     rowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DeletedAtUtc = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,13 +282,13 @@ namespace DonationHub.Infrastructure.Data.Migrations
                     DonationAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DonationCurrency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     DonationStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CompletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     FaliureReson = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ReceiptNumber = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ReceiptFileName = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     CampaignId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DonorUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -288,12 +315,12 @@ namespace DonationHub.Infrastructure.Data.Migrations
                     DonationAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DonationCurrency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     PaymentAttemptStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     FaliureCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     StripeCheckoutSessionId = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
                     StripePaymentIntentId = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: true),
                     DonationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -356,6 +383,18 @@ namespace DonationHub.Infrastructure.Data.Migrations
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Category_NameAr",
+                table: "Category",
+                column: "NameAr",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Category_NameEn",
+                table: "Category",
+                column: "NameEn",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Donation_CampaignId",
                 table: "Donation",
                 column: "CampaignId");
@@ -398,6 +437,9 @@ namespace DonationHub.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProcessedStripeEvent");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

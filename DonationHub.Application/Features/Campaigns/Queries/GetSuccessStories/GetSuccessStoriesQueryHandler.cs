@@ -14,9 +14,9 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories
         public async Task<Result<IReadOnlyList<MainInfoCampginDto>>> Handle(GetSuccessStoriesQuery request, 
             CancellationToken cancellationToken)
         {
-            // TODOD: FIX TO TAKE CACNECLLATION TOKEN
+          
             return Result<IReadOnlyList<MainInfoCampginDto>>.Success(
-                await _query.GetAllAsync(new ActiveCampaignsSpecification(false, _timeProvider)));
+                await _query.GetAllAsync(new ActiveCampaignsSpecification(false, _timeProvider), cancellationToken));
         }
     }
 }

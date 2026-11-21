@@ -28,6 +28,24 @@ namespace DonationHub.Infrastructure.ContractImplementations
             return await _applicationDbContext.Set<TEntity>().FindAsync(id,ct);
         }
 
+        public async Task<TEntity?> GetByIdAsync(
+            Guid id,
+            Specification<TEntity, TEntity> specification,
+            CancellationToken ct)
+        {
+            IQueryable<TEntity> query = _applicationDbContext.Set<TEntity>();
+
+            if (specification.Criteria is not null)
+                query = query.Where(specification.Criteria);
+
+            foreach (var include in specification.Includes)
+                query = query.Include(include);
+
+            query = query.Where(entity => EF.Property<Guid>(entity, "Id") == id);
+
+            return await query.Select(specification.Projection).FirstOrDefaultAsync(ct);
+        }
+
         public void Update(TEntity entity)
         {
             _applicationDbContext.Set<TEntity>().Update(entity);

@@ -8,20 +8,23 @@ namespace DonationHub.Infrastructure.Implementations
     internal class Query<TIn, TOut>(ApplicationDbContext _dbContext): IQuery<TIn, TOut> where TIn: class
                                                                                         where TOut: class
     {
-        public async Task<IReadOnlyList<TOut>> GetAllAsync(Specification<TIn, TOut> spec) {
+        public async Task<IReadOnlyList<TOut>> GetAllAsync(Specification<TIn, TOut> spec,
+            CancellationToken ct) {
 
             var query = _dbContext.Set<TIn>().AsNoTracking();
          
-            return await QueryEvaluator.CreateQuery<TIn, TOut>(query, spec).ToListAsync();
+            return await QueryEvaluator.CreateQuery<TIn, TOut>(query, spec).ToListAsync(ct);
           
 
         }
 
-        public async Task<TOut?> GetByIdAsync(Guid Id, Specification<TIn, TOut> spec)
+        public async Task<TOut?> GetByIdAsync(Guid Id, Specification<TIn, TOut> spec, CancellationToken ct)
         {
-            var query = _dbContext.Set<TIn>().AsNoTracking();
+            var query = _dbContext.Set<TIn>()
+                          .AsNoTracking()
+                          .Where(x => EF.Property<Guid>(x, "Id") == Id);
 
-            return await QueryEvaluator.CreateQuery<TIn, TOut>(query, spec).FirstOrDefaultAsync();
+            return await QueryEvaluator.CreateQuery<TIn, TOut>(query, spec).FirstOrDefaultAsync(ct);
         }
     }
 }

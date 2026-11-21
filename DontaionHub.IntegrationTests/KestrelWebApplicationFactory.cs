@@ -47,7 +47,8 @@ namespace DontaionHub.IntegrationTests
 
 
                 services.AddDbContext<ApplicationDbContext>(o => o
-                   .UseSqlServer(connectionString)
+                   .UseSqlServer(connectionString ?? 
+                   "Server=.;Database=DonationHubTestDb_v2;Trusted_Connection=True;TrustServerCertificate=True")
                    .AddInterceptors(new SoftDeleteInterceptor()));
             });
         }
