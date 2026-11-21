@@ -24,10 +24,6 @@
     <ProjectReference Include="..\DonationHub.Shared\DonationHub.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Migrations\" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<None Update="Data\Seeding\Categories\categories.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

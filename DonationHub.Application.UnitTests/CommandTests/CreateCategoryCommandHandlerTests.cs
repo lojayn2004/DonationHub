@@ -27,7 +27,7 @@ namespace DonationHub.Application.UnitTests.CommandTests
                 .ReturnsAsync(Result<int>.Success(1));
 
             _categoryQuery
-                .Setup(query => query.GetAllAsync(It.IsAny<Specification<Category, CategoryResponse>>()))
+                .Setup(query => query.GetAllAsync(It.IsAny<Specification<Category, CategoryResponse>>(), It.IsAny<CancellationToken>()))
                 .Returns((Specification<Category, CategoryResponse> specification) =>
                 {
                     var existingCategories = new[]

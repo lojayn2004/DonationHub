@@ -7,6 +7,7 @@ using DonationHub.Domain.Results.Errors;
 using Microsoft.Extensions.Time.Testing;
 using FluentAssertions;
 using Moq;
+using DonationHub.Application.Features.Campaigns.Common;
 
 
 namespace DonationHub.Application.UnitTests.CommandTests
@@ -16,6 +17,8 @@ namespace DonationHub.Application.UnitTests.CommandTests
         private readonly Mock<IUnitOfWork> _uow = new();
         private readonly Mock<IGenericRepository<Category>> _categories = new();
         private readonly Mock<IGenericRepository<Campaign>> _campaigns = new();
+
+        private readonly Mock<IQuery<Campaign, CampaignDto>> _query = new();
         private readonly FakeTimeProvider _time =
             new(new DateTimeOffset(2026, 11, 17, 0, 0, 0, TimeSpan.Zero));
         private readonly CreateCampaignCommandHandler _handler;
@@ -29,7 +32,7 @@ namespace DonationHub.Application.UnitTests.CommandTests
             _uow.Setup(u => u.SavaChangesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Result<int>.Success(1));
 
-            _handler = new CreateCampaignCommandHandler(_uow.Object, _time);
+            _handler = new CreateCampaignCommandHandler(_uow.Object, _time, _query.Object);
         }
 
 

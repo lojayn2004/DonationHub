@@ -16,7 +16,7 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetCampaignById
         {
             
             var campaignDto = await  _query.GetByIdAsync(request.id, 
-                new CampaignWithCategorySpecification(_timeProvider));
+                new CampaignWithCategorySpecification(_timeProvider), cancellationToken);
         
             if(campaignDto == null)
                 return Result<CampaignDto>.Failure(CampaignErrors.NotFound);

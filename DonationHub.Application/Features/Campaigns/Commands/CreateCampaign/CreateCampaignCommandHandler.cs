@@ -37,7 +37,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
 
             
             var campaignDto = await _query.GetByIdAsync(campaignResult.Value.Id,
-                new CampaignWithCategorySpecification(_timeProvider));
+                new CampaignWithCategorySpecification(_timeProvider), cancellationToken);
             return Result<CampaignDto>.Success(campaignDto);
 
 

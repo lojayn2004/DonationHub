@@ -19,7 +19,7 @@ namespace DonationHub.Application.Features.Categories.Commands.CreateCategory
             CancellationToken cancellationToken)
         {
             var existingCategories = await _categoryQuery.GetAllAsync(
-                new CategoryNameSpecification(request.NameAr, request.NameEn));
+                new CategoryNameSpecification(request.NameAr, request.NameEn), cancellationToken);
             if (existingCategories.Count > 0)
                 return Result<CategoryResponse>.Failure(CategoryErrors.AlreadyExists);
 
