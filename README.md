@@ -156,6 +156,48 @@ The response contains the access token used for secured requests. The refresh to
 
 Admin-only endpoint checks require a token returned after logging in with the seeded admin account. Log out through `POST /api/v1/auth/logout` while the refresh-token cookie is available.
 
+## Campaign endpoints
+
+Campaign routes use the singular `/api/v1/campaign` path.
+
+| Method | Route | Access | Description |
+|---|---|---|---|
+| `GET` | `/api/v1/campaign` | Public | List active campaigns |
+| `GET` | `/api/v1/campaign/{id}` | Public | Get a campaign by ID |
+| `GET` | `/api/v1/campaign/success-stories` | Public | List success-story campaigns |
+| `POST` | `/api/v1/campaign` | Admin | Create a campaign |
+| `PUT` | `/api/v1/campaign/{id}` | Admin | Update campaign details |
+| `PATCH` | `/api/v1/campaign/{id}` | Admin | Update campaign status |
+| `DELETE` | `/api/v1/campaign/{id}` | Admin | Delete a campaign |
+
+For admin routes, send `Authorization: Bearer <access-token>`. Read responses choose Arabic fields when the request's `Accept-Language` header starts with `ar` (for example, `ar` or `ar-SA`); otherwise they return English fields. For example:
+
+```http
+GET /api/v1/campaign
+Accept-Language: ar
+```
+
+The request/response schemas and validation details are available in the OpenAPI document and Scalar API reference.
+
+## Run tests
+
+Run all test projects from the repository root:
+
+```powershell
+dotnet test .\DonationHub.slnx
+```
+
+To run a specific test project, for example the application unit tests:
+
+```powershell
+dotnet test .\DonationHub.Application.UnitTests\DonationHub.Application.UnitTests.csproj
+```
+
+Integration tests run the API against SQL Server. They use the connection string in the `TEST_DB_CONNECTION` environment variable; if it is not set, they use `Server=.;Database=DonationHubTestDb_v2;Trusted_Connection=True;TrustServerCertificate=True`. The test host calls `EnsureCreated`, which creates a missing database but does not clear an existing one. Use a new, empty database for each integration-test run so prior test data cannot affect results. For example, in PowerShell:
+
+
+This creates a uniquely named test database for that run, provided the SQL Server instance is available and the account can create databases. Do not point `TEST_DB_CONNECTION` at a development or production database. The test database remains on the server after the tests finish; remove it using your SQL Server administration tools when it is no longer needed.
+
 ## Solution structure
 
 - `DonationHub.API` - HTTP endpoints, API configuration, authentication, and Scalar/OpenAPI setup
@@ -203,3 +245,17 @@ Admin-only endpoint checks require a token returned after logging in with the se
 - communicate expected failures without relying only on exceptions for control flow. 
 - Alternative: exceptions or raw service responses.
 - Trade-off: more mapping and result handling, but clearer application outcomes and API problem responses.
+10. **Separate query contract (`IQuery`)**
+ - keeps read operations distinct from write-oriented repository operations. The query implementation uses no-tracking reads and specification projections, reducing unnecessary entity tracking and allowing read use cases to shape the data they need.
+ - Alternative: use the same persistence abstraction for both reads and writes.
+ - Trade-off: one additional contract, in exchange for clearer read/write responsibilities and a focused place to optimize read queries.
+11. **Specification pattern**
+ - packages query criteria, includes, and projections into reusable, testable definitions, keeping persistence query details out of individual handlers.
+ - Alternative: write query expressions directly in each handler.
+ - Trade-off: some extra types, but shared query rules are easier to reuse and maintain.
+12. **Concurrency contract (`IConcurrencyHandler<TEntity>`)**
+ - sets the entity's original row-version value from the version supplied by the caller. When the entity is saved, EF Core can detect that another request changed the row and the application can report the conflict rather than silently overwriting newer data.
+ - Alternative: omit row-version checks or implement EF Core concurrency handling separately in each write handler.
+ - Trade-off: callers must provide the version they read, but concurrent updates are detected consistently.
+13. **Temporary header-based language selection**
+ - reads `Accept-Language` and selects Arabic fields for `ar`/`ar-*`; all other values currently use English. This is a lightweight placeholder, not full localization. A proper localization solution is planned for Sprint 2.
