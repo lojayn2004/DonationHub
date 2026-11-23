@@ -1,6 +1,7 @@
 ﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Application.Features.Auth.Commands.Login;
 using FluentAssertions;
+using Microsoft.Extensions.Time.Testing;
 using Moq;
 
 
@@ -10,13 +11,15 @@ namespace DonationHub.Application.UnitTests.CommandTests
     {
         private readonly Mock<IIdentityService> _identityService = new();
 
+        private readonly FakeTimeProvider _time =
+            new(new DateTimeOffset(2026, 11, 17, 0, 0, 0, TimeSpan.Zero));
 
         private readonly LoginCommandHandler _handler;
 
 
         public LoginCommandTests()
         {
-            _handler = new LoginCommandHandler(_identityService.Object);
+            _handler = new LoginCommandHandler(_identityService.Object, _time);
 
         }
 

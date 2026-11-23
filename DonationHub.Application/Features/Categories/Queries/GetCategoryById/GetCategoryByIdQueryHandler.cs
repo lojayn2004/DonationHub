@@ -7,7 +7,7 @@ using DonationHub.Domain.Results.Errors;
 
 namespace DonationHub.Application.Features.Categories.Queries.GetCategoryById
 {
-    internal class GetCategoryByIdQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetCategoryByIdQuery, Result<CategoryResponse>>
+    internal class GetCategoryByIdQueryHandler(IUnitOfWork _unitOfWork, ICurrentLanguage _lang) : IRequestHandler<GetCategoryByIdQuery, Result<CategoryResponse>>
     {
         public async Task<Result<CategoryResponse>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
@@ -17,11 +17,7 @@ namespace DonationHub.Application.Features.Categories.Queries.GetCategoryById
                 return Result<CategoryResponse>.Failure(CategoryErrors.NotFound);
 
        
-            return Result<CategoryResponse>.Success(new CategoryResponse(category.Id,
-                category.NameAr,
-                category.NameEn,
-                category.DescriptionAr,
-                category.DescriptionEn));
+            return Result<CategoryResponse>.Success(category.ToLanguageResult(request.isAdmin, _lang.IsArabic));
         }
     
     }

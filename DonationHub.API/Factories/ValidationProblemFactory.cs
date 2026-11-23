@@ -24,7 +24,7 @@ namespace DonationHub.API.Factories
                 TraceId = context.HttpContext.TraceIdentifier,
                 Status = StatusCodes.Status400BadRequest,
                 Type = "https://httpstatuses.io/400",
-                Details = details
+                Errors = details
             };
 
             return new ObjectResult(problemDetails)

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DonationHub.Application.Features.Auth.Commands.Register;
+using DonationHub.Application.Common.Dtos;
+using DonationHub.Domain.Results.Errors;
 
 namespace DonationHub.API.Controllers
 {
@@ -49,7 +51,7 @@ namespace DonationHub.API.Controllers
         public async Task<IActionResult> RefreshToken(CancellationToken ct)
         {
             if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
-                return Unauthorized(new { message = "Refresh token is missing." });
+                return GetUnAuthorizedResponse();
             
             var command = new RefreshTokenCommand(refreshToken);
             var result = await _mediator.Send(command, ct);
@@ -65,7 +67,7 @@ namespace DonationHub.API.Controllers
         public async Task<IActionResult> Logout(CancellationToken ct)
         {
             if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
-                return Unauthorized(new { message = "Refresh token is missing." });
+                return GetUnAuthorizedResponse();
             var command = new LogoutCommand(refreshToken);
             var result = await _mediator.Send(command, ct);
             if(!result.IsSuccess)
@@ -74,8 +76,7 @@ namespace DonationHub.API.Controllers
             return Ok(new { message = "Logged out successfully." });
         }
 
-
-
+       
         [Authorize]
         [HttpGet("me")]
         
@@ -83,10 +84,9 @@ namespace DonationHub.API.Controllers
         {
            
             string userEmail = User.FindFirstValue(ClaimTypes.Email);
-            Console.WriteLine("User Email: " + userEmail);
-
+           
             if (string.IsNullOrEmpty(userEmail))
-                return Unauthorized(new { message = "Invalid Credentials" });
+                return GetUnAuthorizedResponse();
 
             var query = new GetProfileQuery(userEmail);
             var result = await _mediator.Send(query, ct);
@@ -109,5 +109,27 @@ namespace DonationHub.API.Controllers
             };
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
+
+
+        private ObjectResult GetUnAuthorizedResponse()
+        {
+            var problemDetails = new ProblemDetailsDto()
+            {
+                Title = AuthErrors.InValidCredentials.Message,
+                Code = AuthErrors.InValidCredentials.Code,
+                TraceId = HttpContext.TraceIdentifier,
+                Status = 401,
+                Type = $"https://httpstatuses.io/401"
+
+            };
+            return new ObjectResult(problemDetails)
+            {
+                StatusCode = 401,
+                ContentTypes = { "application/problem+json" }
+            };
+
+        }
+
+
     }
 }

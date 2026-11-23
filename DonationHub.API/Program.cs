@@ -56,6 +56,14 @@ if (app.Environment.IsDevelopment())
     var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
     await app.Services.SeedDatabaseAsync(lifetime.ApplicationStopping);
 }
+var supportedCultures = new[] { "en", "ar" };
+app.UseRequestLocalization(options =>
+{
+    options.SetDefaultCulture("en")
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
+    options.ApplyCurrentCultureToResponseHeaders = true;
+});
 
 app.UseExceptionHandler();
 

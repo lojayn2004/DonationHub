@@ -9,12 +9,17 @@ namespace DonationHub.Application.Features.Categories.Specifications
         public CategoryNameSpecification(string nameAr, string nameEn)
             : base(category => category.NameAr == nameAr || category.NameEn == nameEn)
         {
-            Projection = category => new CategoryResponse(
-                category.Id,
-                category.NameAr,
-                category.NameEn,
-                category.DescriptionAr,
-                category.DescriptionEn);
+            Projection = category => new CategoryResponse()
+            {
+                Id = category.Id,
+                Name = null,
+                Description = null,
+                NameAr = category.NameAr,
+                NameEn = category.NameEn,
+                DescriptionAr = category.DescriptionAr,
+                DescriptionEn = category.DescriptionEn
+
+            };
         }
     }
 }

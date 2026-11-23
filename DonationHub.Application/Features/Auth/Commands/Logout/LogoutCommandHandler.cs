@@ -4,13 +4,13 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Auth.Commands.Logout
 {
-    internal class LogoutCommandHandler(IIdentityService _identityService):
+    internal class LogoutCommandHandler(IIdentityService _identityService, TimeProvider _timeProvider):
         IRequestHandler<LogoutCommand, Result>
     {
         
         public async Task<Result> Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
-            return await _identityService.RevokeRefreshTokenAsync(request.RefreshToken);
+            return await _identityService.RevokeRefreshTokenAsync(request.RefreshToken, _timeProvider.GetUtcNow().DateTime);
         }
     
     }

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories
 {
-    public class GetSuccessStoriesQuery : IRequest<Result<IReadOnlyList<MainInfoCampginDto>>>
+    public record GetSuccessStoriesQuery(bool isAdmin) : IRequest<Result<IReadOnlyList<MainInfoCampginDto>>>
     {
     }
 }

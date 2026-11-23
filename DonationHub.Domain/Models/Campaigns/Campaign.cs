@@ -131,6 +131,8 @@ namespace DonationHub.Domain.Models.Campaigns
                                               Guid categoryId,
                                               DateTimeOffset utcNow)
         {
+            if (CampaignStatus != CampaignStatus.ACTIVE)
+                return Result.Failure(CampaignErrors.NotActive);
            
             TitleAr = titleAr;
             TitleEn = titleEn;

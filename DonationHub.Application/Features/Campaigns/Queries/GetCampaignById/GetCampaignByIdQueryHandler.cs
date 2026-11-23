@@ -10,6 +10,7 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetCampaignById
 {
 
     public class GetCampaignByIdQueryHandler(IQuery<Campaign, CampaignDto> _query,
+        ICurrentLanguage _curLanguage,
         TimeProvider _timeProvider): IRequestHandler<GetCampaignById, Result<CampaignDto>>
     {
         public async Task<Result<CampaignDto>> Handle(GetCampaignById request, CancellationToken cancellationToken)
@@ -21,7 +22,7 @@ namespace DonationHub.Application.Features.Campaigns.Queries.GetCampaignById
             if(campaignDto == null)
                 return Result<CampaignDto>.Failure(CampaignErrors.NotFound);
 
-            return Result<CampaignDto>.Success(campaignDto!);
+            return Result<CampaignDto>.Success(campaignDto!.ToLanguageResult(request.isAdmin, _curLanguage.IsArabic));
         }
     }
 }

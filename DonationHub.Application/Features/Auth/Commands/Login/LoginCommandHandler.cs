@@ -7,7 +7,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Auth.Commands.Login
 {
-    public class LoginCommandHandler(IIdentityService _identityService):
+    public class LoginCommandHandler(IIdentityService _identityService, TimeProvider _timeProvider):
         IRequestHandler<LoginCommand, Result<AuthResponse>>
     {
         public async Task<Result<AuthResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -17,7 +17,7 @@ namespace DonationHub.Application.Features.Auth.Commands.Login
             var isValidCredentials = await _identityService.ValidateCredentialsAsync(request.Email, request.Password);
             if(!isValidCredentials) 
                 return Result<AuthResponse>.Failure(AuthErrors.InValidCredentials);
-            return await _identityService.GetAuthResponseAsync(request.Email);
+            return await _identityService.GetAuthResponseAsync(request.Email, _timeProvider.GetUtcNow().DateTime);
             
             
         }

@@ -1,16 +1,35 @@
 ﻿
 
+using System.Reflection;
+using System.Text.Json.Serialization;
+
 namespace DonationHub.Application.Features.Campaigns.Common
 {
     public class CampaignDto()
     {
         public Guid Id { get; set; }
-        public string TitleAr { get; set; } = default!;
 
-        public string TitleEn { get; set; } = default!;
-        public string DescriptionAr { get; set; } = default!;
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Title { get; set; } = default!;
 
-        public string DescriptionEn { get; set; } = default!;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Description { get; set; } = default!;
+
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? TitleAr { get; set; } = default!;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? TitleEn { get; set; } = default!;
+
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? DescriptionAr { get; set; } = default!;
+
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? DescriptionEn { get; set; } = default!;
 
         public decimal GoalAmount { get; set; }
 

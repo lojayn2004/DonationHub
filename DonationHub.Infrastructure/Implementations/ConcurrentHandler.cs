@@ -1,5 +1,4 @@
-﻿
-using DonationHub.Application.Common.Contracts;
+﻿using DonationHub.Application.Common.Contracts;
 using DonationHub.Domain.Models.Shared;
 using DonationHub.Infrastructure.Data;
 

@@ -11,6 +11,7 @@ namespace DonationHub.Application.Features.Categories.Commands.CreateCategory
     public class CreateCategoryCommandHandler(
         IUnitOfWork _unitOfWork,
         IQuery<Category, CategoryResponse> _categoryQuery,
+        ICurrentLanguage _lang,
         TimeProvider _timeProvider) :
         IRequestHandler<CreateCategoryCommand, Result<CategoryResponse>>
     {
@@ -31,11 +32,7 @@ namespace DonationHub.Application.Features.Categories.Commands.CreateCategory
             categoryRepo.Add(category);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
 
-            return Result<CategoryResponse>.Success(new CategoryResponse(category.Id, 
-                category.NameAr, 
-                category.NameEn,
-                category.DescriptionAr, 
-                category.DescriptionEn));
+            return Result<CategoryResponse>.Success(category.ToLanguageResult(true, _lang.IsArabic));
 
         }
     }

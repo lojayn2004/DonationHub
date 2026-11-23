@@ -4,9 +4,9 @@ using DonationHub.Application.Features.Categories.Commands.DeleteCategory;
 using DonationHub.Application.Features.Categories.Queries.GetCategories;
 using DonationHub.Application.Features.Categories.Queries.GetCategoryById;
 using DonationHub.Application.Features.Categories.Commands.UpdateCategory;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace DonationHub.API.Controllers
 {
@@ -69,37 +69,27 @@ namespace DonationHub.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id, CancellationToken ct)
         {
-            var query = new GetCategoryByIdQuery(id);
+            var query = new GetCategoryByIdQuery(id, base.IsAdmin);
 
             var result = await _mediator.Send(query, ct);
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
             var category = result.Value!;
-            return Ok(new
-            {
-                category.Id,
-                Name = IsArabicRequest ? category.NameAr : category.NameEn,
-                Description = IsArabicRequest ? category.DescriptionAr : category.DescriptionEn
-            });
+            return Ok(result.Value);
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken ct)
         {
-            var query = new GetCategoriesQuery();
+            var query = new GetCategoriesQuery(base.IsAdmin);
 
             var result = await _mediator.Send(query, ct);
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value!.Select(category => new
-            {
-                category.Id,
-                Name = IsArabicRequest ? category.NameAr : category.NameEn,
-                Description = IsArabicRequest ? category.DescriptionAr : category.DescriptionEn
-            }));
+            return Ok(result.Value!);
         }
     }
 }

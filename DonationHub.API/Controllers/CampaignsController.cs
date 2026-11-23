@@ -1,16 +1,15 @@
-﻿using DonationHub.API.Dtos.Campaigns;
-using DonationHub.Application.Features.Campaigns.Commands.CreateCampaign;
+﻿using DonationHub.Application.Features.Campaigns.Commands.CreateCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.DeleteCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign;
 using DonationHub.Application.Features.Campaigns.Commands.UpdateCampaignStatus;
-using DonationHub.Application.Features.Campaigns.Common;
 using DonationHub.Application.Features.Campaigns.Queries.GetActiveCampaigns;
 using DonationHub.Application.Features.Campaigns.Queries.GetCampaignById;
 using DonationHub.Application.Features.Campaigns.Queries.GetSuccessStories;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using DonationHub.API.Dtos.Campaigns;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using MediatR;
 
 namespace DonationHub.API.Controllers
 {
@@ -21,39 +20,39 @@ namespace DonationHub.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id, CancellationToken ct)
         {
-            var query = new GetCampaignById(id);
+            var query = new GetCampaignById(id, base.IsAdmin);
 
             var result = await _mediator.Send(query, ct);
 
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(ToPublicResponse(result.Value!));
+            return Ok(result.Value!);
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken ct)
         {
-            var query = new GetActiveCampaignsQuery();
+            var query = new GetActiveCampaignsQuery(base.IsAdmin);
 
             var result = await _mediator.Send(query, ct);
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value!.Select(ToPublicSummaryResponse));
+            return Ok(result.Value!);
         }
 
         [HttpGet("success-stories")]
         public async Task<IActionResult> GetSuccessStories(CancellationToken ct)
         {
-            var query = new GetSuccessStoriesQuery();
+            var query = new GetSuccessStoriesQuery(base.IsAdmin);
 
             var result = await _mediator.Send(query, ct);
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error!);
 
-            return Ok(result.Value!.Select(ToPublicSummaryResponse));
+            return Ok(result.Value!);
         }
 
         [HttpPut("{id:guid}")]
@@ -119,41 +118,14 @@ namespace DonationHub.API.Controllers
             if (!result.IsSuccess)
                 return GetProblemResult(result.Error);
 
-            return Created($"/api/campaign/{result.Value!.Id}", ToPublicResponse(result.Value));
+            return Created($"/api/v1/campaign/{result.Value!.Id}", result.Value);
 
 
 
         }
 
 
-        private object ToPublicResponse(CampaignDto campaign) => new
-        {
-            campaign.Id,
-            Title = IsArabicRequest ? campaign.TitleAr : campaign.TitleEn,
-            Description = IsArabicRequest ? campaign.DescriptionAr : campaign.DescriptionEn,
-            campaign.GoalAmount,
-            campaign.RaisedAmount,
-            campaign.EndDate,
-            campaign.CategoryId,
-            campaign.CategoryName,
-            campaign.RowVersion,
-            campaign.Status,
-            campaign.CreatedByUserId,
-            campaign.ProgressPercent,
-            campaign.DaysLeft
-        };
-
-        private object ToPublicSummaryResponse(MainInfoCampginDto campaign) => new
-        {
-            campaign.Id,
-            Title = IsArabicRequest ? campaign.TitleAr : campaign.TitleEn,
-            Description = IsArabicRequest ? campaign.DescriptionAr : campaign.DescriptionEn,
-            campaign.RaisedAmount,
-            campaign.GoalAmount,
-            campaign.EndDate,
-            campaign.ProgressPercent,
-            campaign.DaysLeft
-        };
+      
 
     }
 }

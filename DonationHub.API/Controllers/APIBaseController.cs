@@ -6,19 +6,7 @@ namespace DonationHub.API.Controllers
 {
     public class APIBaseController: ControllerBase
     {
-        protected bool IsArabicRequest
-        {
-            get
-            {
-                var language = Request.Headers.AcceptLanguage.ToString()
-                    .Split(',')[0]
-                    .Split(';')[0]
-                    .Trim();
-
-                return language.Equals("ar", StringComparison.OrdinalIgnoreCase) ||
-                    language.StartsWith("ar-", StringComparison.OrdinalIgnoreCase);
-            }
-        }
+        protected bool IsAdmin => HttpContext?.User.IsInRole("Admin") ?? false;
 
         protected IActionResult GetProblemResult(Error error)
         {
@@ -37,7 +25,7 @@ namespace DonationHub.API.Controllers
             };
             if(errorDetails is not null)
             {
-                problemDetails.Details = errorDetails.Details;
+                problemDetails.Errors = errorDetails.Details;
             }
             return new ObjectResult(problemDetails)
             {

@@ -26,7 +26,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.CreateCampaign
 
             Money goalAmount = new Money(request.goalAmount, request.goalCurrency);
             Result<Campaign> campaignResult = Campaign.Create(request.titleAr, request.titleEn, request.descAr, request.descEn,
-                goalAmount, request.endDate, request.categoryId, request.createdByUserId, _timeProvider.GetLocalNow()
+                goalAmount, request.endDate, request.categoryId, request.createdByUserId, _timeProvider.GetUtcNow()
                 );
 
             if (!campaignResult.IsSuccess)

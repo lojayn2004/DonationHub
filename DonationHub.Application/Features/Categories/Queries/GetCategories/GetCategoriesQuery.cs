@@ -5,5 +5,5 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Categories.Queries.GetCategories
 {
-    public  record GetCategoriesQuery : IRequest<Result<IReadOnlyList<CategoryResponse>>>;
+    public  record GetCategoriesQuery(bool isAdmin): IRequest<Result<IReadOnlyList<CategoryResponse>>>;
 }

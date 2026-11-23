@@ -5,13 +5,13 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Auth.Commands.Refresh
 {
-    internal class RefreshTokenCommandHandler(IIdentityService _identityService): 
+    internal class RefreshTokenCommandHandler(IIdentityService _identityService, TimeProvider _timeProvider): 
         IRequestHandler<RefreshTokenCommand, Result<AuthResponse>>
     {
         public async Task<Result<AuthResponse>> Handle(RefreshTokenCommand request,
             CancellationToken cancellationToken)
         {
-            return await _identityService.RefreshTokenAsync(request.RefreshToken);
+            return await _identityService.RefreshTokenAsync(request.RefreshToken, _timeProvider.GetUtcNow().DateTime);
         }
             
     }

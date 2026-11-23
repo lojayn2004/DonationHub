@@ -1,4 +1,5 @@
 ﻿using DonationHub.Application.Common.Contracts;
+using DonationHub.Domain.Results.Errors;
 using DonationHub.Infrastructure.ContractImplementations;
 using DonationHub.Infrastructure.Data;
 using DonationHub.Infrastructure.Data.Interceptors;
@@ -8,12 +9,13 @@ using DonationHub.Infrastructure.Data.Seeding.Users;
 using DonationHub.Infrastructure.Implementations;
 using DonationHub.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace DonationHub.Infrastructure
@@ -73,6 +75,43 @@ namespace DonationHub.Infrastructure
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
                     };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = async context =>
+                        {
+                            context.HandleResponse();
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/problem+json";
+
+                            var problemDetails = new
+                            {
+                                Title = AuthErrors.InValidCredentials.Message,
+                                Code = AuthErrors.InValidCredentials.Code,
+                                Status = StatusCodes.Status401Unauthorized,
+                                Type = $"https://httpstatuses.io/401"
+
+                            };
+                            await context.Response.WriteAsJsonAsync(problemDetails);
+                        },
+                        OnForbidden = async context =>
+                        {
+                            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                            context.Response.ContentType = "application/problem+json";
+
+                            var problemDetails = new 
+                            {
+                                Status = StatusCodes.Status403Forbidden,
+                                Title = AuthErrors.UnAuthorized.Message,
+
+                                Code = AuthErrors.UnAuthorized.Code,
+                                Type = $"https://httpstatuses.io/403"
+                            };
+
+                            await context.Response.WriteAsJsonAsync(problemDetails);
+                        }
+
+                    };
                 });
 
 
@@ -95,13 +134,6 @@ namespace DonationHub.Infrastructure
         {
             using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            //var env = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
-            //if (env.IsEnvironment("Testing"))
-            //{
-            //    await dbContext.Database.EnsureCreatedAsync(ct);
-            //}
-
             var seeders = scope.ServiceProvider.GetServices<IDataSeeder>();
             foreach(var seeder in seeders)
             {

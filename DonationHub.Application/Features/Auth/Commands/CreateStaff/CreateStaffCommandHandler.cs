@@ -7,7 +7,7 @@ using MediatR;
 
 namespace DonationHub.Application.Features.Auth.Commands.CreateStaff
 {
-    internal class CreateStaffCommandHandler(IIdentityService _identityService): IRequestHandler<CreateStaffCommand, Result<CreateStaffResponse>>
+    internal class CreateStaffCommandHandler(IIdentityService _identityService, TimeProvider _timeProvider): IRequestHandler<CreateStaffCommand, Result<CreateStaffResponse>>
     {
         public async Task<Result<CreateStaffResponse>> Handle(CreateStaffCommand request, CancellationToken cancellationToken)
         {
@@ -17,12 +17,12 @@ namespace DonationHub.Application.Features.Auth.Commands.CreateStaff
             var registerCommand = new RegisterCommand(request.Email, request.Password, request.FullName, 
                 request.UserName, request.PrefferedLanguage, request.Role);
 
-            var userResult = await _identityService.CreateUserAsync(registerCommand);
+            var userResult = await _identityService.CreateUserAsync(registerCommand, _timeProvider.GetUtcNow().DateTime);
             if (!userResult.IsSuccess)
                 return Result<CreateStaffResponse>.Failure(userResult.Error!);
 
             var user = userResult.Value!;
-            return Result<CreateStaffResponse>.Success(new CreateStaffResponse(user.Id, user.Email, user.UserName, user.FullName, user.PreferredLanguage));
+            return Result<CreateStaffResponse>.Success(new CreateStaffResponse(user.Id, user.FullName, user.UserName, user.Email, user.PreferredLanguage));
         }
     }
 }

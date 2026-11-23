@@ -1,4 +1,6 @@
 ﻿using DonationHub.Application.Behaviors;
+using DonationHub.Application.Common.Contracts;
+using DonationHub.Application.Common.Implementations;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +21,7 @@ namespace DonationHub.Application
             services.AddValidatorsFromAssembly(typeof(IAssemblyMarker).Assembly);
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
+            services.AddScoped<ICurrentLanguage, CurrentLanguage>();
             return services;
         }
     }

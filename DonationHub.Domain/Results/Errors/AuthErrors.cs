@@ -18,6 +18,9 @@ namespace DonationHub.Domain.Results.Errors
         public static readonly Error AccountDeactivated =
            new Error("Auth.AccountDeactivated", "Deactivated user logs in or refreshes", ErrorType.Forbidden);
 
+        public static readonly Error UnAuthorized =
+  new("Auth.UnAuthorized", "UnAuthorized To Access This Rescource", ErrorType.UnAuthorized);
+
 
     }
 }

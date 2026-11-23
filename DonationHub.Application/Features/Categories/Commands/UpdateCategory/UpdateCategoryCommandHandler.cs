@@ -7,7 +7,9 @@ using DonationHub.Domain.Results.Errors;
 
 namespace DonationHub.Application.Features.Categories.Commands.UpdateCategory
 {
-    internal class UpdateCategoryCommandHandler(IUnitOfWork _unitOfWork, TimeProvider _timeProvider) : IRequestHandler<UpdateCategoryCommand, Result<CategoryResponse>>
+    internal class UpdateCategoryCommandHandler(IUnitOfWork _unitOfWork, 
+        ICurrentLanguage _lang,
+        TimeProvider _timeProvider) : IRequestHandler<UpdateCategoryCommand, Result<CategoryResponse>>
     {
         public async Task<Result<CategoryResponse>> Handle(UpdateCategoryCommand request, 
             CancellationToken cancellationToken)
@@ -21,11 +23,7 @@ namespace DonationHub.Application.Features.Categories.Commands.UpdateCategory
                 request.DescriptionEn, _timeProvider.GetUtcNow());
             categoryRepo.Update(category);
             await _unitOfWork.SavaChangesAsync(cancellationToken);
-            return Result<CategoryResponse>.Success(new CategoryResponse(category.Id, 
-                category.NameAr, 
-                category.NameEn, 
-                category.DescriptionAr, 
-                category.DescriptionEn));
+            return Result<CategoryResponse>.Success(category.ToLanguageResult(true, _lang.IsArabic));
         }
     }
 }

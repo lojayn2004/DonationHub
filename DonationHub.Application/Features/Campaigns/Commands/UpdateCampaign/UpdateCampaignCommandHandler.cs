@@ -23,7 +23,7 @@ namespace DonationHub.Application.Features.Campaigns.Commands.UpdateCampaign
                 return Result.Failure(CampaignErrors.NotFound);
 
             Result updateResult = campaign.Update(request.titleAr, request.titleEn, request.descAr, request.descEn,
-                request.goalAmount, request.endDate, request.categoryId, _timeProvider.GetLocalNow());
+                request.goalAmount, request.endDate, request.categoryId, _timeProvider.GetUtcNow());
 
 
             if (!updateResult.IsSuccess)

@@ -6,13 +6,13 @@ namespace DonationHub.Application.Common.Contracts
 {
     public  interface IIdentityService
     {
-         Task<Result<UserDto>> CreateUserAsync(RegisterCommand register);
+         Task<Result<UserDto>> CreateUserAsync(RegisterCommand register, DateTime utcNow);
 
-        Task<Result<AuthResponse>> GetAuthResponseAsync(string Email);
+        Task<Result<AuthResponse>> GetAuthResponseAsync(string Email, DateTime utcNow);
 
-        Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken);
+        Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken, DateTime utcNow);
 
-        Task<Result> RevokeRefreshTokenAsync(string refreshToken);
+        Task<Result> RevokeRefreshTokenAsync(string refreshToken, DateTime utcNow);
 
 
          Task<UserDto?> FindUserByEmailAsync(string Email);
