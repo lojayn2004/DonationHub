@@ -21,9 +21,9 @@ namespace DonationHub.Domain.Models.RefreshToken
 
         public Guid? ReplacedByTokenId { get; private set; }
 
-        public bool IsExpired => DateTimeOffset.UtcNow >= ExpiresAt;
+      //  public bool IsExpired => DateTimeOffset.UtcNow >= ExpiresAt;
 
-        public bool IsActive => RevokedOn == null && !IsExpired;
+        //public bool IsActive => RevokedOn == null && !IsExpired;
 
         public static RefreshToken Create(string token, 
             string tokenHash, DateTimeOffset 
@@ -45,6 +45,18 @@ namespace DonationHub.Domain.Models.RefreshToken
             if (replacedByTokenId is not null)
                 ReplacedByTokenId = replacedByTokenId;
 
+        }
+
+        public bool IsExpired(DateTimeOffset uctNow)
+
+        {
+            return uctNow >= ExpiresAt;
+            
+        }
+
+        public bool IsActive(DateTimeOffset utcNow)
+        {
+            return RevokedOn == null && !IsExpired(utcNow);
         }
     }
 }

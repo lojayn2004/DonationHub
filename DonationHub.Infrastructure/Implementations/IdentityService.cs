@@ -81,7 +81,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 return Result<AuthResponse>.Failure(AuthErrors.InValidCredentials);
             var authResponse = new AuthResponse();
             authResponse.Token =  await _jwtUtils.GenerateJwtTokenAsync(appUser.Id);
-            var activeRefreshToken = appUser.RefreshTokens.FirstOrDefault(t => t.IsActive);
+            var activeRefreshToken = appUser.RefreshTokens.FirstOrDefault(t => t.IsActive(utcNow));
           
 
             var refreshToken = _jwtUtils.GetRefreshToken();
@@ -107,7 +107,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 return Result<AuthResponse>.Failure(AuthErrors.AccountDeactivated);
 
             var refreshTokenEntity = user.RefreshTokens.Single(t => t.TokenHash == refreshTokenHash);
-            if (!refreshTokenEntity.IsActive)
+            if (!refreshTokenEntity.IsActive(utcNow))
                 return Result<AuthResponse>.Failure(AuthErrors.RefreshTokenInvalid);
             var authResponse = new AuthResponse();
             // refresh token revoke
@@ -135,7 +135,7 @@ namespace DonationHub.Infrastructure.ContractImplementations
                 return Result.Failure(AuthErrors.RefreshTokenInvalid);
 
             var refreshTokenEntity = user.RefreshTokens.Single(t => t.TokenHash == refreshTokenHash);
-            if (!refreshTokenEntity.IsActive)
+            if (!refreshTokenEntity.IsActive(utcNow))
                 return Result.Failure(AuthErrors.RefreshTokenInvalid);
         
             // refresh token revoke

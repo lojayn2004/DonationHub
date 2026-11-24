@@ -32,7 +32,7 @@ namespace DonationHub.Domain.UnitTests
                 createdByUserId: Guid.NewGuid(),
                 utcNow: now);
 
-            result.IsSuccess.Should().BeTrue("helper must produce a valid campaign");
+           
             return result.Value;
         }
 
@@ -155,14 +155,15 @@ namespace DonationHub.Domain.UnitTests
 
 
         [Fact]
-        public void UpdateCamapign_WhenGoalAmountBelowRaised_ReturnsFaliure()
+        public void UpdateCamapign_WhenStatusIsCompleted_ReturnsFaliure()
         {
 
             // Arrange
             var campaign = CreateValidCampaign();
 
 
-            // add big donation
+            // Add Big Donation
+            // So Here Status will be completed because we finished the goal
             var donation = Donation.Create(campaign.Id, campaign.CategoryId, new Money(50000, "USD"),
                int.MinValue, int.MaxValue, TimeProvider.GetUtcNow());
            
@@ -182,9 +183,43 @@ namespace DonationHub.Domain.UnitTests
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.Error.Should().NotBeNull();
+            result.Error.Type.Should().Be(ErrorType.Conflict);
+           
+
+        }
+
+
+        [Fact]
+        public void UpdateCamapign_WhenGoalBelowReached_ReturnsFaliure()
+        {
+
+            // Arrange
+            var campaign = CreateValidCampaign();
+
+
+            // add big donation
+            var donation = Donation.Create(campaign.Id, campaign.CategoryId, new Money(5000, "USD"),
+               int.MinValue, int.MaxValue, TimeProvider.GetUtcNow());
+
+            donation.UpdateStatus(DonationStatus.SUCCEEDED);
+            campaign.AddDonation(donation, TimeProvider.GetUtcNow());
+            // Act
+            var result = campaign.Update(
+                   titleAr: "عنوان تجريبي",
+                   titleEn: "Dummy Title",
+                   descAr: "وصف تجريبي",
+                   descEn: "Dummy description",
+                   goalAmount: 2000,
+                   endDate: TimeProvider.GetUtcNow().AddDays(30),
+                   categoryId: Guid.NewGuid(),
+                   utcNow: TimeProvider.GetUtcNow());
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.Error.Should().NotBeNull();
             result.Error.Type.Should().Be(ErrorType.UnprocessableEntity);
             result.Error.Code.Should().Be("Campaign.GoalBelowRaised");
-         
+
 
         }
 

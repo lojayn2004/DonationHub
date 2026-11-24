@@ -86,33 +86,21 @@ namespace DonationHub.Domain.Models.Campaigns
             return Result<Campaign>.Success(campaign);
         }
 
-        public void UpdateGoalAmount(Money newGoal, DateTimeOffset utcNow)
-        {
-            if (newGoal.Amount < 0)
-                throw new AmountNotValidException("Goal Amount Must be Positive");
-            if (newGoal.Amount < RaisedAmount.Amount)
-                throw new AmountNotValidException("Updated Goal Amount Must be Greater than or equal the raised amount");
-            // TODO: add when they are not the same currecny also
-            GoalAmount = newGoal;
-            UpdatedAt = utcNow;
-
-        }
-
-
-        public void AddDonation(Donation donation, DateTimeOffset utcNow)
+        public Result AddDonation(Donation donation, DateTimeOffset utcNow)
         {
             if (donation.DonationStatus != DonationStatus.SUCCEEDED)
-                throw new Exception("Only succeeded donations count toward raised amount.");
+                return Result.Failure(DonationErrors.InValidState);
             if (donation.CampaignId != Id)
-                throw new Exception("Donation does not belong to this campaign.");
+                return Result.Failure(DonationErrors.InValidState);
 
             if (CampaignStatus != CampaignStatus.ACTIVE || utcNow >= EndDate)
-                throw new Exception("cannot add donation to un active campaign");
+                return Result.Failure(DonationErrors.InValidState);
 
             RaisedAmount += donation.Amount;
            
             if (RaisedAmount.Amount >= GoalAmount.Amount && CampaignStatus == CampaignStatus.ACTIVE)
                 UpdateCampaignStatus(CampaignStatus.COMPLETED, utcNow);
+            return Result.Success();
         }
 
         public Result UpdateCampaignStatus(CampaignStatus status, DateTimeOffset utcNow)
